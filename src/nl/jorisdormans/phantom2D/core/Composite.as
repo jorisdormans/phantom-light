@@ -6,10 +6,11 @@ package nl.jorisdormans.phantom2D.core
 	 */
 	public class Composite extends Component
 	{
-		public var components:Vector.<Component>;
 		/**
-		 * A reference to the ObjectLayer (a GameScreen component) that holds the GameObject. 
+		 * A collection of the Composite's components. Do not modify this list directly.
+		 * Use AddComponent() and RemoveComponent() instead.
 		 */
+		public var components:Vector.<Component>;
 		
 		public function Composite() 
 		{
@@ -32,6 +33,11 @@ package nl.jorisdormans.phantom2D.core
 			return false;
 		}
 		
+		/**
+		 * Remove a specific component based on its index in the component list.
+		 * @param	index
+		 * @return
+		 */
 		public function removeComponentAt(index:int):Boolean {
 			if (index<0 || index>=components.length) return false;
 			components[index].onRemove();
@@ -40,7 +46,7 @@ package nl.jorisdormans.phantom2D.core
 		}
 		
 		/**
-		 * Add a generic GameComponent to the object. 
+		 * Add a Component to the Composite. 
 		 * @param	component
 		 */
 		public function addComponent(component:Component):Component {
@@ -141,12 +147,11 @@ package nl.jorisdormans.phantom2D.core
 					}
 				}
 			}
-			
 			return result;
 		}
 		
 		
-/**
+		/**
 		 * Takes care of the physics update (which might run more than once every frame) 
 		 * @param	elapsedTime
 		 */

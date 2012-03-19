@@ -22,12 +22,30 @@
 		 */
 		public static const M_MOVE_TO:String = "moveTo";
 		
+		/**
+		 * A reference to the screen the camera is a component of
+		 */
 		public var screen:Screen;
+		
+		/**
+		 * The current camera position.
+		 */
 		public var position:Vector3D;
+		
+		/**
+		 * The current camera target, it will move to or towards this position on the next update.
+		 */
 		public var target:Vector3D;
 		private var setTarget:Vector3D;
 		
+		/**
+		 * Current camera angle.
+		 */
 		public var angle:Number = 0;
+		
+		/**
+		 * Current camera zoom.
+		 */
 		public var zoom:Number = 1;
 		
 		/**

@@ -12,15 +12,34 @@ package nl.jorisdormans.phantom2D.core
 	 */
 	public class Layer extends Composite implements IInputHandler
 	{
+		/**
+		 * Message to change internal flags that help when a layer needs to be draw wrapped.
+		 * These are called by the cameras.WrapAroundLayer component.
+		 */
+		public static const M_SET_WRAPPED:String = "setWrapped";
+		
+		
+		/**
+		 * A reference to the sprite the layer uses to draw itself to.
+		 */
 		public var sprite:Sprite;
+		
+		/**
+		 * A reference to its parent as a Layer.
+		 */
 		public var layer:Layer;
+		
+		/**
+		 * A rerference to its parent as a Screen.
+		 */
 		public var screen:Screen;
 		
 		protected var renderWrappedHorizontal:Boolean = false;
 		protected var renderWrappedVertical:Boolean = false;
 		
-		public static const M_SET_WRAPPED:String = "setWrapped";
-		
+		/**
+		 * Flag that can be used to toggle whether a layer responds to inputs.
+		 */
 		public var allowInteraction:Boolean = true;
 		
 		/**
@@ -32,6 +51,11 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public var layerHeight:Number;		
 		
+		/**
+		 * Contructor for the layer
+		 * @param	width	The layer's width, use 0 if you want to use the game's default width.
+		 * @param	height  The layer's height, use 0 if you want to use the game's default height.
+		 */
 		public function Layer(width:int=0, height:int=0) 
 		{
 			sprite = new Sprite();
@@ -75,6 +99,9 @@ package nl.jorisdormans.phantom2D.core
 			super.dispose();
 		}
 		
+		/**
+		 * Clears the layer and all its contents
+		 */
 		public function clear():void {
 		
 		}
@@ -90,53 +117,6 @@ package nl.jorisdormans.phantom2D.core
 			return super.handleMessage(message, data);
 		}
 		
-		/**
-		 * Generate xml data describing a new layer, this is used to create a new, empty level
-		 * @return
-		 */
-		public function generateNewXML():XML {
-			var xml:XML = <layer/>;
-			xml.@c = StringUtil.getObjectClassName(this.toString());
-			return xml;
-		}
-		
-		/**
-		 * Generate xml data describing the current layer, this is used to save level data
-		 * @return
-		 */
-		public function generateXML():XML {
-			var xml:XML = <layer/>;
-			xml.@c = StringUtil.getObjectClassName(this.toString());
-			return xml;
-		}
-		
-		public function executeScript(script:String, caller:GameObject):void {
-			var p:int = script.indexOf(";");
-			var command:String;
-			if (p >= 0) {
-				command = script.substr(0, p);
-				script = script.substr(p + 1);
-			} else {
-				command = script;
-				script = "";
-			}
-			command = StringUtil.trim(command);
-			script = StringUtil.trim(script);
-			trace("Executing:", command);
-			var commandArray:Array = StringUtil.parseCommand(command);
-			executeCommand(commandArray, caller);
-			if (script.length > 0) {
-				executeScript(script, caller);
-			}
-		}
-		
-		public function executeCommand(command:Array, caller:GameObject):Boolean {
-			if (command[0] == "changeLight") {
-				screen.sendMessage("changeLight", { target: command[1], speed:command[2] } );
-				return true;
-			}
-			return false;
-		}	
 		
 		/**
 		 * Called to render the objects this component controls

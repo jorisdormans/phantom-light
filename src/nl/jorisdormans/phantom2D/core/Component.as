@@ -49,6 +49,13 @@ package nl.jorisdormans.phantom2D.core
 			
 		}
 		
+		/**
+		 * Passes a message to a component (and it subcomponents when it is a composite)
+		 * @param	message				The message
+		 * @param	data				Data associated with the message
+		 * @param	componentClass		A specific target component class
+		 * @return						An integer value that indicates its response (defined in Phantom)
+		 */
 		public function sendMessage(message:String, data:Object = null, componentClass:Class = null):int {
 			if (componentClass != null && this is componentClass)	{
 				return handleMessage(message, data);
@@ -108,24 +115,5 @@ package nl.jorisdormans.phantom2D.core
 		public function dispose():void {
 			
 		}
-		
-		/**
-		 * Adds attributes to the xml representation of the object, should be overriden..
-		 * @param	xml
-		 */
-		public function setXML(xml:XML):void {
-			
-		}
-		
-		/**
-		 * Reads an xml and initializes an object accordingly, should be overriden.
-		 * @param	xml
-		 */
-		public function readXML(xml:XML):void {
-			
-		}
-		
-		
 	}
-
 }

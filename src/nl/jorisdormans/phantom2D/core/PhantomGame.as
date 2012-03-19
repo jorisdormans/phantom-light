@@ -13,8 +13,17 @@ package nl.jorisdormans.phantom2D.core
 	 */
 	public class PhantomGame extends Sprite
 	{
+		/**
+		 * Volume for sound effects (0-1)
+		 */
 		static public var volumeSoundEffects:Number = 1;
+		/**
+		 * Volume for music (0-1)
+		 */
 		static public var volumeMusic:Number = 1;
+		/**
+		 * Master volume (0-1)
+		 */
 		static public var volumeMaster:Number = 1;
 		
 		/**
@@ -37,6 +46,10 @@ package nl.jorisdormans.phantom2D.core
 		
 		private var frameCounter:uint;
 		private var frameCountTimer:Number;
+		
+		/**
+		 * The game's current framerate, is updated every second
+		 */
 		public static var fps:uint = 0;
 		
 		
