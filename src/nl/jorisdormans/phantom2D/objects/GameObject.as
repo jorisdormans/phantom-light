@@ -5,7 +5,7 @@ package nl.jorisdormans.phantom2D.objects
 	import flash.geom.Vector3D;
 	import flash.utils.getQualifiedClassName;
 	import nl.jorisdormans.phantom2D.core.*;
-	import nl.jorisdormans.phantom2D.core.Camera;
+	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.core.InputState;
 	import nl.jorisdormans.phantom2D.objects.shapes.BoundingShape;
 	import nl.jorisdormans.phantom2D.util.MathUtil;

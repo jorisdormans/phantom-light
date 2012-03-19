@@ -1,6 +1,5 @@
 package nl.jorisdormans.phantom2D.cameras 
 {
-	import nl.jorisdormans.phantom2D.core.Camera;
 	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.Composite;
 	/**

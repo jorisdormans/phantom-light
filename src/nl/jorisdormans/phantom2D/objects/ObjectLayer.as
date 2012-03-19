@@ -2,7 +2,7 @@ package nl.jorisdormans.phantom2D.objects
 {
 	import flash.display.Graphics;
 	import flash.geom.Vector3D;
-	import nl.jorisdormans.phantom2D.core.Camera;
+	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.core.InputState;
 	import nl.jorisdormans.phantom2D.core.Layer;
 	import nl.jorisdormans.phantom2D.core.Phantom;

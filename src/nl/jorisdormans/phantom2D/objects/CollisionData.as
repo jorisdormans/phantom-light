@@ -6,7 +6,6 @@
 	import flash.geom.Matrix;
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
-	import nl.jorisdormans.phantom2D.core.Camera;
 	import nl.jorisdormans.phantom2D.objects.shapes.*;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	

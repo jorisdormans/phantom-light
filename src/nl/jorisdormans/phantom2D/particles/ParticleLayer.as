@@ -2,8 +2,8 @@ package nl.jorisdormans.phantom2D.particles
 {
 	import flash.filters.BlurFilter;
 	import flash.geom.Vector3D;
-	import nl.jorisdormans.phantom2D.core.Camera;
 	import flash.display.Graphics;
+	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.core.Layer;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	/**

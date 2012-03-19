@@ -2,7 +2,7 @@ package nl.jorisdormans.phantom2D.layers
 {
 	import flash.display.GradientType;
 	import flash.geom.Matrix;
-	import nl.jorisdormans.phantom2D.core.Camera;
+	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.core.Layer;
 	/**
 	 * ...

@@ -14,7 +14,7 @@ package nl.jorisdormans.phantom2D.objects
 	import flash.geom.Vector3D;
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
-	import nl.jorisdormans.phantom2D.core.Camera;
+	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
 	import nl.jorisdormans.phantom2D.objects.shapes.BoundingLine;
 	import nl.jorisdormans.phantom2D.util.DrawUtil;

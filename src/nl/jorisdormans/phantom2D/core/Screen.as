@@ -3,6 +3,7 @@ package nl.jorisdormans.phantom2D.core
 	import flash.display.Sprite;
 	import flash.geom.Vector3D;
 	import flash.utils.getDefinitionByName;
+	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.objects.IInputHandler;
 	import nl.jorisdormans.phantom2D.objects.IRenderable;
 	import nl.jorisdormans.phantom2D.particles.Particle;

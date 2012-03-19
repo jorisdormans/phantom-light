@@ -1,7 +1,6 @@
 package nl.jorisdormans.phantom2D.objects 
 {
 	import flash.display.Graphics;
-	import nl.jorisdormans.phantom2D.core.Camera;
 	
 	/**
 	 * ...

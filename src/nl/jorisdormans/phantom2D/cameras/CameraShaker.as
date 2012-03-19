@@ -17,7 +17,7 @@ package nl.jorisdormans.phantom2D.cameras
 		private var counter:Number;
 		
 		/**
-		 * Message to shake the camera, can take the following input {time:Number, amplitude:Number, speed:Number}
+		 * Message to shake the camera, takes the following input {[time:Number][, amplitude:Number][, speed:Number]}
 		 */
 		public static const M_SHAKE:String = "shake";
 		

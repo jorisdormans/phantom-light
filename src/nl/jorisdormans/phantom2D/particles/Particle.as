@@ -2,7 +2,7 @@ package nl.jorisdormans.phantom2D.particles
 {
 	import flash.display.Graphics;
 	import flash.geom.Vector3D;
-	import nl.jorisdormans.phantom2D.core.Camera;
+	import nl.jorisdormans.phantom2D.cameras.Camera;
 	/**
 	 * The basic particle class, for light weight particles
 	 * @author Joris Dormans
