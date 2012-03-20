@@ -1,11 +1,11 @@
 ﻿package nl.jorisdormans.phantom2D.objects.boundaries
 {
-	import nl.jorisdormans.phantom2D.core.Component;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	/**
-	 * ...
+	 * Component that will cause a GameObject to wrap around a layer
 	 * @author Joris Dormans
 	 */
-	public class WrapAround extends Component
+	public class WrapAround extends GameObjectComponent
 	{
 		private var threshold:Number;
 		private var horizontal:Boolean;
@@ -22,16 +22,16 @@
 		{
 			if (horizontal) {
 				if (gameObject.position.x < -threshold) {
-					gameObject.position.x += threshold * 2 + gameObject.layer.layerWidth;
-				} else if (gameObject.position.x > threshold + gameObject.layer.layerWidth) {
-					gameObject.position.x -= threshold * 2 + gameObject.layer.layerWidth;
+					gameObject.position.x += threshold * 2 + gameObject.objectLayer.layerWidth;
+				} else if (gameObject.position.x > threshold + gameObject.objectLayer.layerWidth) {
+					gameObject.position.x -= threshold * 2 + gameObject.objectLayer.layerWidth;
 				}
 			}
 			if (vertical) {
 				if (gameObject.position.y < -threshold) {
-					gameObject.position.y += threshold * 2 + gameObject.layer.layerHeight;
-				} else if (gameObject.position.y > threshold + gameObject.layer.layerHeight) {
-					gameObject.position.y -= threshold * 2 + gameObject.layer.layerHeight;
+					gameObject.position.y += threshold * 2 + gameObject.objectLayer.layerHeight;
+				} else if (gameObject.position.y > threshold + gameObject.objectLayer.layerHeight) {
+					gameObject.position.y -= threshold * 2 + gameObject.objectLayer.layerHeight;
 				}
 			}
 			

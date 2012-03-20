@@ -8,13 +8,13 @@ package nl.jorisdormans.phantom2D.cameras
 	 * component to follow objects that wrap around layers.
 	 * @author Joris Dormans
 	 */
-	public class WrapAroundLayer extends CameraComponent
+	public class CameraWrapAround extends CameraComponent
 	{
 		private var layer:Layer;
 		private var horizontal:Boolean;
 		private var vertical:Boolean;
 		
-		public function WrapAroundLayer(layer:Layer, horizontal:Boolean = true, vertical:Boolean = true) 
+		public function CameraWrapAround(layer:Layer, horizontal:Boolean = true, vertical:Boolean = true) 
 		{
 			this.layer = layer;
 			this.horizontal = horizontal;

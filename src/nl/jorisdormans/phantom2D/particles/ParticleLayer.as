@@ -85,6 +85,14 @@ package nl.jorisdormans.phantom2D.particles
 			particles.push(particle);
 		}
 		
+		/**
+		 * Create a particle explosion at a certain position
+		 * @param	position		explosion's position
+		 * @param	velocity		base velocity of all particles
+		 * @param	particleType	particle class
+		 * @param	particleCount	the number of particles in the explosion
+		 * @param	force
+		 */
 		public function createExplosion(position:Vector3D, velocity:Vector3D, particleType:Class, particleCount:int, force:Number):void {
 			for (var i:int = 0; i < particleCount; i++) {
 				var v:Vector3D = new Vector3D();

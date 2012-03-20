@@ -50,7 +50,7 @@ package nl.jorisdormans.phantom2D.objects
 			i = objects.length - 1;
 			while (i >= 0) {
 				objects[i].tile = null;
-				objects[i].layer = null;
+				objects[i].objectLayer = null;
 				objects[i].dispose();
 				i--;
 			}
@@ -64,10 +64,10 @@ package nl.jorisdormans.phantom2D.objects
 		public function addGameObject(gameObject:GameObject):void {
 			gameObject.removed = false;
 			
-			if (gameObject.layer != null) {
-				gameObject.layer.removeGameObject(gameObject);
+			if (gameObject.objectLayer != null) {
+				gameObject.objectLayer.removeGameObject(gameObject);
 			}
-			gameObject.layer = this;
+			gameObject.objectLayer = this;
 			objects.push(gameObject);
 		}
 		
@@ -79,10 +79,10 @@ package nl.jorisdormans.phantom2D.objects
 		public function addGameObjectAt(gameObject:GameObject, position:int):void {
 			gameObject.removed = false;
 			
-			if (gameObject.layer != null) {
-				gameObject.layer.removeGameObject(gameObject);
+			if (gameObject.objectLayer != null) {
+				gameObject.objectLayer.removeGameObject(gameObject);
 			}
-			gameObject.layer = this;
+			gameObject.objectLayer = this;
 			objects.splice(position, 0, gameObject);
 		}
 		
@@ -93,10 +93,10 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public function addGameObjectSorted(gameObject:GameObject):void {
 			gameObject.removed = false;
-			if (gameObject.layer != null) {
-				gameObject.layer.removeGameObject(gameObject);
+			if (gameObject.objectLayer != null) {
+				gameObject.objectLayer.removeGameObject(gameObject);
 			}
-			gameObject.layer = this;
+			gameObject.objectLayer = this;
 			var l:int = objects.length;
 			for (var i:int = l-1; i >= 0; i--) {
 				if (compareObjects(objects[i], gameObject) < 0 ) {
@@ -117,7 +117,7 @@ package nl.jorisdormans.phantom2D.objects
 			while (i >= 0) {
 				if (objects[i] == gameObject) {
 					if (gameObject.tile != null) gameObject.tile.removeGameObject(gameObject);
-					gameObject.layer = null;
+					gameObject.objectLayer = null;
 					objects.splice(i, 1);
 				}
 				i--;
@@ -184,14 +184,14 @@ package nl.jorisdormans.phantom2D.objects
 					//check if the object is destroyed. If so remove it
 					if (objects[i].removed) {
 						if (objects[i].tile != null) objects[i].tile.removeGameObject(objects[i]);
-						objects[i].layer = null;
+						objects[i].objectLayer = null;
 						objects[i].removed = false;
 						objects.splice(i, 1);
 						l--;
 					} else if (objects[i].destroyed) {
 						objects[i].dispose();
 						if (objects[i].tile != null) objects[i].tile.removeGameObject(objects[i]);
-						objects[i].layer = null;
+						objects[i].objectLayer = null;
 						objects.splice(i, 1);
 						l--;
 					} else {
@@ -260,12 +260,16 @@ package nl.jorisdormans.phantom2D.objects
 			return null;
 		}
 		
-		
-		public function findAllObjectsOfClass(c:Class):Vector.<GameObject> {
+		/**
+		 * Return a list of all objects of a certain class
+		 * @param	objectClass
+		 * @return
+		 */
+		public function findAllObjectsOfClass(objectClass:Class):Vector.<GameObject> {
 			var r:Vector.<GameObject> = new Vector.<GameObject>();
 			var l:int = objects.length;
 			for (var i:int = 0; i < l; i++) {
-				if (objects[i] is c) {
+				if (objects[i] is objectClass) {
 					r.push(objects[i]);
 				}
 			}
@@ -277,8 +281,11 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public function get objectCount():int { return objects.length; }
 		
-		//public function get objects():Vector.<GameObject> { return _objects; }
-		
+		/**
+		 * Returns the number of objects of a certain class
+		 * @param	objectClass
+		 * @return
+		 */
 		public function countObjectType(objectClass:Class):int {
 			var r:int = 0;
 			var l:int = objects.length;
@@ -307,55 +314,52 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	objectClass		A class specifying the type of object (null = any class of objects).
 		 * @return			
 		 */
-		public function getObjectAt(position:Vector3D, objectClass:Class = null, objectType:int = -1): GameObject {
+		public function getObjectAt(position:Vector3D, objectClass:Class = null): GameObject {
 			for (var i:int = objects.length-1; i >= 0 ; i--) {
-				if ((objectClass == null || objects[i] is objectClass) && (objectType == -1 || objects[i].type == objectType) && objects[i].shape && objects[i].shape.pointInShape(position)) return objects[i];
+				if ((objectClass == null || objects[i] is objectClass) && objects[i].shape && objects[i].shape.pointInShape(position)) return objects[i];
 			}
 			return null;
 		}
 		
-		public function getObjectNumber(gameObject:GameObject):int {
+		/**
+		 * Returns the index of a gameObject
+		 * @param	gameObject
+		 * @return
+		 */
+		public function getObjectIndex(gameObject:GameObject):int {
 			for (var i:int = 0; i < objects.length; i++) {
 				if (gameObject == objects[i]) return i;
 			}
 			return -1;
 		}
 		
-		public function getNextId():int {
-			var id:int = 0;
-			for (var i:int = 0; i < objects.length; i++) {
-				if (objects[i].id > id) id = objects[i].id;
-			}
-			return id+1;
-		}
-		
 		/**
-		 * Find a gameObject by its id
-		 * @param	id		The id of the objects to be returned
-		 * @return
+		 * Sends a message to all objects in the layer
+		 * @param	message
+		 * @param	data
 		 */
-		public function findObjectById(id:int = 0):GameObject {
-			var l:int = objects.length;
-			for (var i:int = 0; i < l; i++) {
-				if (objects[i].id == id) {
-					return objects[i];
-				}
-			}			
-			return null;
-		}
-		
-		public function passMessageToObjects(id:int, message:String, data:Object):void {
-			if (id <= 0) return;
+		public function sendMessageToObjects(message:String, data:Object):void {
 			for (var i:int = 0; i < objects.length; i++) {
-				if (objects[i].id == id) objects[i].sendMessage(message, data);
+				objects[i].sendMessage(message, data);
 			}
 			
 		}
 		
+		/**
+		 * Pooled instances for the ratTracing
+		 */
 		private var v1:Vector3D = new Vector3D();
 		private var v2:Vector3D = new Vector3D();
 		private var rayObject:GameObject;
 		private var ray:BoundingLine;
+		
+		/**
+		 * Returns true if a ray can be traced from start to target object.
+		 * @param	start
+		 * @param	target
+		 * @param	forObject	Objects must be able to collide with this object to count as blocking. When null all objects count as blocking
+		 * @return
+		 */
 		public function rayTraceToObject(start:GameObject, target:GameObject, forObject:GameObject=null):Boolean 
 		{
 			if (!rayObject) {
@@ -371,7 +375,7 @@ package nl.jorisdormans.phantom2D.objects
 			rayObject.position.x = start.position.x + v1.x * 0.5;
 			rayObject.position.y = start.position.y + v1.y * 0.5;
 			rayObject.position.z = 0;
-			//var ray:BoundingLine = new BoundingLine(v2, v1);
+			
 			for (var i:int = 0; i < objects.length; i++) {
 				if (objects[i] != start && objects[i] != target && (forObject == null || objects[i].canCollideWith(forObject)) && objects[i].doResponse) {
 					if (CollisionData.roughCheck(rayObject, objects[i])) {
@@ -383,6 +387,14 @@ package nl.jorisdormans.phantom2D.objects
 			}
 			return true;
 		}
+		
+		/**
+		 * Returns true if a ray can be traced from start to target point.
+		 * @param	start
+		 * @param	target
+		 * @param	forObject	Objects must be able to collide with this object to count as blocking. When null all objects count as blocking
+		 * @return
+		 */
 		
 		public function rayTraceToPoint(start:GameObject, target:Vector3D, forObject:GameObject=null):Boolean 
 		{

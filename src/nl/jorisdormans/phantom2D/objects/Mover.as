@@ -1,12 +1,11 @@
 package nl.jorisdormans.phantom2D.objects 
 {
 	import flash.geom.Vector3D;
-	import nl.jorisdormans.phantom2D.core.Component;
 	/**
-	 * A mover gameComponents enables movement and collision response of GameObjects.
+	 * A mover Components enables movement and collision response of GameObjects.
 	 * @author Joris Dormans
 	 */
-	public class Mover extends Component
+	public class Mover extends GameObjectComponent
 	{
 		/**
 		 * The GameObjects velocity (in pixels/second)

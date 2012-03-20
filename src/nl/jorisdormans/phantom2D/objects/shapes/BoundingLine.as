@@ -37,7 +37,6 @@
 			points.push(line.clone());
 			points[0].scaleBy( -0.5);
 			points[1].scaleBy( 0.5);
-			setExtremes();
 		}
 		
 		public function setLine(line:Vector3D):void {
@@ -50,35 +49,25 @@
 			points.push(line.clone());
 			points[0].scaleBy( -0.5);
 			points[1].scaleBy( 0.5);
-			setExtremes();
+			changeShape();
 		}
 		
 		public function setNormal():void {
 			MathUtil.getNormal2D(normal, line);
 		}
 		
-		override public function getRoughSize():Number 
+		override protected function setExtremes():void 
 		{
-			if (roughSize<0) {
-				if (Math.abs(line.x) > Math.abs(line.y)) roughSize = Math.abs(line.x);
-				else roughSize = Math.abs(line.y);
-			}
-			return roughSize;
-		}
-		
-		override public function drawPhysics(graphics:Graphics, offsetX:Number, offsetY:Number):void 
-		{
-			var dx:Number = gameObject.position.x - offsetX;
-			var dy:Number = gameObject.position.y - offsetY;
-			
-			graphics.lineStyle(lineWidth, 0xff0000, 1);
-
-			graphics.moveTo(dx + line.x * -0.5, dy + line.y * -0.5);
-			graphics.lineTo(dx + line.x * 0.5, dy + line.y * 0.5);
-			
-			graphics.moveTo(dx, dy);
-			graphics.lineTo(dx + normal.x * 5, dy + normal.y * 5);
-			graphics.lineStyle();
+			super.setExtremes();
+			for (var i:int = 0; i < points.length; i++) {
+				MathUtil.rotateVector3D(p, points[i], _orientation);
+				if (_left > p.x) _left = p.x;
+				if (_right < p.x) _right = p.x;
+				if (_top > p.y) _top = p.y;
+				if (_bottom < p.y) _bottom = p.y;
+			}			
+			if (Math.abs(line.x) > Math.abs(line.y)) _roughSize = Math.abs(line.x);
+			else _roughSize = Math.abs(line.y);
 		}
 		
 		override public function drawShape(graphics:Graphics, x:Number, y:Number, angle:Number = 0, zoom:Number = 1):void 
@@ -111,7 +100,7 @@
 			if (dst.y < d) dst.y = d;
 		}
 		
-		override public function createProjections():void 
+		override protected function createProjections():void 
 		{
 			super.createProjections();
 			var n:Vector3D = new Vector3D();
@@ -121,7 +110,7 @@
 			
 		}
 		
-		override public function createPoints():void 
+		override protected function createPoints():void 
 		{
 			super.createPoints();
 			var v:Vector3D = line.clone();
@@ -139,40 +128,21 @@
 			setNormal();
 		}*/
 		
-		override public function scale(factor:Number):void 
+		override public function scaleBy(factor:Number):void 
 		{
-			super.scale(factor);
-			//originalLine.scaleBy(factor);
 			line.scaleBy(factor);
+			super.scaleBy(factor);
 		}
 		
-		override public function setOrientation(a:Number):void 
-		{
-			super.setOrientation(a);
-			setExtremes();
-		}
 		
-		private function setExtremes():void 
-		{
-			left = 0;
-			top = 0;
-			right = 0;
-			bottom = 0;
-			for (var i:int = 0; i < points.length; i++) {
-				MathUtil.rotateVector3D(p, points[i], orientation);
-				if (left > p.x) left = p.x;
-				if (right < p.x) right = p.x;
-				if (top > p.y) top = p.y;
-				if (bottom < p.y) bottom = p.y;
-			}
-			
-		}
+		
+		
 		
 		override public function pointInShape(pos:Vector3D):Boolean 
 		{
 			p.x = pos.x - gameObject.position.x;
 			p.y = pos.y - gameObject.position.y;
-			MathUtil.rotateVector3D(p, p, -orientation);
+			MathUtil.rotateVector3D(p, p, -_orientation);
 			var d:Number = MathUtil.distanceToLine(points[0], unit, length, p);
 			return (d < 4);
 		}

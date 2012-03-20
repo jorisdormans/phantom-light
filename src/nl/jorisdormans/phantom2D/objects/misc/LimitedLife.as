@@ -1,11 +1,11 @@
 ﻿package nl.jorisdormans.phantom2D.objects.misc 
 {
-	import nl.jorisdormans.phantom2D.core.Component;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	/**
-	 * ...
+	 * A component that destroys 
 	 * @author Joris Dormans
 	 */
-	public class LimitedLife extends Component
+	public class LimitedLife extends GameObjectComponent
 	{
 		public static const E_DIED:String = "died";
 		

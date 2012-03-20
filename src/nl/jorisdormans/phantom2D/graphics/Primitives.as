@@ -41,6 +41,15 @@ package nl.jorisdormans.phantom2D.graphics
 			}
 		}
 		
+		public static function drawCross(graphics:Graphics, x:Number, y:Number, size:Number):void {
+			size *= 0.5;
+			graphics.moveTo(x-size, y);
+			graphics.lineTo(x+size, y);
+			graphics.moveTo(x, y-size);
+			graphics.lineTo(x, y+size);
+		}
+		
+		
 	}
 
 }

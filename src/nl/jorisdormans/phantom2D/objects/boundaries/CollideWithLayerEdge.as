@@ -1,11 +1,11 @@
 package nl.jorisdormans.phantom2D.objects.boundaries
 {
-	import nl.jorisdormans.phantom2D.core.Component;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	/**
 	 * A GameObjectComponent that causes the game object to bounce off the edges of its layer
 	 * @author Joris Dormans
 	 */
-	public class CollideWithLayerEdge extends Component
+	public class CollideWithLayerEdge extends GameObjectComponent
 	{
 		/**
 		 * Event generated after colliding against layer boundaries, data ({dx:int, dy:int}) specifies which edge
@@ -43,8 +43,8 @@ package nl.jorisdormans.phantom2D.objects.boundaries
 				if (gameObject.mover.velocity.x < 0) gameObject.mover.velocity.x *= bounceRestitution;
 				parent.sendMessage(E_EDGE_COLISSION, { dx: -1, dy:0 } );
 			}
-			if (right && gameObject.position.x + gameObject.shape.right > gameObject.layer.layerWidth) {
-				gameObject.position.x = gameObject.layer.layerWidth - gameObject.shape.right;
+			if (right && gameObject.position.x + gameObject.shape.right > gameObject.objectLayer.layerWidth) {
+				gameObject.position.x = gameObject.objectLayer.layerWidth - gameObject.shape.right;
 				if (gameObject.mover.velocity.x > 0) gameObject.mover.velocity.x *= bounceRestitution;
 				parent.sendMessage(E_EDGE_COLISSION, { dx: 1, dy:0 } );
 			}
@@ -53,8 +53,8 @@ package nl.jorisdormans.phantom2D.objects.boundaries
 				if (gameObject.mover.velocity.y < 0) gameObject.mover.velocity.y *= bounceRestitution;
 				parent.sendMessage(E_EDGE_COLISSION, { dx: 0, dy:-1 } );
 			}
-			if (down && gameObject.position.y + gameObject.shape.bottom> gameObject.layer.layerHeight) {
-				gameObject.position.y = gameObject.layer.layerHeight - gameObject.shape.bottom;
+			if (down && gameObject.position.y + gameObject.shape.bottom> gameObject.objectLayer.layerHeight) {
+				gameObject.position.y = gameObject.objectLayer.layerHeight - gameObject.shape.bottom;
 				if (gameObject.mover.velocity.y > 0) gameObject.mover.velocity.y *= bounceRestitution;
 				parent.sendMessage(E_EDGE_COLISSION, { dx: 0, dy:1 } );
 			}			

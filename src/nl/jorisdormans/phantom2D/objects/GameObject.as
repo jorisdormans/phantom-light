@@ -12,8 +12,8 @@ package nl.jorisdormans.phantom2D.objects
 	import nl.jorisdormans.phantom2D.util.StringUtil;
 	/**
 	 * A GameObject is used to represent entities in the game. Its components determine its behavior and appearance.
-	 * GameObjects have four special components to boost performance: a shape, a mover, a handler and a renderer.
-	 * It can have any number of additional generic gameComponents
+	 * GameObjects can have one shape and one mover. Both will have a special reference. 
+	 * It can have any number of additional components
 	 * @author Joris Dormans
 	 */
 	public class GameObject extends Composite
@@ -33,9 +33,9 @@ package nl.jorisdormans.phantom2D.objects
 		/**
 		 * A reference to the ObjectLayer (a GameScreen component) that holds the GameObject. 
 		 */
-		public var layer:ObjectLayer;
+		public var objectLayer:ObjectLayer;
 		private var tiledLayer:TiledObjectLayer;
-		private var tiles:Boolean = false;
+		private var inTiledLayer:Boolean = false;
 		/**
 		 * A reference to the Tile in a TiledObjectLayer (a GameScreen component) that holds the GameObject. 
 		 */
@@ -64,22 +64,9 @@ package nl.jorisdormans.phantom2D.objects
 		public var initiateCollisionCheck:Boolean;
 		
 		/**
-		 * Object type indicates how the object can be edited and is saved to xml
-		 */
-		public var type:int;
-		public static const TYPE_NORMAL:int = 0;
-		public static const TYPE_TILE:int = 1;
-		public static const TYPE_CURVE:int = 2;
-		
-		/**
 		 * The GameObject's relative mass. This value is used for collision response 
 		 */
 		public var mass:Number;
-		
-		/**
-		 * An id used in scripting and message handling (probably obsolete)
-		 */
-		public var id:int;
 		
 		/**
 		 * Creates an instance of the gameObject. Call the initialize() function to actually initialize it.
@@ -90,8 +77,6 @@ package nl.jorisdormans.phantom2D.objects
 			_collisionHandlers = 0;
 			_inputHandlers = 0;
 			initiateCollisionCheck = false;
-			type = TYPE_NORMAL;
-			id = 0;
 			mass = 1;
 			position = new Vector3D();
 		}
@@ -146,13 +131,13 @@ package nl.jorisdormans.phantom2D.objects
 		override public function updatePhysics(elapsedTime:Number):void 
 		{
 			super.updatePhysics(elapsedTime);
-			if (tiles) {
+			if (inTiledLayer) {
 				placeOnTile();
 			}
 		}
 		
 		/**
-		 * Creates GameObjectComponents and adds the GameObject to the specified GameObjectLayer.
+		 * Creates GameObjectComponents and adds the GameObject to the specified ObjectLayer.
 		 * @param	objectLayer	Layer to which the object is to be added.
 		 * @param	position	The initial position
 		 * @param	data		Additional created data
@@ -163,7 +148,7 @@ package nl.jorisdormans.phantom2D.objects
 				objectLayer.addGameObjectSorted(this);
 				tiledLayer = objectLayer as TiledObjectLayer;
 				if (tiledLayer) {
-					tiles = true;
+					inTiledLayer = true;
 					placeOnTile();
 				}
 			}
@@ -241,12 +226,9 @@ package nl.jorisdormans.phantom2D.objects
 		 * @return
 		 */
 		override public function toString():String {
-			return "[object " + getQualifiedClassName(this) + "]";
+			//return "[object " + getQualifiedClassName(this) + "]";
 			var s:String = "[object " + getQualifiedClassName(this) + "] components (";
 			var l:int = components.length;
-			s += shape.toString();
-			if (mover) s += ", " + mover.toString();
-			//if (renderer) s += ", " + renderer.toString();
 			for (var i:int = 0; i < l; i++) {
 				s += ", "+components[0].toString();
 			}
@@ -260,18 +242,22 @@ package nl.jorisdormans.phantom2D.objects
 		 * @return			True when it is visible, false when it is not.
 		 */
 		public function isVisible(renderX:Number, renderY:Number, zoom:Number):Boolean {
-			if (layer.screen.camera.position.z != position.z) return false;
+			if (objectLayer.screen.camera.position.z != position.z) return false;
 			var margin:Number = 0;
-			if (shape) margin = shape.getRoughSize() * 0.5;
+			if (shape) margin = shape.roughSize * 0.5;
 			margin *= zoom;
-			if (renderX < -margin || renderY < -margin || renderX > layer.screen.screenWidth + margin || renderY > layer.screen.screenHeight + margin) return false;
+			if (renderX < -margin || renderY < -margin || renderX > objectLayer.screen.screenWidth + margin || renderY > objectLayer.screen.screenHeight + margin) return false;
 			return true;
 		}
 		
-		
-		
-
-		
+		/**
+		 * Function that rendersa gamObject and its components to a certain location
+		 * @param	graphics
+		 * @param	x
+		 * @param	y
+		 * @param	angle
+		 * @param	zoom
+		 */
 		public function render(graphics:Graphics, x:Number, y:Number, angle:Number, zoom:Number):void 
 		{
 			var l:int = components.length;
@@ -282,11 +268,17 @@ package nl.jorisdormans.phantom2D.objects
 			}
 		}
 		
+		/**
+		 * Current count of collisionHandlers
+		 */
 		public function get collisionHandlers():int 
 		{
 			return _collisionHandlers;
 		}
 		
+		/**
+		 * Current count of inputHandlers
+		 */
 		public function get inputHandlers():int 
 		{
 			return _inputHandlers;

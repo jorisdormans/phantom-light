@@ -1,15 +1,20 @@
 package nl.jorisdormans.phantom2D.objects.renderers 
 {
 	import flash.display.Graphics;
-	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.Phantom;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	import nl.jorisdormans.phantom2D.objects.IRenderable;
 	/**
-	 * A Component that simply renders the GameObject´s bounding shape with the specified colors and strokewidth
+	 * A Component that simply renders the GameObject´s bounding shape with the specified colors and strokewidth.
 	 * @author Joris Dormans
 	 */
-	public class BoundingShapeRenderer extends Component implements IRenderable
+	public class BoundingShapeRenderer extends GameObjectComponent implements IRenderable
 	{
+		/**
+		 * Message you can use to change the render style. 
+		 * Takes input: {[fillColor:uint][, strokeColor:uint][, strokeWidth:Number][, alpha:Number]}
+		 */
+		public static const M_SET_RENDER_STYLE:String = "setRenderStyle";
 		public var strokeWidth:Number;
 		public var strokeColor:uint;
 		public var fillColor:uint;
@@ -26,11 +31,11 @@ package nl.jorisdormans.phantom2D.objects.renderers
 		override public function handleMessage(message:String, data:Object = null):int 
 		{
 			switch (message) {
-				case "changeFillColor":
-					fillColor = data.color;
-					return Phantom.MESSAGE_HANDLED;
-				case "changeStrokeColor":
-					strokeColor = data.color;
+				case M_SET_RENDER_STYLE:
+					if (data && data.fillColor) this.fillColor = data.fillColor;
+					if (data && data.strokeColor) this.strokeColor = data.strokeColor;
+					if (data && data.alpha) this.alpha = data.alpha;
+					if (data && data.strokeWidth) this.strokeWidth = data.strokeWidth;
 					return Phantom.MESSAGE_HANDLED;
 			}
 			return super.handleMessage(message, data);

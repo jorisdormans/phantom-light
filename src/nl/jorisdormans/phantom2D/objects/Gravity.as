@@ -1,14 +1,12 @@
 package nl.jorisdormans.phantom2D.objects 
 {
 	import flash.geom.Vector3D;
-	import nl.jorisdormans.phantom2D.core.Component;
-	import nl.jorisdormans.phantom2D.core.Composite;
 	
 	/**
-	 * ...
+	 * Applies gravity to a GameObject
 	 * @author R. van Swieten
 	 */
-	public class Gravity extends Component 
+	public class Gravity extends GameObjectComponent 
 	{
 		private var gravity:Vector3D;
 		public var applyGravity:Boolean = true;

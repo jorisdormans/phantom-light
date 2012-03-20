@@ -10,7 +10,7 @@
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	
 	/**
-	 * ...
+	 * Class that handles collision detection and creates the data for accurate collision response
 	 * @author Joris Dormans
 	 */
 	public class CollisionData 
@@ -84,14 +84,14 @@
 		
 		/**
 		 * A quick check if two shapes might overlap
-		 * @param	shape1
-		 * @param	shape2
+		 * @param	object1
+		 * @param	object2
 		 * @return
 		 */
 		public static function roughCheck(object1:GameObject, object2:GameObject):Boolean
 		{
 			if (!object1.shape || !object2.shape) return false;
-			var r:Number = (object1.shape.getRoughSize() + object2.shape.getRoughSize()) / 2;
+			var r:Number = (object1.shape.roughSize + object2.shape.roughSize) / 2;
 			distance.x = object1.position.x - object2.position.x;
 			distance.y = object1.position.y - object2.position.y;
 			distance.z = object1.position.z - object2.position.z;
@@ -100,8 +100,8 @@
 		
 		/**
 		 * The accurate check for a collission between two shapes
-		 * @param	shape1
-		 * @param	shape2
+		 * @param	object1
+		 * @param	object2
 		 * @return
 		 */
 		public static function check(object1:GameObject, object2:GameObject):CollisionData
@@ -112,30 +112,6 @@
 			distance.x = object1.position.x - object2.position.x;
 			distance.y = object1.position.y - object2.position.y;
 			distance.z = object1.position.z - object2.position.z;
-			
-			//check iso
-			if (doIsometric) {
-				var i:Number = (object1.position.z + object1.shape.isoHeight - object2.position.z);
-				if (i>=0) {
-					data.interpenetration = i;
-					data.normal.x = 0;
-					data.normal.y = 0;
-					data.normal.z = 1;
-				} else {
-					data.clear();
-					return data;
-				}
-				i = (object2.position.z + object2.shape.isoHeight - object1.position.z);
-				if (i>=0 && i<data.interpenetration) {
-					data.interpenetration = i;
-					data.normal.x = 0;
-					data.normal.y = 0;
-					data.normal.z = -1;
-				} else if (i<0) {
-					data.clear();
-					return data;
-				}
-			}
 			
 			if (object1.shape is BoundingCircle && object2.shape is BoundingCircle) return checkCircleCircle(object1, object2, distance);
 			else if (object1.shape is BoundingCircle) return checkCircleOther(object1, object2, distance, false);

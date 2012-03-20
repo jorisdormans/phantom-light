@@ -9,10 +9,6 @@ package nl.jorisdormans.phantom2D.core
 	 */
 	public class Component 
 	{
-		/**
-		 * A reference to the component's GameObject (if any)
-		 */
-		public var gameObject:GameObject;
 		
 		/**
 		 * A reference to the component's composite (if any)
@@ -97,7 +93,6 @@ package nl.jorisdormans.phantom2D.core
 		 * Called automatically when a component is added to a game object, should be overriden.
 		 */
 		public function onAdd(composite:Composite):void {
-			gameObject = composite as GameObject;
 			parent = composite;
 		}
 		
@@ -105,7 +100,6 @@ package nl.jorisdormans.phantom2D.core
 		 * Called automatically when a component is removed to a game object, should be overriden.
 		 */
 		public function onRemove():void {
-			gameObject = null;
 			parent = null;
 		}
 		

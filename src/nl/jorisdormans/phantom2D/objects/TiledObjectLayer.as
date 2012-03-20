@@ -43,11 +43,14 @@ package nl.jorisdormans.phantom2D.objects
 		 * The height of the grid of tiles
 		 */
 		public var tilesY:int;
-		
 		/**
 		 * An array that contains the game objects that can be placed in this level by the editor as tiles
 		 */
 		public var tileList:Array;
+		/**
+		 * Determines the order in which tiles get checked: first the same tile, then orthogonally adjecent tiles and diagonally adjecent tiles
+		 */
+		private static var checkOrder:Vector.<Number>;
 
 		
 		/**
@@ -64,6 +67,12 @@ package nl.jorisdormans.phantom2D.objects
 			clear();
 			createTiles(tilesX, tilesY);
 			tileList = new Array();
+			if (!checkOrder) {
+				checkOrder = new Vector.<Number>();
+				checkOrder.push(0, 0, //same tile
+				                0, 1, 0, -1, -1, 0, 1, 0, //orthoganally adjecent tiles
+								-1, -1, 1, -1, -1, 1, 1, 1); //diagonally adjecent tiles
+			}
 		}
 		
 		override public function clear():void {
@@ -101,7 +110,6 @@ package nl.jorisdormans.phantom2D.objects
 		}
 		
 		
-		private static var checkOrder:Array = new Array(0, 0, 0, 1, 0, -1, -1, 0, 1, 0, -1, -1, 1, -1, -1, 1, 1, 1);
 		
 		override protected function checkCollisionsOfObject(index:int):void {
 			var object:GameObject = objects[index];
@@ -110,21 +118,9 @@ package nl.jorisdormans.phantom2D.objects
 			var maxX:int = Math.min(object.tile.tileX + 2, tilesX);
 			var minY:int = Math.max(object.tile.tileY - 1, 0);
 			var maxY:int = Math.min(object.tile.tileY + 2, tilesY);
-			/*
-			for (var x:int = minX; x < maxX; x++) {
-				for (var y:int = minY; y < maxY; y++) {
-					var tile:Tile = _tiles[x + y * tilesX];
-					var maxO:int = tile.objects.length;
-					for (var i:int = 0; i < maxO; i++) {
-						checkCollisionsBetween(object, tile.objects[i]);
-					}
-				}
-			}
-			//*/
-			//*
 			for (var i:int = 0; i < 18; i += 2) {
-				var x:int = object.tile.tileX +checkOrder[i] as int;
-				var y:int = object.tile.tileY +checkOrder[i + 1] as int;
+				var x:int = object.tile.tileX +checkOrder[i];
+				var y:int = object.tile.tileY +checkOrder[i + 1];
 				if (x >= minX && x < maxX && y >= minY && y < maxY) {
 					var tile:Tile = tiles[x + y * tilesX];
 					var maxO:int = tile.objects.length;
@@ -134,38 +130,6 @@ package nl.jorisdormans.phantom2D.objects
 					
 				}
 			}
-			//*/
-		}
-		
-		/*override public function getObjectAt(position:Vector3D, objectClass:Class = null, ignoreTileObject:Boolean = false):GameObject 
-		{
-			var minX:int = Math.max(Math.floor(position.x/tileSize) - 1, 0);
-			var maxX:int = Math.min(Math.floor(position.x/tileSize) + 2, tilesX);
-			var minY:int = Math.max(Math.floor(position.y/tileSize) - 1, 0);
-			var maxY:int = Math.min(Math.floor(position.y/tileSize) + 2, tilesY);
-			for (var x:int = minX; x < maxX; x++) {
-				for (var y:int = minY; y < maxY; y++) {
-					var tile:Tile = _tiles[x + y * tilesX];
-					var maxO:int = tile.objects.length;
-					for (var i:int = 0; i < maxO; i++) {
-						if ((objectClass == null || tile.objects[i] is objectClass) && !(ignoreTileObject && _objects[i].tileObject) && tile.objects[i].shape.pointInShape(position)) return tile.objects[i];
-					}
-				}
-			}
-			
-			return null;
-		}*/
-		
-		public function getTileObjectAt(x:Number, y:Number):GameObject 
-		{
-			var tx:int = Math.min(Math.max(Math.floor(x/tileSize), 0), tilesX-1);
-			var ty:int = Math.min(Math.max(Math.floor(y/tileSize), 0), tilesY-1);
-			var tile:Tile = tiles[tx + ty * tilesX];
-			var maxO:int = tile.objects.length;
-			for (var i:int = 0; i < maxO; i++) {
-				if (tile.objects[i].type == GameObject.TYPE_TILE) return tile.objects[i];
-			}
-			return null;
 		}
 		
 		/**
@@ -186,73 +150,9 @@ package nl.jorisdormans.phantom2D.objects
 					var gameObject:GameObject = new this.tileList[tileIndex]() as GameObject;
 					var p:Vector3D = new Vector3D(x * tileSize + tileSize * 0.5, y * tileSize + tileSize * 0.5); 
 					gameObject.initialize(this, p, {index:tileIndex});
-					gameObject.type = GameObject.TYPE_TILE;
 				}
 			}
 		}
-		
-		override public function render(camera:Camera):void 
-		{
-			super.render(camera);
-			return;
-			sprite.graphics.clear();
-			var tx:int = (camera.left / tileSize) - 1;
-			var ty:int = (camera.top / tileSize) - 1;
-			var drawWidth:int = Math.ceil(screen.screenWidth * camera.zoom / tileSize) + 2;
-			var drawHeight:int = Math.ceil(screen.screenHeight * camera.zoom / tileSize) + 2;
-			
-			/*
-			//Code to draw tiles and blocking info
-			for (var y:int = ty; y < ty + drawWidth; y++) {
-				for (var x:int = tx; x < tx + drawWidth; x++) {
-					var t:int = ((x+tilesX) % tilesX) + ((y+tilesY) % tilesY) * tilesX;
-					var dx:Number = x * tileSize - camera.left;
-					var dy:Number = y * tileSize - camera.top;
-					tiles[t].drawTile(graphics, dx, dy, tileSize * camera.zoom);
-				}
-			}
-			//*/
-			
-			var l:int = objects.length;
-			for (var i:int = 0; i < l; i++) {
-				var ox:int = objects[i].tile.tileX;
-				var oy:int = objects[i].tile.tileY;
-				var offsetX:Number = 0;
-				var offsetY:Number = 0;
-				if (renderWrappedHorizontal) {
-					if (ox < tx) {
-						ox += tilesX;
-						offsetX = layerWidth;
-					} else if (ox > tx + drawWidth) {
-						ox -= tilesX;
-						offsetX = -layerWidth;
-					}
-				}
-				if (renderWrappedVertical) {
-					if (oy < ty) {
-						oy += tilesY;
-						offsetY = layerHeight;
-					} else if (oy > ty + drawWidth + 2) {
-						oy -= tilesY;
-						offsetY = -layerHeight;
-					}
-				}
-				if (ox >= tx && ox < tx + drawWidth && oy >= ty && oy < ty + drawHeight) {
-					objects[i].render(sprite.graphics, camera.left-offsetX, camera.top-offsetY, camera.angle, camera.zoom);
-					
-				}
-			}
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 
 }

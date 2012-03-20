@@ -8,7 +8,7 @@
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	
 	/**
-	 * ...
+	 * An object aligned bounding box
 	 * @author Joris Dormans
 	 */
 	public class BoundingBoxOA extends BoundingBoxAA
@@ -21,15 +21,24 @@
 			super(halfSize);
 		}
 		
-		override public function changeShape():void {
-			createPoints();
-			createProjections();
-			setExtremes();
+		override protected function setExtremes():void {
+			super.setExtremes();
+			for (var i:int = 0; i < points.length; i++) {
+				MathUtil.rotateVector3D(p, points[i], _orientation);
+				if (_left > p.x) _left = p.x;
+				if (_right < p.x) _right = p.x;
+				if (_top > p.y) _top = p.y;
+				if (_bottom < p.y) _bottom = p.y;
+			}			
+			var w:Number = Math.max( -_left, _right);
+			var h:Number = Math.max( -_top, _bottom);
+			_roughSize = Math.sqrt(w * w + h * h) * 2;
 		}
 		
 		override public function drawShape(graphics:Graphics, x:Number, y:Number, angle:Number = 0, zoom:Number = 1):void 
 		{
 			var lastPoint:int = points.length;
+			angle += _orientation;
 			MathUtil.rotateVector3D(p, points[lastPoint - 1], angle);
 			p.x *= zoom;
 			p.y *= zoom;
@@ -49,49 +58,11 @@
 			graphics.drawPath(commands, data);
 		}
 		
-		override public function drawIsoShape(graphics:Graphics, x:Number, y:Number, angle:Number, isoX:Number, isoY:Number, isoZ:Number):void 
-		{
-			var h:Number = isoHeight * isoZ;
-			var commands:Vector.<int> = new Vector.<int>();
-			var data:Vector.<Number> = new Vector.<Number>();
-			
-			for (var i:int = 0; i < points.length; i++) {
-				MathUtil.rotateVector3D(p, points[i], angle);
-				MathUtil.rotateVector3D(p2, points[(i + 1) % points.length], angle);
-				if (p.x - p2.x > 0) {
-					commands.push(GraphicsPathCommand.MOVE_TO, GraphicsPathCommand.LINE_TO, GraphicsPathCommand.LINE_TO, GraphicsPathCommand.LINE_TO, GraphicsPathCommand.LINE_TO);
-					data.push(x + p.x * isoX, y + p.y * isoY + h);
-					data.push(x + p2.x * isoX, y + p2.y * isoY + h);
-					data.push(x + p2.x * isoX, y + p2.y * isoY);
-					data.push(x + p.x * isoX, y + p.y * isoY);
-					data.push(x + p.x * isoX, y + p.y * isoY + h);
-				}
-			}			
-			
-			MathUtil.rotateVector3D(p, points[points.length -1], angle);
-			p.x *= isoX;
-			p.y *= isoY;
-			
-			//var commands:Vector.<int> = new Vector.<int>();
-			commands.push(GraphicsPathCommand.MOVE_TO);
-			//var data:Vector.<Number> = new Vector.<Number>();
-			data.push(x + p.x, y + p.y+h);
-					  
-			for (i = 0; i < points.length; i++) {
-				MathUtil.rotateVector3D(p, points[i], angle);
-				p.x *= isoX;
-				p.y *= isoY;
-				commands.push(GraphicsPathCommand.LINE_TO);
-				data.push(x+p.x, y+p.y+h);
-			}
-			graphics.drawPath(commands, data);
-		}		
-		
 		override public function pointInShape(pos:Vector3D):Boolean 
 		{
 			p.x = pos.x - gameObject.position.x;
 			p.y = pos.y - gameObject.position.y;
-			MathUtil.rotateVector3D(p, p, -orientation);
+			MathUtil.rotateVector3D(p, p, -_orientation);
 			for (var i:int = 0; i < projections.length; i += 2) {
 				var dot:Number = p.dotProduct(projections[i]);
 				var inter1:Number = projections[i+1].y - dot;
@@ -99,36 +70,7 @@
 				if (inter1 < 0 || inter2 < 0) return false;
 			}
 			return true;
-
 		}
-		
-		override public function getRoughSize():Number 
-		{
-			return super.getRoughSize()*1.5;
-		}
-		
-		private function setExtremes():void 
-		{
-			left = 0;
-			top = 0;
-			right = 0;
-			bottom = 0;
-			for (var i:int = 0; i < points.length; i++) {
-				MathUtil.rotateVector3D(p, points[i], orientation);
-				if (left > p.x) left = p.x;
-				if (right < p.x) right = p.x;
-				if (top > p.y) top = p.y;
-				if (bottom < p.y) bottom = p.y;
-			}
-			
-		}
-		
-		override public function setOrientation(a:Number):void {
-			orientation = MathUtil.normalizeAngle(a);
-			orientationVector.x = Math.cos(orientation);
-			orientationVector.y = Math.sin(orientation);
-			setExtremes();
-		}		
 		
 	}
 	

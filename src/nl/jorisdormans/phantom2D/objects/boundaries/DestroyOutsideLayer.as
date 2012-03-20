@@ -2,10 +2,10 @@ package nl.jorisdormans.phantom2D.objects.boundaries
 {
 	import nl.jorisdormans.phantom2D.core.Component;
 	/**
-	 * A GameObjectComponent that destroys its object when it moves outside its layer.
+	 * A Component that destroys its object when it moves outside its layer.
 	 * @author Joris Dormans
 	 */
-	public class DestroyOutsideWorld extends Component
+	public class DestroyOutsideLayer extends Component
 	{
 		private var threshold:Number = 0;
 		private var left:Boolean;
@@ -13,7 +13,15 @@ package nl.jorisdormans.phantom2D.objects.boundaries
 		private var up:Boolean;
 		private var down:Boolean;
 		
-		public function DestroyOutsideWorld(threshold:Number = 0, left:Boolean = true, right:Boolean = true, up:Boolean = true, down:Boolean = true ) 
+		/**
+		 * 
+		 * @param	threshold	How many pixels the position of the object has to be outside the layer before being destroyed.
+		 * @param	left
+		 * @param	right
+		 * @param	up
+		 * @param	down
+		 */
+		public function DestroyOutsideLayer(threshold:Number = 0, left:Boolean = true, right:Boolean = true, up:Boolean = true, down:Boolean = true ) 
 		{
 			this.threshold = threshold;
 			this.left = left;

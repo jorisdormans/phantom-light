@@ -5,6 +5,7 @@
 	import flash.geom.Vector3D;
 	import nl.jorisdormans.phantom2D.core.*;
 	import nl.jorisdormans.phantom2D.objects.CollisionData;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	
 	/**
@@ -12,89 +13,137 @@
 	 * @author Joris Dormans
 	 * this is an class from which other shapes are derived, it should be abstract...
 	 */
-	public class BoundingShape extends Component
+	public class BoundingShape extends GameObjectComponent
 	{
+		
 		public var projections:Vector.<Vector3D>; 
+		
 		public var points:Vector.<Vector3D>;
-		public var orientation:Number;
-		public var orientationVector:Vector3D;
-		public var lineWidth:int = 2; 
-		protected var roughSize:Number = -1;
-		public var isoHeight:Number = 0;
+		
+		protected var _orientation:Number;
+		
+		protected var _orientationVector:Vector3D;
+		
+		protected var _roughSize:Number = 0;
+		
 		/**
-		 * The shape's lowest value on the x axis. Do not set this value.
+		 * The shape's lowest value on the x axis. 
 		 */
-		public var left:Number;
+		protected var _left:Number;
 		/**
-		 * The shape's lowest value on the y axis. Do not set this value.
+		 * The shape's lowest value on the y axis. 
 		 */
-		public var top:Number;
+		protected var _top:Number;
 		/**
-		 * The shape's highest value on the x axis. Do not set this value.
+		 * The shape's highest value on the x axis. 
 		 */
-		public var right:Number;
+		protected var _right:Number;
 		/**
-		 * The shape's highest value on the y axis. Do not set this value.
+		 * The shape's highest value on the y axis. 
 		 */
-		public var bottom:Number;
+		protected var _bottom:Number;
 		
 		public function BoundingShape()
 		{
 			projections = new Vector.<Vector3D>();
 			points = new Vector.<Vector3D>();
-			orientation = 0;
-			orientationVector = new Vector3D(1, 0, 0);
+			_orientation = 0;
+			_orientationVector = new Vector3D(1, 0, 0);
 			changeShape();
 		}
 		
-		public function changeShape():void {
-			createProjections();
-			createPoints();
-			left = 0;
-			right = 0;
-			top = 0;
-			bottom = 0;
+		protected function setExtremes():void {
+			_left = 0;
+			_right = 0;
+			_top = 0;
+			_bottom = 0;
+			_roughSize = 0;
 		}
 		
+		protected function changeShape():void {
+			createProjections();
+			createPoints();
+			setExtremes();
+		}
+		
+		/**
+		 * check if a point is falls within a shape
+		 * @param	p
+		 * @return
+		 */
 		public function pointInShape(p:Vector3D):Boolean {
 			return false;
 		}
 		
-		/*public function roughCollisionCheck(other:BoundingShape):Boolean {
-			return CollisionData.roughCheck(this, other);
-		}
-		
-		public function collisionCheck(other:BoundingShape):CollisionData {
-			return CollisionData.check(this, other);
-		}*/
-		
-		public function drawPhysics(graphics:Graphics, offsetX:Number, offsetY:Number):void {
-			var dx:Number = gameObject.position.x - offsetX;
-			var dy:Number = gameObject.position.y - offsetY;
-			graphics.lineStyle(lineWidth, 0xff0000, 1);
-			drawPositionMark(graphics, dx, dy);
-			drawShape(graphics, offsetX, offsetY);
-			graphics.lineStyle();
-		}
-		
+		/**
+		 * draw the shape to a graphics object at a specified location
+		 * @param	graphics
+		 * @param	x
+		 * @param	y
+		 * @param	angle
+		 * @param	zoom
+		 */
 		public function drawShape(graphics:Graphics, x:Number, y:Number, angle:Number = 0, zoom:Number = 1):void {
 			
 		}
 		
-		public function drawIsoShape(graphics:Graphics, x:Number, y:Number, angle:Number, isoX:Number, isoY:Number, isoZ:Number):void {
-		
+		public function get roughSize():Number {
+			return _roughSize;
 		}
 		
-		public function drawPositionMark(graphics:Graphics, x:Number, y:Number):void {
-			graphics.moveTo(x-4, y);
-			graphics.lineTo(x+4, y);
-			graphics.moveTo(x, y-4);
-			graphics.lineTo(x, y+4);
+		public function get orientationVector():Vector3D 
+		{
+			return _orientationVector;
 		}
 		
-		public function getRoughSize():Number {
-			if (roughSize < -1) roughSize = 0;
-			return roughSize;
+		public function get orientation():Number 
+		{
+			return _orientation;
+		}
+		
+		public function set orientation(value:Number):void 
+		{
+			_orientation = MathUtil.normalizeAngle(value);
+			_orientationVector.x = Math.cos(_orientation);
+			_orientationVector.y = Math.sin(_orientation);
+			setExtremes();
+		}
+		
+		/**
+		 * The shape's lowest value on the x axis. 
+		 */
+		public function get left():Number 
+		{
+			return _left;
+		}
+		
+		/**
+		 * The shape's lowest value on the y axis. 
+		 */
+		public function get top():Number 
+		{
+			return _top;
+		}
+		
+		/**
+		 * The shape's highest value on the x axis. 
+		 */
+		public function get right():Number 
+		{
+			return _right;
+		}
+		
+		/**
+		 * The shape's highest value on the y axis. 
+		 */
+		public function get bottom():Number 
+		{
+			return _bottom;
+		}
+		
+		public function set bottom(value:Number):void 
+		{
+			_bottom = value;
 		}
 		
 		public function projection(dst:Vector3D, unit:Vector3D, distance:Vector3D):void{
@@ -103,30 +152,28 @@
 			dst.z = 0;
 		}
 		
-		public function createProjections():void {
+		protected function createProjections():void {
 			projections.splice(0, projections.length);
 		}
 		
-		public function createPoints():void {
+		protected function createPoints():void {
 			points.splice(0, points.length);
 		}
 		
-		public function scale(factor:Number):void {
-			for (var i:int; i < points.length; i++) {
+		/**
+		 * Scale the current shape with a factor.
+		 * @param	factor
+		 */
+		public function scaleBy(factor:Number):void {
+			for (var i:int = 0; i < points.length; i++) {
 				points[i].scaleBy(factor);
 			}
+			for (i = 0; i < projections.length; i++) {
+				projections[i].scaleBy(factor);
+			}
+			setExtremes();
 		}
 		
-		public function rotateBy(a:Number):void {
-			setOrientation(orientation + a);
-		}
-		
-		public function setOrientation(a:Number):void {
-			orientation = MathUtil.normalizeAngle(a);
-			orientationVector.x = Math.cos(orientation);
-			orientationVector.y = Math.sin(orientation);
-			//createProjections();
-		}
 		
 	}
 	
