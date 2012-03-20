@@ -14,11 +14,11 @@
 	public class Camera extends Composite
 	{
 		/**
-		 * Message that makes the camera jump to a specified location. takes input {target:Vector3} or {x:Number, y:Number}.
+		 * Message that makes the camera jump to a specified location. Takes input: {target:Vector3} or {x:Number, y:Number}.
 		 */
 		public static const M_JUMP_TO:String = "jumpTo";
 		/**
-		 * Message sets the target of camera to a specified location. takes input {target:Vector3} or {x:Number, y:Number}.
+		 * Message sets the target of camera to a specified location. Takes input: {target:Vector3} or {x:Number, y:Number}.
 		 */
 		public static const M_MOVE_TO:String = "moveTo";
 		
@@ -99,13 +99,30 @@
 		{
 			switch (message) {
 				case M_JUMP_TO:
-					target = data.target;
+					if (data && data.target) {
+						target = data.target;
+					}
+					if (data && data.x) {
+						target.x = data.x;
+					}
+					if (data && data.y) {
+						target.y = data.y;
+					}
 					position.x = setTarget.x = target.x;
 					position.y = setTarget.y = target.y;
 					position.z = setTarget.z = target.z;
 					sendMessage(FollowObject.M_STOP_FOLLOWING);
 					break;
 				case M_MOVE_TO:
+					if (data && data.target) {
+						target = data.target;
+					}
+					if (data && data.x) {
+						target.x = data.x;
+					}
+					if (data && data.y) {
+						target.y = data.y;
+					}
 					target = data.target;
 					setTarget.x = target.x;
 					setTarget.y = target.y;

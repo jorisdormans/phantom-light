@@ -5,7 +5,7 @@ package nl.jorisdormans.phantom2D.layers
 	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.core.Layer;
 	/**
-	 * ...
+	 * Layer class that renders a gradient background
 	 * @author Joris Dormans
 	 */
 	public class Background extends Layer
@@ -25,8 +25,8 @@ package nl.jorisdormans.phantom2D.layers
 		
 		override public function render(camera:Camera):void 
 		{
+			//nothing here, prevent the super from clearing the sprite.graphics
 			//super.render(camera);
-			//nothing here
 		}
 		
 	}

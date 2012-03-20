@@ -9,8 +9,10 @@ package nl.jorisdormans.phantom2D.core
 	import nl.jorisdormans.phantom2D.particles.Particle;
 	import nl.jorisdormans.phantom2D.particles.ParticleLayer;
 	import nl.jorisdormans.phantom2D.util.StringUtil;
+	
 	/**
-	 * ...
+	 * Screen is the main composite class that is added to a game. A game has a stack of screens. Only the top 
+	 * screen is active. Use a Screen to define menu's, and main game states. A screen has an individual camera.
 	 * @author Joris Dormans
 	 */
 	public class Screen extends Layer
@@ -20,15 +22,21 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public var camera:Camera;
 		
+		/**
+		 * The width of the screen's view port.
+		 */
 		public var screenWidth:int;
+		/**
+		 * The height of the screen's view port.
+		 */
 		public var screenHeight:int;
 		
 		/**
-		 * The maximum width of all game screen components
+		 * The maximum width of all the screen's layers
 		 */
 		public var maxWidth:int;
 		/**
-		 * The maximum height of all game screen components
+		 * The maximum height of all the screen's layers
 		 */
 		public var maxHeight:int;
 		/**
@@ -54,15 +62,6 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public var screenBelow:Screen;
 		
-		/**
-		 * Flag indicating if a screen is being edited by the editor
-		 */
-		public var editing:Boolean = false;
-		
-		/**
-		 * A backup of the game level in xml format. Is used to reset a level.
-		 */
-		public var levelData:XML;
 		
 		/**
 		 * Creates an instance of the GameScreen class.
@@ -175,101 +174,6 @@ package nl.jorisdormans.phantom2D.core
 			}
 		}
 		
-		/*public function makeInvisible():void {
-			var l:int = layers.length;
-			for (var i:int = 0; i < l; i++) {
-				layers[i].graphics.clear();
-			}
-			
-		}*/
-		
-		
-		/**
-		 * Fast access to the addParticle function of ParticleLayers in the screen's component list
-		 * @param	particle	The particle to be added
-		 * @param	layer		Indicates the particleLayer, 0 = the lowest layer.
-		 */
-		public function addParticle(particle:Particle, layerIndex:int = 0):void {
-			var l:int = components.length;
-			for (var i:int = 0; i < l; i++) {
-				if (components[i] is ParticleLayer) {
-					if (layerIndex == 0) {
-						(components[i] as ParticleLayer).addParticle(particle);
-						return;
-					} else {
-						layerIndex--;
-					}
-				}
-			}
-		}
-		
-		/**
-		 * Returns a ParticleLayer from the screen's component list
-		 * @param	index	The index of the ParticleLayer (0 = the lowest layer)
-		 * @return
-		 */
-		public function getParticleLayer(index:int = 0):ParticleLayer {
-			var l:int = components.length;
-			for (var i:int = 0; i < l; i++) {
-				if (components[i] is ParticleLayer) {
-					if (index == 0) {
-						return (components[i] as ParticleLayer);
-					} else {
-						index--;
-					}
-				}
-			}
-			return null;
-		}
-		
-		override public function generateNewXML():XML {
-			var xml:XML = <screen/>;
-			xml.@c = StringUtil.getObjectClassName(this.toString());
-			for (var i:int = 0; i < components.length; i++) {
-				if (components[i] is Layer) {
-					xml.appendChild((components[i] as Layer).generateNewXML());
-				}
-			}
-			return xml;
-			
-		}
-		
-		
-		override public function generateXML():XML {
-			var xml:XML = <screen/>;
-			xml.@c = StringUtil.getObjectClassName(this.toString());
-			for (var i:int = 0; i < components.length; i++) {
-				if (components[i] is Layer) {
-					xml.appendChild((components[i] as Layer).generateXML());
-				}
-			}
-			return xml;
-		}
-		
-		override public function readXML(xml:XML):void {
-			if (levelData != xml) {
-				//store a copy of the level data
-				levelData = new XML(xml.toXMLString());
-			}
-			
-			trace("PHANTOM: Reading screen data");
-			if (xml.@c != StringUtil.getObjectClassName(this.toString())) {
-				trace("WARNING: Data for '"+xml.@c+"' might not be compatible with screen of class", StringUtil.getObjectClassName(this.toString()) + ".");
-			}
-			for (var i:int = 0; i < components.length; i++) {
-				if (components[i] is Layer) (components[i] as Layer).clear();
-			}
-			for (i = 0; i < xml.layer.length(); i++) {
-				getComponentByClass(Layer, i).readXML(xml.layer[i]);
-			}
-		}
-		
-		public function reset():void {
-			if (levelData) {
-				readXML(levelData);
-			}
-		}
-		
 		override public function addComponent(component:Component):Component 
 		{
 			if (component is Layer) {
@@ -281,14 +185,15 @@ package nl.jorisdormans.phantom2D.core
 		
 		override public function handleInput(elapsedTime:Number, currentState:InputState, previousState:InputState):void 
 		{
-			var l:int = components.length;
-			for (var i:int = 0; i < l; i++) {
-				if (components[i] is IInputHandler) {
-					(components[i] as IInputHandler).handleInput(elapsedTime, game.currentInputState, game.previousInputState);
+			if (this.allowInteraction) {
+				var l:int = components.length;
+				for (var i:int = 0; i < l; i++) {
+					if (components[i] is IInputHandler) {
+						(components[i] as IInputHandler).handleInput(elapsedTime, game.currentInputState, game.previousInputState);
+					}
+					if (paused) return;
 				}
-				if (paused) return;
 			}
-
 		}
 		
 		

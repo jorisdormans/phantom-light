@@ -5,25 +5,30 @@ package nl.jorisdormans.phantom2D.objects.boundaries
 	 * A GameObjectComponent that causes the game object to bounce off the edges of its layer
 	 * @author Joris Dormans
 	 */
-	public class BounceAgainstWorldBoundaries extends Component
+	public class CollideWithLayerEdge extends Component
 	{
 		/**
-		 * Event generated after colliding against world boundaries, data ({dx:int, dy:int}) specifies which edge
+		 * Event generated after colliding against layer boundaries, data ({dx:int, dy:int}) specifies which edge
 		 */
 		public static const E_EDGE_COLISSION:String = "edgeCollision";
 		
 		private var bounceRestitution:Number;
-		private var threshold:Number;
 		private var left:Boolean;
 		private var right:Boolean;
 		private var up:Boolean;
 		private var down:Boolean;
 		
-		
-		public function BounceAgainstWorldBoundaries(threshold:Number = 0, bounceRestitution:Number = 0, left:Boolean = true, right:Boolean = true, up:Boolean = true, down:Boolean = true) 
+		/**
+		 * 
+		 * @param	bounceRestitution	Energy after the reflection;
+		 * @param	left				Can bounce with the layer's left 
+		 * @param	right
+		 * @param	up
+		 * @param	down
+		 */
+		public function CollideWithLayerEdge(bounceRestitution:Number = 1, left:Boolean = true, right:Boolean = true, up:Boolean = true, down:Boolean = true) 
 		{
 			this.bounceRestitution = -bounceRestitution;
-			this.threshold = threshold;
 			this.left = left;
 			this.right = right;
 			this.up = up;
@@ -33,23 +38,23 @@ package nl.jorisdormans.phantom2D.objects.boundaries
 		override public function updatePhysics(elapsedTime:Number):void 
 		{
 			super.updatePhysics(elapsedTime);
-			if (left && gameObject.position.x - threshold < 0) {
-				gameObject.position.x = threshold;
+			if (left && gameObject.position.x + gameObject.shape.left < 0) {
+				gameObject.position.x = -gameObject.shape.left;
 				if (gameObject.mover.velocity.x < 0) gameObject.mover.velocity.x *= bounceRestitution;
 				parent.sendMessage(E_EDGE_COLISSION, { dx: -1, dy:0 } );
 			}
-			if (right && gameObject.position.x + threshold > gameObject.layer.layerWidth) {
-				gameObject.position.x = gameObject.layer.layerWidth - threshold;
+			if (right && gameObject.position.x + gameObject.shape.right > gameObject.layer.layerWidth) {
+				gameObject.position.x = gameObject.layer.layerWidth - gameObject.shape.right;
 				if (gameObject.mover.velocity.x > 0) gameObject.mover.velocity.x *= bounceRestitution;
 				parent.sendMessage(E_EDGE_COLISSION, { dx: 1, dy:0 } );
 			}
-			if (up && gameObject.position.y - threshold < 0) {
-				gameObject.position.y = threshold;
+			if (up && gameObject.position.y + gameObject.shape.top < 0) {
+				gameObject.position.y = -gameObject.shape.top;
 				if (gameObject.mover.velocity.y < 0) gameObject.mover.velocity.y *= bounceRestitution;
 				parent.sendMessage(E_EDGE_COLISSION, { dx: 0, dy:-1 } );
 			}
-			if (down && gameObject.position.y + threshold> gameObject.layer.layerHeight) {
-				gameObject.position.y = gameObject.layer.layerHeight - threshold;
+			if (down && gameObject.position.y + gameObject.shape.bottom> gameObject.layer.layerHeight) {
+				gameObject.position.y = gameObject.layer.layerHeight - gameObject.shape.bottom;
 				if (gameObject.mover.velocity.y > 0) gameObject.mover.velocity.y *= bounceRestitution;
 				parent.sendMessage(E_EDGE_COLISSION, { dx: 0, dy:1 } );
 			}			

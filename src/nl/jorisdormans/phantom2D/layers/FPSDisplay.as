@@ -6,7 +6,7 @@ package nl.jorisdormans.phantom2D.layers
 	import nl.jorisdormans.phantom2D.core.Layer;
 	import nl.jorisdormans.phantom2D.core.PhantomGame;
 	/**
-	 * ...
+	 * Displays the current framerate.
 	 * @author Joris Dormans
 	 */
 	public class FPSDisplay extends Layer

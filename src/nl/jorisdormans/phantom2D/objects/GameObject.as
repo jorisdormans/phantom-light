@@ -282,55 +282,6 @@ package nl.jorisdormans.phantom2D.objects
 			}
 		}
 		
-		public function generateXML():XML {
-			var xml:XML = <object/>;
-			xml.@c = StringUtil.getObjectClassName(this.toString());
-			if (id > 0) xml.@id = id;
-			xml.@x = Math.floor(position.x);
-			xml.@y = Math.floor(position.y);
-			if (position.z != 0) xml.@z = Math.floor(position.z);
-			if (shape.orientation != 0) xml.@orientation = Math.floor(shape.orientation * MathUtil.TO_DEGREES);
-			for (var i:int = 0; i < components.length; i++) {
-				components[i].setXML(xml);
-			}
-			return xml;
-		}
-		
-		override public function readXML(xml:XML):void {
-			if (xml.@id.length()>0) id = xml.@id;
-			position.x = xml.@x;
-			position.y = xml.@y;
-			if (xml.@z.length() > 0) {
-				position.z = xml.@z;
-			} else {
-				position.z = 0;
-			}
-			if (xml.@orientation.length() > 0) {
-				var a:Number = xml.@orientation;
-				shape.setOrientation(a * MathUtil.TO_RADIANS);
-			} else {
-				shape.setOrientation(0);
-			}
-			
-			for (var i:int = 0; i < components.length; i++) {
-				components[i].readXML(xml);
-			}
-			
-		}
-		
-		public function copySettings(other:GameObject):void {
-			var xml:XML = other.generateXML();
-			copySettingsXML(xml);
-		}
-		
-		public function copySettingsXML(xml:XML):void {
-			xml.@x = Math.floor(position.x);
-			xml.@y = Math.floor(position.y);
-			xml.@z = Math.floor(position.z);
-			xml.@id = id;
-			readXML(xml);
-		}
-		
 		public function get collisionHandlers():int 
 		{
 			return _collisionHandlers;

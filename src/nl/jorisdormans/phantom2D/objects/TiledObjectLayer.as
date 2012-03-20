@@ -244,71 +244,7 @@ package nl.jorisdormans.phantom2D.objects
 			}
 		}
 		
-		override public function generateNewXML():XML 
-		{
-			var xml:XML = super.generateNewXML();
-			xml.@tileSize = tileSize;
-			xml.@tilesX = tilesX;
-			xml.@tilesY = tilesY;
-			return xml;
-		}
 		
-		override public function generateXML():XML 
-		{
-			var xml:XML = super.generateXML();
-			xml.@tileSize = tileSize;
-			xml.@tilesX = tilesX;
-			xml.@tilesY = tilesY;
-			if (tileList.length>0) {
-				for (var y:int = 0; y < tilesY; y++) {
-					var row:XML = <row/>;
-					xml.appendChild(row);
-					var s:String = "";
-					for (var x:int = 0; x < tilesX; x++) {
-						var tile:GameObject = tiles[x + y * tilesX].getTileObject();
-						for (var i:int = 0; i < tileList.length; i++) {
-							if ((tile == null && tileList[i] == null) || (tile && tileList[i] && StringUtil.getObjectClassName(tile.toString()) == StringUtil.getClassName(tileList[i].toString()))) {
-								s += StringUtil.intToStringFixed(i, 2, 16)+" ";
-							}
-						}
-						xml.row[y] = s;
-					}
-				}
-			}
-			
-			return xml;
-		}
-		
-		override public function readXML(xml:XML):void 
-		{
-			tileSize = xml.@tileSize;
-			tilesX = xml.@tilesX;
-			tilesY = xml.@tilesY;
-			createTiles(tilesX, tilesY);
-			
-			for (var y:int = 0; y < xml.row.length(); y++) {
-				var s:String = xml.row[y];
-				var x:int = 0;
-				while (x<tilesX) {
-					var p:int = s.indexOf(" ");
-					if (p < 0) break;
-					var t:String = s.substr(0, p);
-					s = s.substr(p + 1);
-					var i:int = parseInt(t);
-					if (i >= 0 && i < tileList.length && tileList[i]) {
-						var go:GameObject = new tileList[i];
-						go.type = GameObject.TYPE_TILE;
-						var pos:Vector3D = new Vector3D();
-						pos.x = (x + 0.5) * tileSize;
-						pos.y = (y + 0.5) * tileSize;
-						go.initialize(this, pos);
-					}
-					x++;
-				}
-			}
-			
-			super.readXML(xml);
-		}
 		
 		
 		

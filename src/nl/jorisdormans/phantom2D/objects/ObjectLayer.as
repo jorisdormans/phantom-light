@@ -352,62 +352,6 @@ package nl.jorisdormans.phantom2D.objects
 			
 		}
 		
-		override public function generateXML():XML 
-		{
-			var xml:XML = super.generateXML();
-			xml.@width = layerWidth;
-			xml.@height = layerHeight;
-			for (var i:int = 0; i < objects.length; i++) {
-				if (objects[i].type == GameObject.TYPE_NORMAL && !objects[i].destroyed) {
-					var objectXML:XML = objects[i].generateXML();
-					if (objectXML) {
-						xml.appendChild(objectXML);
-					}
-				}
-			}
-			return xml;
-		}
-		
-		override public function readXML(xml:XML):void
-		{
-			super.readXML(xml);
-			if (xml.@width.length()>0) layerWidth = xml.@width;
-			if (xml.@height.length()>0) layerHeight = xml.@height;
-			for (var i:int = 0; i < xml.object.length(); i++) {
-				for (var j:int = 0; j < objectList.length; j++) {
-					if (xml.object[i].@c == StringUtil.getClassName(objectList[j])) {
-						var go:GameObject = new objectList[j]();
-						var p:Vector3D = new Vector3D();
-						p.x = xml.object[i].@x;
-						p.y = xml.object[i].@y;
-						if (xml.object[i].@z.length() > 0) p.z = xml.object[i].@z;
-						go.initialize(this, p);
-						go.readXML(xml.object[i]);
-						break;
-					}
-				}
-			}
-			sortObjects();
-		}		
-		
-		override public function executeCommand(command:Array, caller:GameObject):Boolean 
-		{
-			if (super.executeCommand(command, caller)) return true;
-			if (command[0] == "activateObject" && command[1] != caller.id) {
-				passMessageToObjects(command[1], "activate", { caller: caller });
-				return true;
-			}
-			if (command[0] == "deactivateObject" && command[1] != caller.id) {
-				passMessageToObjects(command[1], "deactivate", { caller: caller });
-				return true;
-			}
-			if (command[0] == "passMessageToObjects" && command[1] != caller.id) {
-				passMessageToObjects(command[1], command[2], { caller: caller });
-				return true;
-			}
-			return false;
-		}
-		
 		private var v1:Vector3D = new Vector3D();
 		private var v2:Vector3D = new Vector3D();
 		private var rayObject:GameObject;

@@ -180,12 +180,6 @@ package nl.jorisdormans.phantom2D.core
 			//update the current screen
 			if (currentScreen) currentScreen.update(elapsedTime);
 			prof.endProfiling();
-			
-			/*if (prof.parent) {
-				graphics.beginFill(0xffffff, 0.8);
-				graphics.drawRect(2, 2, prof.width, prof.height);
-				graphics.endFill();
-			}*/
 		}		
 		
 		/**
