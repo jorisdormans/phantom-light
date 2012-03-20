@@ -2,6 +2,7 @@ package nl.jorisdormans.phantom2D.util
 {
 	import flash.display.Graphics;
 	import flash.display.GraphicsPathCommand;
+	import flash.display.GraphicsPathWinding;
 	/**
 	 * ...
 	 * @author Joris Dormans
@@ -70,10 +71,10 @@ package nl.jorisdormans.phantom2D.util
 				rotation += step;
 				commands.push(GraphicsPathCommand.LINE_TO);
 				data.push(x + innerRadius * Math.sin(rotation), y - innerRadius * Math.cos(rotation));				
+				rotation += step;
 				commands.push(GraphicsPathCommand.LINE_TO);
 				data.push(x + outerRadius * Math.sin(rotation), y - outerRadius * Math.cos(rotation));
 			}
-			
 			graphics.drawPath(commands, data, GraphicsPathWinding.NON_ZERO);
 		}
 		
@@ -87,7 +88,7 @@ package nl.jorisdormans.phantom2D.util
 		 * @param	sides
 		 * @param	orientation
 		 */
-		public static drawRegularPolygon(graphics:Graphics, x:Number, y:Number, radius:Number, sides:int, orientation:Number) {
+		public static function drawRegularPolygon(graphics:Graphics, x:Number, y:Number, radius:Number, sides:int, orientation:Number):void {
 			var commands:Vector.<int> = new Vector.<int>();
 			var data:Vector.<Number> = new Vector.<Number>();
 			

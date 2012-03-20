@@ -11,7 +11,7 @@
 		private var horizontal:Boolean;
 		private var vertical:Boolean;
 		
-		public function WrapAround(horizontal:Boolean = true, vertical:Boolean = true, threshold:Number = 0) 
+		public function WrapAround(threshold:Number = 0, horizontal:Boolean = true, vertical:Boolean = true) 
 		{
 			this.threshold = threshold;
 			this.horizontal = horizontal;

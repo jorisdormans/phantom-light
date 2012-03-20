@@ -15,6 +15,7 @@ package nl.jorisdormans.phantom2D.core
 		/**
 		 * Message to change internal flags that help when a layer needs to be draw wrapped.
 		 * These are called by the cameras.WrapAroundLayer component.
+		 * Expects input: {[horizontal:Boolean][,vertical:Boolean]}
 		 */
 		public static const M_SET_WRAPPED:String = "setWrapped";
 		
@@ -110,8 +111,8 @@ package nl.jorisdormans.phantom2D.core
 		{
 			switch (message) {
 				case M_SET_WRAPPED:
-					renderWrappedHorizontal = data.horizontal;
-					renderWrappedVertical = data.vertical;
+					if (data && data.horizontal) renderWrappedHorizontal = data.horizontal;
+					if (data && data.vertical) renderWrappedVertical = data.vertical;
 					return Phantom.MESSAGE_HANDLED;
 			}
 			return super.handleMessage(message, data);

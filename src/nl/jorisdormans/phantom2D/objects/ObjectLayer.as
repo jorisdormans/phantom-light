@@ -125,11 +125,11 @@ package nl.jorisdormans.phantom2D.objects
 		}		
 		
 		override public function handleInput(elapsedTime:Number, currentState:InputState, previousState:InputState):void {
-			if (!allowInteraction) {
+			if (allowInteraction) {
 				super.handleInput(elapsedTime, currentState, previousState); 
 				var l:int = objects.length;
 				for (var i:int = 0; i < l; i++) {
-					if (objects[i].collisionHandlers > 0 || objects[i].inputHandlers > 0) {
+					if (objects[i].inputHandlers > 0) {
 						objects[i].handleInput(elapsedTime, currentState, previousState);
 					}
 				}

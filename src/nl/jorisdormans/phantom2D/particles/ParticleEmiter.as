@@ -2,11 +2,13 @@ package nl.jorisdormans.phantom2D.particles
 {
 	import flash.geom.Vector3D;
 	import nl.jorisdormans.phantom2D.core.Component;
+	import nl.jorisdormans.phantom2D.core.Composite;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	/**
 	 * A Component that emmits particles at a regular interval
 	 * @author Joris Dormans
 	 */
-	public class ParticleEmiter extends Component
+	public class ParticleEmiter extends GameObjectComponent
 	{
 		private var speedFactor:Number;
 		private var randomVelocity:Number;
@@ -43,15 +45,17 @@ package nl.jorisdormans.phantom2D.particles
 			this.layer = layer;
 		}
 		
+		
 		override public function update(elapsedTime:Number):void 
 		{
 			super.update(elapsedTime);
 			timer -= elapsedTime;
 			if (timer < 0) {
 				if (!particleLayer) {
-					particleLayer = gameObject.layer.screen.getParticleLayer(layer);
+					particleLayer = gameObject.objectLayer.screen.getComponentByClass(ParticleLayer, layer) as ParticleLayer;
 					if (!particleLayer) {
 						trace("WARNING: ParticleLayer " + layer + " not found for " + gameObject.toString());
+						return;
 					}
 				}
 				timer += delay;
