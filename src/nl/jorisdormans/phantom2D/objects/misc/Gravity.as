@@ -1,6 +1,7 @@
-package nl.jorisdormans.phantom2D.objects 
+package nl.jorisdormans.phantom2D.objects.misc 
 {
 	import flash.geom.Vector3D;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	
 	/**
 	 * Applies gravity to a GameObject

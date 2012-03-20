@@ -14,82 +14,11 @@ package nl.jorisdormans.phantom2D.util
 			
 		}
 		
-		public static const moveTo:int = 0;
-		public static const lineTo:int = 1;
-		public static const curveTo:int = 2;
-		public static function drawPolygon(graphics:Graphics, x:Number, y:Number, polygon:Array, scaleX:Number=1, scaleY:Number=1):void {
-			var p:int = 0;
-			var t:int;
-			var x1:Number;
-			var x2:Number;
-			var y1:Number;
-			var y2:Number;
-			while (p < polygon.length) {
-				t = (polygon[p] as int);
-				switch (t) {
-					default:
-					case moveTo:
-						x1 = (polygon[p + 1] as Number)*scaleX;
-						y1 = (polygon[p + 2] as Number)*scaleY;
-						graphics.moveTo(x + x1, y + y1);
-						p += 3;
-						break;
-					case lineTo:
-						x1 = (polygon[p + 1] as Number)*scaleX;
-						y1 = (polygon[p + 2] as Number)*scaleY;
-						graphics.lineTo(x + x1, y + y1);
-						p += 3;
-						break;
-					case curveTo:
-						x1 = (polygon[p + 1] as Number)*scaleX;
-						y1 = (polygon[p + 2] as Number)*scaleY;
-						x2 = (polygon[p + 3] as Number)*scaleX;
-						y2 = (polygon[p + 4] as Number)*scaleY;
-						graphics.curveTo(x + x2, y + y2, x + x1, y + y1);
-						p += 5;
-						break;
-				}
-			}
-		}
-		
-		public static function drawPolygonAngled(graphics:Graphics, x:Number, y:Number, polygon:Array, angle:Number, scaleX:Number=1, scaleY:Number=1):void {
-			var p:int = 0;
-			var t:int;
-			var x1:Number;
-			var x2:Number;
-			var y1:Number;
-			var y2:Number;
-			angle+= Math.PI * 0.5;
-			var cos:Number = Math.cos(angle);
-			var sin:Number = Math.sin(angle);
-			while (p < polygon.length) {
-				t = (polygon[p] as int);
-				switch (t) {
-					default:
-					case moveTo:
-						x1 = (polygon[p + 1] as Number)*scaleX;
-						y1 = (polygon[p + 2] as Number)*scaleY;
-						graphics.moveTo(x + cos*x1-sin*y1, y + cos*y1+sin*x1);
-						p += 3;
-						break;
-					case lineTo:
-						x1 = (polygon[p + 1] as Number)*scaleX;
-						y1 = (polygon[p + 2] as Number)*scaleY;
-						graphics.lineTo(x + cos*x1-sin*y1, y + cos*y1+sin*x1);
-						p += 3;
-						break;
-					case curveTo:
-						x1 = (polygon[p + 1] as Number)*scaleX;
-						y1 = (polygon[p + 2] as Number)*scaleY;
-						x2 = (polygon[p + 3] as Number)*scaleX;
-						y2 = (polygon[p + 4] as Number)*scaleY;
-						graphics.curveTo(x + cos*x2-sin*y2, y + cos*y2+sin*x2, x + cos*x1-sin*y1, y + cos*y1+sin*x1);
-						p += 5;
-						break;
-				}
-			}
-		}	
-		
+		/**
+		 * Returns the illumination value of a color (0-1).
+		 * @param	color
+		 * @return
+		 */
 		public static function colorToIllumination(color:uint):Number {
 			var red1:uint = (color & 0xff0000) >> 16;
 			var green1:uint = (color & 0x00ff00) >> 8;
@@ -98,7 +27,13 @@ package nl.jorisdormans.phantom2D.util
 			return (il / 1024);
 		}
 		
-		
+		/**
+		 * Linear inerpolation between two colors
+		 * @param	color1
+		 * @param	color2
+		 * @param	f
+		 * @return
+		 */
 		public static function lerpColor(color1:uint, color2:uint, f:Number):uint {
 			var red1:uint = (color1 & 0xff0000) >> 16;
 			var green1:uint = (color1 & 0x00ff00) >> 8;
@@ -115,108 +50,91 @@ package nl.jorisdormans.phantom2D.util
 			return ((red1 << 16) | (green1 << 8) | blue1);
 		}	
 		
-		public static var strokeWidthAdjust:Number = 0.7;
-		
-		public static function drawCircleToSVG(x:Number, y:Number, r:Number, fill:String, stroke:String, strokeWidth:Number):XML {
-			var svg:XML = <circle/>;
-			svg.@cx = x.toFixed(2);
-			svg.@cy = y.toFixed(2);
-			svg.@r = r.toFixed(2);
-			if (stroke !=null) {
-				svg.@stroke = stroke;
-				svg.@["stroke-width"] = (strokeWidth * strokeWidthAdjust).toFixed(1);
+		/**
+		 * Draws a regular star
+		 * @param	graphics
+		 * @param	x
+		 * @param	y
+		 * @param	outerRadius
+		 * @param	innerRadius
+		 * @param	points
+		 * @param	rotation
+		 */
+		public static function drawStar(graphics:Graphics, x:Number, y:Number, outerRadius:Number, innerRadius:Number, points:int = 5, rotation:Number = 0):void {
+			var commands:Vector.<int> = new Vector.<int>();
+			var data:Vector.<Number> = new Vector.<Number>();
+			var step:Number = Math.PI / points;
+			commands.push(GraphicsPathCommand.MOVE_TO);
+			data.push(x + outerRadius * Math.sin(rotation), y - outerRadius * Math.cos(rotation));
+			for (var i:int = 0; i < points; i++) {
+				rotation += step;
+				commands.push(GraphicsPathCommand.LINE_TO);
+				data.push(x + innerRadius * Math.sin(rotation), y - innerRadius * Math.cos(rotation));				
+				commands.push(GraphicsPathCommand.LINE_TO);
+				data.push(x + outerRadius * Math.sin(rotation), y - outerRadius * Math.cos(rotation));
 			}
-			if (fill !=null) {
-				svg.@fill = fill;
-			}
-			return svg;
 			
+			graphics.drawPath(commands, data, GraphicsPathWinding.NON_ZERO);
 		}
 		
-		public static function drawRectToSVG(x:Number, y:Number, w:Number, h:Number, fill:String, stroke:String, strokeWidth:Number):XML {
-			var svg:XML = <rect/>;
-			svg.@x = x.toFixed(2);
-			svg.@y = y.toFixed(2);
-			svg.@width = w.toFixed(2);
-			svg.@height = h.toFixed(2);
-			if (stroke !=null) {
-				svg.@stroke = stroke;
-				svg.@["stroke-width"] = (strokeWidth * strokeWidthAdjust).toFixed(1);
-			}
-			if (fill !=null) {
-				svg.@fill = fill;
-			}
-			return svg;
-		}	
-		
-		public static function drawRoundRectToSVG(x:Number, y:Number, w:Number, h:Number, rx:Number, ry:Number, fill:String, stroke:String, strokeWidth:Number):XML {
-			var svg:XML = <rect/>;
-			svg.@x = x.toFixed(2);
-			svg.@y = y.toFixed(2);
-			svg.@width = w.toFixed(2);
-			svg.@height = h.toFixed(2);
-			svg.@rx = rx.toFixed(2);
-			svg.@ry = ry.toFixed(2);
-			if (stroke !=null) {
-				svg.@stroke = stroke;
-				svg.@["stroke-width"] = (strokeWidth * strokeWidthAdjust).toFixed(1);
-			}
-			if (fill !=null) {
-				svg.@fill = fill;
-			}
-			return svg;
+		/**
+		 * Draws a regular polygon
+		 * @param	commands
+		 * @param	data
+		 * @param	x
+		 * @param	y
+		 * @param	radius
+		 * @param	sides
+		 * @param	orientation
+		 */
+		public static drawRegularPolygon(graphics:Graphics, x:Number, y:Number, radius:Number, sides:int, orientation:Number) {
+			var commands:Vector.<int> = new Vector.<int>();
+			var data:Vector.<Number> = new Vector.<Number>();
 			
-		}	
-		
-		public static function drawPathToSVG(commands:Vector.<int>, data:Vector.<Number>, fill:String, stroke:String, strokeWidth:Number):XML {
-			var d:String = "";
-			var di:int = 0;
-			for (var i:int = 0; i < commands.length; i++) {
-				switch (commands[i]) {
-					case GraphicsPathCommand.WIDE_MOVE_TO:
-						d += " M " + data[di + 2].toFixed(2) + " " + data[di + 3].toFixed(2);
-						di += 4;
-						break;
-					case GraphicsPathCommand.MOVE_TO:
-						d += " M " + data[di].toFixed(2) + " " + data[di + 1].toFixed(2);
-						di += 2;
-						break;
-					case GraphicsPathCommand.WIDE_LINE_TO:
-						d += " L " + data[di + 2].toFixed(2) + " " + data[di + 3].toFixed(2);
-						di += 4;
-						break;
-					case GraphicsPathCommand.LINE_TO:
-						d += " L " + data[di].toFixed(2) + " " + data[di + 1].toFixed(2);
-						di += 2;
-						break;
-					case GraphicsPathCommand.CURVE_TO:
-					    var cx:Number = data[di];
-					    var cy:Number = data[di + 1];
-						if (i>0 && commands[i-1] == GraphicsPathCommand.CURVE_TO) {
-							cx = data[di + 2] + (data[di + 0] - data[di + 2]) * 0.5;
-							cy = data[di + 3] + (data[di + 1] - data[di + 3]) * 0.5;
-						}
-						d += " S " + cx.toFixed(2) + " " + cy.toFixed(2) + " " + data[di + 2].toFixed(2) + " " + data[di + 3].toFixed(2);
-						di += 4;
-						break;
-				}
-			}	
-			if (d.charAt(0) == " ") d = d.substr(1);
-					
-			var svg:XML = <path/>;
-			svg.@d = d;
-			if (stroke !=null) {
-				svg.@stroke = stroke;
-				svg.@["stroke-width"] = (strokeWidth * strokeWidthAdjust).toFixed(1);
-			}
-			if (fill !=null) {
-				svg.@fill = fill;
-			}
+			addRegularPolygon(commands, data, x, y, radius, sides, orientation);
 			
-			
-			return svg;
+			graphics.drawPath(commands, data, GraphicsPathWinding.NON_ZERO);
 		}
 		
+		/**
+		 * Adds a regular polygon to command and data structure
+		 * @param	commands
+		 * @param	data
+		 * @param	x
+		 * @param	y
+		 * @param	radius
+		 * @param	sides
+		 * @param	orientation
+		 */
+		public static function addRegularPolygon(commands:Vector.<int>, data:Vector.<Number>, x:Number, y:Number, radius:Number, sides:int, orientation:Number):void {
+			var step:Number = Math.PI * 2 / sides;
+			commands.push(GraphicsPathCommand.MOVE_TO);
+			data.push(x + Math.cos(orientation) * radius, y + Math.sin(orientation) * radius);
+			orientation += step;
+			for (var i:int = 0; i < sides; i++) {
+				commands.push(GraphicsPathCommand.LINE_TO);
+				data.push(x + Math.cos(orientation) * radius, y + Math.sin(orientation) * radius);
+				orientation += step;
+			}
+		}
+		
+		/**
+		 * Draws two lines in a cross centered on x and y
+		 * @param	graphics
+		 * @param	x
+		 * @param	y
+		 * @param	size
+		 * @param	orientation
+		 */
+		public static function drawCross(graphics:Graphics, x:Number, y:Number, size:Number, orientation:Number = 0):void {
+			size *= 0.5;
+			var cos:Number = Math.cos(orientation) * size;
+			var sin:Number = Math.sin(orientation) * size;
+			graphics.moveTo(x-cos, y-sin);
+			graphics.lineTo(x+cos, y+sin);
+			graphics.moveTo(x-sin, y-cos);
+			graphics.lineTo(x+sin, y+cos);
+		}		
 	}
 
 }
