@@ -142,17 +142,14 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	position	The initial position
 		 * @param	data		Additional created data
 		 */
-		public function initialize(objectLayer:ObjectLayer, position:Vector3D, data:Object = null):GameObject {
-			this.position = position;
+		public function initialize():void {
 			if (objectLayer) {
-				objectLayer.addGameObjectSorted(this);
 				tiledLayer = objectLayer as TiledObjectLayer;
 				if (tiledLayer) {
 					inTiledLayer = true;
 					placeOnTile();
 				}
 			}
-			return this;
 		}
 		
 		/**

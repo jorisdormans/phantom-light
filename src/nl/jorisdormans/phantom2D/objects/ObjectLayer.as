@@ -58,54 +58,49 @@ package nl.jorisdormans.phantom2D.objects
 		}
 		
 		/**
-		 * Add a gameObject to this layer
-		 * @param	gameObject
-		 */
-		public function addGameObject(gameObject:GameObject):void {
-			gameObject.removed = false;
-			
-			if (gameObject.objectLayer != null) {
-				gameObject.objectLayer.removeGameObject(gameObject);
-			}
-			gameObject.objectLayer = this;
-			objects.push(gameObject);
-		}
-		
-		/**
-		 * Add a game object to a particular position in the object list
+		 * Add a gameObject to this layer at the specified position.
 		 * @param	gameObject
 		 * @param	position
 		 */
-		public function addGameObjectAt(gameObject:GameObject, position:int):void {
+		public function addGameObject(gameObject:GameObject, position:Vector3D):void {
+			addGameObjectAt(gameObject, position, objects.length);
+		}
+		
+		/**
+		 * Add a gameObject to this layer at the specified position and at a particular index in the object list.
+		 * @param	gameObject
+		 * @param	position
+		 * @param 	index
+		 */
+		public function addGameObjectAt(gameObject:GameObject, position:Vector3D, index:int):void {
 			gameObject.removed = false;
+			gameObject.position = position;
 			
 			if (gameObject.objectLayer != null) {
 				gameObject.objectLayer.removeGameObject(gameObject);
 			}
 			gameObject.objectLayer = this;
-			objects.splice(position, 0, gameObject);
+			objects.splice(index, 0, gameObject);
+			gameObject.initialize();
 		}
 		
 		/**
-		 * Inserts a gameObject at a location in the list based on the GameObject.sortOrder value.
+		 * Inserts a gameObject to this layer at the specified position and at an index in 
+		 * the object list based on the GameObject.sortOrder value.
 		 * This function should only be called if the list of objects is realy sorted
 		 * @param	gameObject
+		 * @param	position
 		 */
-		public function addGameObjectSorted(gameObject:GameObject):void {
-			gameObject.removed = false;
-			if (gameObject.objectLayer != null) {
-				gameObject.objectLayer.removeGameObject(gameObject);
-			}
-			gameObject.objectLayer = this;
+		public function addGameObjectSorted(gameObject:GameObject, position:Vector3D):void {
 			var l:int = objects.length;
 			for (var i:int = l-1; i >= 0; i--) {
 				if (compareObjects(objects[i], gameObject) < 0 ) {
-					objects.splice(i+1, 0, gameObject);
+					addGameObjectAt(gameObject, position, i+1);
 					return;
 				}
 			}
 			//add to begin
-			objects.splice(0, 0, gameObject);
+			addGameObjectAt(gameObject, position, 0);
 		}
 
 		/**

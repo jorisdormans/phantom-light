@@ -149,7 +149,7 @@ package nl.jorisdormans.phantom2D.objects
 				if (y<tilesY && tileIndex >= 0 && tileIndex < this.tileList.length && this.tileList[tileIndex]!=null) {
 					var gameObject:GameObject = new this.tileList[tileIndex]() as GameObject;
 					var p:Vector3D = new Vector3D(x * tileSize + tileSize * 0.5, y * tileSize + tileSize * 0.5); 
-					gameObject.initialize(this, p, {index:tileIndex});
+					addGameObjectSorted(gameObject, p);
 				}
 			}
 		}
