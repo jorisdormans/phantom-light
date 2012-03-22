@@ -16,9 +16,9 @@
 		private static var p:Vector3D = new Vector3D();
 		private static var p2:Vector3D = new Vector3D();
 		
-		public function BoundingBoxOA(halfSize:Vector3D) 
+		public function BoundingBoxOA(size:Vector3D) 
 		{
-			super(halfSize);
+			super(size);
 		}
 		
 		override protected function setExtremes():void {

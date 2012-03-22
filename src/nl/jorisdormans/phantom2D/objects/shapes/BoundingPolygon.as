@@ -78,6 +78,8 @@
 		{
 			var lastPoint:int = points.length;
 			if (lastPoint <= 0) return;
+			angle += orientation;
+			
 			MathUtil.rotateVector3D(p, points[lastPoint - 1], angle);
 			p.x *= zoom;
 			p.y *= zoom;
@@ -85,9 +87,6 @@
 			commands.push(GraphicsPathCommand.MOVE_TO);
 			var data:Vector.<Number> = new Vector.<Number>();
 			data.push(x + p.x, y + p.y);
-			
-			
-			angle += orientation;
 					  
 			for (var i:int = 0; i < lastPoint; i++) {
 				MathUtil.rotateVector3D(p, points[i], angle);

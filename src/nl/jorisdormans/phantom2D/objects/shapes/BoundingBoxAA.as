@@ -126,7 +126,7 @@
 		
 		override public function set orientation(value:Number):void 
 		{
-			value = 0;
+			//value = 0;
 			super.orientation = value;
 		}
 		
