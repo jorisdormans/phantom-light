@@ -2,7 +2,8 @@ package nl.jorisdormans.phantom2D.core
 {
 	import flash.utils.getQualifiedClassName;
 	import nl.jorisdormans.phantom2D.core.Phantom;
-	import nl.jorisdormans.phantom2D.objects.GameObject;
+	
+	
 	/**
 	 * The base class for Components of a GameObject
 	 * @author Joris Dormans
@@ -58,7 +59,6 @@ package nl.jorisdormans.phantom2D.core
 			} else {
 				return Phantom.MESSAGE_NOT_HANDLED;
 			}
-			
 		}
 
 		

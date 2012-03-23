@@ -5,7 +5,6 @@
 	import nl.jorisdormans.phantom2D.core.Composite;
 	import nl.jorisdormans.phantom2D.core.Screen;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
-	import nl.jorisdormans.phantom2D.objects.ObjectLayer;
 	
 	/**
 	 * ...

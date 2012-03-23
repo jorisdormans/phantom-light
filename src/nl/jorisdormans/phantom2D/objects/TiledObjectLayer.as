@@ -17,9 +17,6 @@ package nl.jorisdormans.phantom2D.objects
 	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
 	import nl.jorisdormans.phantom2D.objects.shapes.BoundingLine;
-	import nl.jorisdormans.phantom2D.util.DrawUtil;
-	import nl.jorisdormans.phantom2D.thirdparty.profiler.Profiler;
-	import nl.jorisdormans.phantom2D.thirdparty.profiler.ProfilerConfig;
 	import nl.jorisdormans.phantom2D.util.StringUtil;
 	/**
 	 * ...
