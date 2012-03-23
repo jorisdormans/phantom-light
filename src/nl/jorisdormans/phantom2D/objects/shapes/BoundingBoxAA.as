@@ -31,6 +31,10 @@
 			_right = _halfSize.x;
 			_top = -_halfSize.y;
 			_bottom = _halfSize.y;
+			var w:Number = Math.max( -_left, _right);
+			var h:Number = Math.max( -_top, _bottom);
+			_roughSize = Math.sqrt(w * w + h * h) * 2;
+			
 		}
 		
 		
