@@ -62,8 +62,8 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	gameObject
 		 * @param	position
 		 */
-		public function addGameObject(gameObject:GameObject, position:Vector3D):void {
-			addGameObjectAt(gameObject, position, objects.length);
+		public function addGameObject(gameObject:GameObject, position:Vector3D):GameObject {
+			return addGameObjectAt(gameObject, position, objects.length);
 		}
 		
 		/**
@@ -72,7 +72,7 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	position
 		 * @param 	index
 		 */
-		public function addGameObjectAt(gameObject:GameObject, position:Vector3D, index:int):void {
+		public function addGameObjectAt(gameObject:GameObject, position:Vector3D, index:int):GameObject {
 			gameObject.removed = false;
 			gameObject.position = position;
 			
@@ -82,6 +82,7 @@ package nl.jorisdormans.phantom2D.objects
 			gameObject.objectLayer = this;
 			objects.splice(index, 0, gameObject);
 			gameObject.initialize();
+			return gameObject;
 		}
 		
 		/**
@@ -91,16 +92,15 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	gameObject
 		 * @param	position
 		 */
-		public function addGameObjectSorted(gameObject:GameObject, position:Vector3D):void {
+		public function addGameObjectSorted(gameObject:GameObject, position:Vector3D):GameObject {
 			var l:int = objects.length;
 			for (var i:int = l-1; i >= 0; i--) {
 				if (compareObjects(objects[i], gameObject) < 0 ) {
-					addGameObjectAt(gameObject, position, i+1);
-					return;
+					return addGameObjectAt(gameObject, position, i+1);
 				}
 			}
 			//add to begin
-			addGameObjectAt(gameObject, position, 0);
+			return addGameObjectAt(gameObject, position, 0);
 		}
 
 		/**
@@ -124,9 +124,7 @@ package nl.jorisdormans.phantom2D.objects
 				super.handleInput(elapsedTime, currentState, previousState); 
 				var l:int = objects.length;
 				for (var i:int = 0; i < l; i++) {
-					if (objects[i].inputHandlers > 0) {
-						objects[i].handleInput(elapsedTime, currentState, previousState);
-					}
+					objects[i].handleInput(elapsedTime, currentState, previousState);
 				}
 			}
 		}

@@ -95,7 +95,18 @@ package nl.jorisdormans.phantom2D.objects
 			layerHeight = y * tileSize;
 			var t:int = x * y;
 			while (tiles.length < t) tiles.push(new Tile(this, tiles.length));
-			while (tiles.length>t) tiles[t].dispose();
+			while (tiles.length > t) tiles[t].dispose();
+			
+			for (y = 0; y < tilesY; y++) {
+				for (x = 0; x < tilesX; x++) {
+					t = x + y * tilesX;
+					if (x > 0) tiles[t].left = tiles[t - 1];
+					if (x < tilesX - 1) tiles[t].right = tiles[t + 1];
+					if (y > 0) tiles[t].up = tiles[t - tilesX];
+					if (y < tilesY - 1) tiles[t].down = tiles[t + tilesX];
+				}
+			}
+			
 		}
 		
 		/**

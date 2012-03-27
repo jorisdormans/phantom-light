@@ -137,10 +137,7 @@ package nl.jorisdormans.phantom2D.objects
 		}
 		
 		/**
-		 * Creates GameObjectComponents and adds the GameObject to the specified ObjectLayer.
-		 * @param	objectLayer	Layer to which the object is to be added.
-		 * @param	position	The initial position
-		 * @param	data		Additional created data
+		 * Called after a component is initialized. Calls the onInitialize of all its GameObjectComponents
 		 */
 		public function initialize():void {
 			if (objectLayer) {
@@ -148,6 +145,12 @@ package nl.jorisdormans.phantom2D.objects
 				if (tiledLayer) {
 					inTiledLayer = true;
 					placeOnTile();
+				}
+			}
+			var l:int = components.length;
+			for (var i:int = 0; i < l; i++) {
+				if (components[i] is GameObjectComponent) {
+					(components[i] as GameObjectComponent).onInitialize();
 				}
 			}
 		}
@@ -260,7 +263,9 @@ package nl.jorisdormans.phantom2D.objects
 			var l:int = components.length;
 			for (var i:int = 0; i < l; i++) {
 				if (components[i] is IRenderable) {
-					(components[i] as IRenderable).render(graphics, x, y, angle + shape.orientation, zoom);
+					var a:Number = angle;
+					if (shape) a += shape.orientation;
+					(components[i] as IRenderable).render(graphics, x, y, a, zoom);
 				}
 			}
 		}

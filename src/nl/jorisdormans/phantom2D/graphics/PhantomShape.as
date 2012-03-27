@@ -434,27 +434,6 @@ package nl.jorisdormans.phantom2D.graphics
 			return new PhantomShape(commands, data, parseInt(s3));
 		}
 		
-		
-		public function toSVG(x:Number, y:Number, scaleX:Number, scaleY:Number, rotation:Number, fill:String, stroke:String, strokeWidth:Number):XML {
-			if (_translation.x != x || _translation.y != y || _scale.x != scaleX || _scale.y != scaleY || _rotation != rotation) {
-				var cos:Number = Math.cos(rotation);
-				var sin:Number = Math.sin(rotation);
-				var cx:Number;
-				var cy:Number;
-				for (var i:int = 0; i < _data.length; i += 2) {
-					cx = _data[i] * scaleX;
-					cy = _data[i+1] * scaleY;
-					_processedData[i] = cos * cx - sin * cy + x;
-					_processedData[i + 1] = cos * cy + sin * cx + y;
-					_translation.x = x;
-					_translation.y = y;
-					_scale.x = scaleX;
-					_scale.y = scaleY;
-					_rotation = rotation;
-				}
-			}			
-			return DrawUtil.drawPathToSVG(_commands, _processedData, fill, stroke, strokeWidth);
-		}
 	}
 
 }

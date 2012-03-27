@@ -34,6 +34,13 @@ package nl.jorisdormans.phantom2D.objects
 			gameObject = null;
 		}
 		
+		/**
+		 * Function that is called after the Component's GameObject is placed in an ObjectLayer and initialized
+		 */
+		public function onInitialize():void {
+			
+		}
+		
 	}
 
 }

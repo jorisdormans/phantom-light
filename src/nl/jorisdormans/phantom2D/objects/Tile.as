@@ -30,6 +30,23 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public var tileY:int;
 		
+		/**
+		 * The tile's neighbor to the left (if any).
+		 */
+		public var left:Tile;
+		/**
+		 * The tile's neighbor to the right (if any).
+		 */
+		public var right:Tile;
+		/**
+		 * The tile's neighbor above (if any).
+		 */
+		public var up:Tile;
+		/**
+		 * The tile's neighbor below (if any).
+		 */
+		public var down:Tile;
+		
 		
 		/**
 		 * Creates an instance of the Tile class

@@ -99,7 +99,7 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function getComponentByClass(componentClass:Class, nth:int = 0):Component {
 			var l:int = components.length;
-			for (var i:int = nth; i < l; i++) {
+			for (var i:int = 0; i < l; i++) {
 				if (components[i] is componentClass) {
 					if (nth == 0) return components[i];
 					else nth--;
