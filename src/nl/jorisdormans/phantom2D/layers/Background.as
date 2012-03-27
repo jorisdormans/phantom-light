@@ -24,7 +24,8 @@ package nl.jorisdormans.phantom2D.layers
 			matrix.createGradientBox( layerWidth, layerHeight );
 			matrix.rotate( Math.PI * 0.5);
 			sprite.graphics.clear();
-			var f:Number = layerHeight / layerWidth;
+			var f:Number = 1;
+			if (layerHeight <layerWidth) layerHeight / layerWidth;
 			sprite.graphics.beginGradientFill(GradientType.LINEAR, [colorTop, colorMiddle, colorBottom], [1.0, 1.0, 1.0], [0, middleRatio * f, 255 * f], matrix);
 			sprite.graphics.drawRect(0, 0, layerWidth, layerHeight);
 			sprite.graphics.endFill();
