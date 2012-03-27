@@ -1,11 +1,11 @@
 package nl.jorisdormans.phantom2D.objects.boundaries
 {
-	import nl.jorisdormans.phantom2D.core.Component;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	/**
 	 * A Component that destroys its object when it moves outside its layer.
 	 * @author Joris Dormans
 	 */
-	public class DestroyOutsideLayer extends Component
+	public class DestroyOutsideLayer extends GameObjectComponent
 	{
 		private var threshold:Number = 0;
 		private var left:Boolean;
@@ -28,6 +28,7 @@ package nl.jorisdormans.phantom2D.objects.boundaries
 			this.right = right;
 			this.up = up;
 			this.down = down;
+			
 		}
 		
 		override public function update(elapsedTime:Number):void 

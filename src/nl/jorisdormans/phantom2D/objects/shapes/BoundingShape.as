@@ -4,7 +4,6 @@
 	import flash.display.Shape;
 	import flash.geom.Vector3D;
 	import nl.jorisdormans.phantom2D.core.*;
-	import nl.jorisdormans.phantom2D.objects.CollisionData;
 	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	
