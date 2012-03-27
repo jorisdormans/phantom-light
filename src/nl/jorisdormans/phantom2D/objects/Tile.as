@@ -2,7 +2,6 @@ package nl.jorisdormans.phantom2D.objects
 {
 	import flash.display.Graphics;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
-	import nl.jorisdormans.phantom2D.util.TextDraw;
 	/**
 	 * A Tile keeps track of objects that are at a particular location
 	 * @author Joris Dormans

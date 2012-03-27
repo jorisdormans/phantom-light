@@ -4,7 +4,6 @@ package nl.jorisdormans.phantom2D.core
 	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
 	import nl.jorisdormans.phantom2D.objects.IInputHandler;
-	import nl.jorisdormans.phantom2D.objects.IRenderable;
 	import nl.jorisdormans.phantom2D.util.StringUtil;
 	/**
 	 * ...
