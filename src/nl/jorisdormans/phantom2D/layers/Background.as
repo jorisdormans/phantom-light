@@ -4,6 +4,7 @@ package nl.jorisdormans.phantom2D.layers
 	import flash.geom.Matrix;
 	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.core.Layer;
+	import nl.jorisdormans.phantom2D.core.PhantomGame;
 	/**
 	 * Layer class that renders a gradient background
 	 * @author Joris Dormans
@@ -20,13 +21,19 @@ package nl.jorisdormans.phantom2D.layers
 		public function Background(colorTop:uint, colorMiddle:uint, colorBottom:uint, middleRatio:int = 128) 
 		{
 			super();
+			layerWidth = PhantomGame.gameWidth;
+			layerHeight = PhantomGame.gameHeight;
+			trace(layerWidth, layerHeight);
 			var matrix:Matrix = new Matrix();
-			matrix.createGradientBox( layerWidth, layerHeight );
+			//matrix.createGradientBox( layerWidth, layerHeight );
+			matrix.createGradientBox( layerHeight, layerWidth );
 			matrix.rotate( Math.PI * 0.5);
 			sprite.graphics.clear();
-			var f:Number = 1;
-			if (layerHeight <layerWidth) layerHeight / layerWidth;
-			sprite.graphics.beginGradientFill(GradientType.LINEAR, [colorTop, colorMiddle, colorBottom], [1.0, 1.0, 1.0], [0, middleRatio * f, 255 * f], matrix);
+			//var f:Number = 1;
+			//if (layerHeight < layerWidth) f = layerHeight / layerWidth;
+			//else f = layerWidth / layerHeight;
+
+			sprite.graphics.beginGradientFill(GradientType.LINEAR, [colorTop, colorMiddle, colorBottom], [1.0, 1.0, 1.0], [0, middleRatio, 255], matrix);
 			sprite.graphics.drawRect(0, 0, layerWidth, layerHeight);
 			sprite.graphics.endFill();
 		}

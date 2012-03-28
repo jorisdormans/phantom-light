@@ -132,6 +132,14 @@ package nl.jorisdormans.phantom2D.objects
 		override public function render(camera:Camera):void {
 			sprite.graphics.clear();
 			var i:int = 0;
+			l = components.length;
+			while (i < l) {
+				if (components[i] is IRenderable) {
+					(components[i] as IRenderable).render(sprite.graphics, 0, 0, camera.angle, camera.zoom);
+				}
+				i++;
+			}
+			i = 0;
 			var l:int = objects.length;
 			while (i < l) {
 				var rx:Number = objects[i].position.x - camera.left;
