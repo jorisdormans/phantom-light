@@ -49,9 +49,8 @@
 		private static var u:Vector3D = new Vector3D();
 		private static var p:Vector3D = new Vector3D();
 		
-		public static var doIsometric:Boolean = false;
 		
-		
+		//public static var feedback:Vector.<Vector3D>;
 		
 		public function CollisionData() 
 		{
@@ -157,31 +156,32 @@
 				}
 
 				MathUtil.rotateVector3D(u, shape1.projections[i], shape1.orientation);
-				//feedback.push(new Vector3D(shape1.position.x + u.x * shape1.projections[i + 1].x, shape1.position.y + u.y * shape1.projections[i + 1].x));
-				//feedback.push(new Vector3D(shape1.position.x + u.x * shape1.projections[i + 1].y, shape1.position.y + u.y * shape1.projections[i + 1].y));
-				//feedback.push(new Vector3D(shape1.position.x + u.x*p.x, shape1.position.y + u.y*p.x, 0));
-				//feedback.push(new Vector3D(shape1.position.x + u.x*p.y, shape1.position.y + u.y*p.y, 0));
+				//feedback.push(new Vector3D(object1.position.x + u.x * shape1.projections[i + 1].x, object1.position.y + u.y * shape1.projections[i + 1].x));
+				//feedback.push(new Vector3D(object1.position.x + u.x * shape1.projections[i + 1].y, object1.position.y + u.y * shape1.projections[i + 1].y));
+				//feedback.push(new Vector3D(object1.position.x + u.x*p.x, object1.position.y + u.y*p.x, 0));
+				//feedback.push(new Vector3D(object1.position.x + u.x*p.y, object1.position.y + u.y*p.y, 0));
 				
-				if (shape2.gameObject && shape2.gameObject.mover) {
-					//Only use the interpenetration in the directions of object1 if object2 is a moving object
-					if (inter1 < inter2 && inter1 < data.interpenetration) {
-						data.interpenetration = inter1;
-						data.normal.x = u.x;
-						data.normal.y = u.y;
-						data.normal.z = 0;
-						lookingAt = object2;
-					} else if (inter2 < data.interpenetration) {
-						data.interpenetration = inter2;
-						data.normal.x = -u.x;
-						data.normal.y = -u.y;
-						data.normal.z = 0;
-						lookingAt = object2;
-					}
+				if (inter1 < inter2 && inter1 < data.interpenetration) {
+					data.interpenetration = inter1;
+					data.normal.x = u.x;
+					data.normal.y = u.y;
+					data.normal.z = 0;
+					lookingAt = object2;
+				} else if (inter2 < data.interpenetration) {
+					data.interpenetration = inter2;
+					data.normal.x = -u.x;
+					data.normal.y = -u.y;
+					data.normal.z = 0;
+					lookingAt = object2;
 				}
 				
 			}
-			
+			//feedback.push(new Vector3D(data.position.x, data.position.y));
+			//feedback.push(new Vector3D(data.position.x + data.normal.x*data.interpenetration, data.position.y + data.normal.y*data.interpenetration));
+			//feedback.push(new Vector3D(data.position.x + data.normal.y*5, data.position.y - data.normal.x*5));
+			//feedback.push(new Vector3D(data.position.x - data.normal.y*5, data.position.y + data.normal.x*5));			
 			//project shape1 onto shape2
+			
 			MathUtil.rotateVector3D(distance2, distance, -shape1.orientation);
 			for (i = 0; i < shape2.projections.length; i += 2) {
 				MathUtil.rotateVector3D(u, shape2.projections[i], shape2.orientation - shape1.orientation);
@@ -191,10 +191,10 @@
 				
 				MathUtil.rotateVector3D(u, shape2.projections[i], shape2.orientation);
 				
-				//feedback.push(new Vector3D(shape2.position.x + u.x * shape2.projections[i + 1].x, shape2.position.y + u.y * shape2.projections[i + 1].x));
-				//feedback.push(new Vector3D(shape2.position.x + u.x * shape2.projections[i + 1].y, shape2.position.y + u.y * shape2.projections[i + 1].y));
-				//feedback.push(new Vector3D(shape2.position.x + u.x*p.x, shape2.position.y + u.y*p.x, 0));
-				//feedback.push(new Vector3D(shape2.position.x + u.x*p.y, shape2.position.y + u.y*p.y, 0));
+				//feedback.push(new Vector3D(object2.position.x + u.x * shape2.projections[i + 1].x, object2.position.y + u.y * shape2.projections[i + 1].x));
+				//feedback.push(new Vector3D(object2.position.x + u.x * shape2.projections[i + 1].y, object2.position.y + u.y * shape2.projections[i + 1].y));
+				//feedback.push(new Vector3D(object2.position.x + u.x*p.x, object2.position.y + u.y*p.x, 0));
+				//feedback.push(new Vector3D(object2.position.x + u.x * p.y, object2.position.y + u.y * p.y, 0));
 
 				//no interpenetration thus no collision
 				if (inter1 <= 0 || inter2 <= 0) {
@@ -265,6 +265,7 @@
 			
 			data.position.incrementBy(u);
 			
+			//feedback = new Vector.<Vector3D>();
 			//feedback.push(new Vector3D(data.position.x, data.position.y));
 			//feedback.push(new Vector3D(data.position.x + data.normal.x*data.interpenetration, data.position.y + data.normal.y*data.interpenetration));
 			//feedback.push(new Vector3D(data.position.x + data.normal.y*5, data.position.y - data.normal.x*5));
@@ -330,8 +331,8 @@
 			for (i = 0; i < other.projections.length; i += 2) {
 				MathUtil.rotateVector3D(u, other.projections[i], other.orientation);
 				circle.projection(p, u, distance);
-				//feedback.push(new Vector3D(other.position.x+u.x*p.x, other.position.y+u.y*p.x));
-				//feedback.push(new Vector3D(other.position.x+u.x*p.y, other.position.y+u.y*p.y));
+				//feedback.push(new Vector3D(object2.position.x+u.x*p.x, object2.position.y+u.y*p.x));
+				//feedback.push(new Vector3D(object2.position.x+u.x*p.y, object2.position.y+u.y*p.y));
 				
 				inter1 = other.projections[i + 1].y - p.x;
 				inter2 = p.y - other.projections[i + 1].x;
@@ -370,17 +371,20 @@
 			MathUtil.rotateVector3D(distance2, distance, -other.orientation);
 			
 			//check collision on projection from other points to the center of the circle
+			
 			for (i = 0; i < other.points.length; i++) {
 				MathUtil.rotateVector3D(u, other.points[i], -other.orientation);
 				u.incrementBy(distance2);
 				u.normalize();
-				//for some reason I had this earlier with certain shapes, do not know why...
-				//MathUtil.getNormal2D(u, u);
+				//for some reason I I have to do this with bound polygons, do not know why...
+				if (other is BoundingPolygon) {
+					MathUtil.getNormal2D(u, u);
+				}
 				
 				other.projection(p, u, distance2);
 				
-				//feedback.push(new Vector3D(other.position.x+u.x*p.x, other.position.y+u.y*p.x));
-				//feedback.push(new Vector3D(other.position.x + u.x * p.y, other.position.y + u.y * p.y));
+				//feedback.push(new Vector3D(object2.position.x+u.x*p.x, object2.position.y+u.y*p.x));
+				//feedback.push(new Vector3D(object2.position.x + u.x * p.y, object2.position.y + u.y * p.y));
 				
 				inter1 = circle.radius - p.x;
 				inter2 = p.y + circle.radius;

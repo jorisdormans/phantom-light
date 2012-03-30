@@ -165,6 +165,18 @@ package nl.jorisdormans.phantom2D.objects
 				
 				i++;
 			}
+			
+			//draw colissionData feedback
+			/*
+			if (CollisionData.feedback) {
+				sprite.graphics.lineStyle(2, 0xbb0000);
+				for (i = 0; i < CollisionData.feedback.length; i+=2) {
+					sprite.graphics.moveTo(CollisionData.feedback[i].x - camera.left, CollisionData.feedback[i].y - camera.top);
+					sprite.graphics.lineTo(CollisionData.feedback[i+1].x - camera.left, CollisionData.feedback[i+1].y - camera.top);
+				}
+				sprite.graphics.lineStyle();
+			}
+			//*/
 		}	
 		
 		override public function update(elapsedTime:Number):void {

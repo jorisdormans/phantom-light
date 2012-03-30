@@ -2,6 +2,7 @@ package nl.jorisdormans.phantom2D.objects.renderers
 {
 	import flash.display.Graphics;
 	import nl.jorisdormans.phantom2D.core.Component;
+	import nl.jorisdormans.phantom2D.core.Phantom;
 	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	import nl.jorisdormans.phantom2D.objects.IRenderable;
 	import nl.jorisdormans.phantom2D.graphics.PhantomShape;
