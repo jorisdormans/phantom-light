@@ -1,5 +1,6 @@
 package nl.jorisdormans.phantom2D.objects.boundaries
 {
+	import nl.jorisdormans.phantom2D.objects.GameObject;
 	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	/**
 	 * A Component that destroys its object when it moves outside its layer.
@@ -34,10 +35,11 @@ package nl.jorisdormans.phantom2D.objects.boundaries
 		override public function update(elapsedTime:Number):void 
 		{
 			super.update(elapsedTime);
+			var gameObject:GameObject = parent as GameObject;
 			if (left && gameObject.position.x + threshold < 0) gameObject.destroyed = true;
-			if (right && gameObject.position.x - threshold > gameObject.layer.layerWidth) gameObject.destroyed = true;
+			if (right && gameObject.position.x - threshold > gameObject.objectLayer.layerWidth) gameObject.destroyed = true;
 			if (up && gameObject.position.y + threshold < 0) gameObject.destroyed = true;
-			if (down && gameObject.position.y - threshold > gameObject.layer.layerHeight) gameObject.destroyed = true;
+			if (down && gameObject.position.y - threshold > gameObject.objectLayer.layerHeight) gameObject.destroyed = true;
 		}
 		
 	}
