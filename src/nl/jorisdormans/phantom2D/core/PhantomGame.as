@@ -127,7 +127,7 @@ package nl.jorisdormans.phantom2D.core
 			_maskShape.graphics.beginFill(0xffffff);
 			_maskShape.graphics.drawRect(0, 0, gameWidth, gameHeight);
 			_maskShape.graphics.endFill();
-			addChild(_maskShape);
+			stage.addChild(_maskShape);
 			mask = _maskShape;
 			
 			this.focusRect = null;
