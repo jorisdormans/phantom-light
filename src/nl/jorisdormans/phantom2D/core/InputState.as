@@ -23,6 +23,15 @@ package nl.jorisdormans.phantom2D.core
 		public var mouseButton:Boolean = false;
 		
 		/**
+		 * The mouse X position relative to the active screen's camera.
+		 */
+		public var cameraX:Number = 0;
+		/**
+		 * The mouse Y position relative to the active screen's camera.
+		 */
+		public var cameraY:Number = 0;
+		
+		/**
 		 * State of the up arrow key
 		 */
 		public var arrowUp:Boolean = false;
@@ -233,6 +242,8 @@ package nl.jorisdormans.phantom2D.core
 			mouseX = source.mouseX;
 			mouseY = source.mouseY;
 			mouseButton = source.mouseButton;
+			cameraX = source.cameraX;
+			cameraY = source.cameraY;
 		}
 		
 		/**
