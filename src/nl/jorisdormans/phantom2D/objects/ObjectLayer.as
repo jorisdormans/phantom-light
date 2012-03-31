@@ -262,7 +262,7 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	index	The index of the objects of that class to be returned (0 = the first)
 		 * @return
 		 */
-		public function findObjectByClass(c:Class, index:int = 0):GameObject {
+		public function getObjectByClass(c:Class, index:int = 0):GameObject {
 			var l:int = objects.length;
 			for (var i:int = 0; i < l; i++) {
 				if (objects[i] is c) {
@@ -278,7 +278,7 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	objectClass
 		 * @return
 		 */
-		public function findAllObjectsOfClass(objectClass:Class):Vector.<GameObject> {
+		public function getAllObjectsOfClass(objectClass:Class):Vector.<GameObject> {
 			var r:Vector.<GameObject> = new Vector.<GameObject>();
 			var l:int = objects.length;
 			for (var i:int = 0; i < l; i++) {
