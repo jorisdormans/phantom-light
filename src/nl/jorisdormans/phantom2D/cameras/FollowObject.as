@@ -8,9 +8,17 @@ package nl.jorisdormans.phantom2D.cameras
 	 */
 	public class FollowObject extends CameraComponent
 	{
+		/**
+		 * The object currently being followed
+		 */
 		public var following:GameObject;
-		
+		/**
+		 * Message to change the object being followed. Expects input: {followObject: GameObject});
+		 */
 		public static const M_FOLLOW_OBJECT:String = "followObject";
+		/**
+		 * Message to stop following an object
+		 */
 		public static const M_STOP_FOLLOWING:String = "stopFollowing";
 		
 		public function FollowObject(following:GameObject) 
