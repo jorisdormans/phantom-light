@@ -136,6 +136,22 @@ package nl.jorisdormans.phantom2D.objects
 			}
 		}
 		
+		override public function onAdd(composite:Composite):void 
+		{
+			super.onAdd(composite);
+			if (this.objectLayer) {
+				var l:int = components.length;
+				for (var i:int = 0; i < l; i++) {
+					if (components[i] is GameObjectComponent) {
+						(components[i] as GameObjectComponent).onInitialize();
+					}
+					if (components[i] is GameObjectComposite) {
+						(components[i] as GameObjectComposite).onInitialize();
+					}
+				}
+			}
+		}
+		
 		/**
 		 * Called after a component is initialized. Calls the onInitialize of all its GameObjectComponents
 		 */
@@ -151,6 +167,9 @@ package nl.jorisdormans.phantom2D.objects
 			for (var i:int = 0; i < l; i++) {
 				if (components[i] is GameObjectComponent) {
 					(components[i] as GameObjectComponent).onInitialize();
+				}
+				if (components[i] is GameObjectComposite) {
+					(components[i] as GameObjectComposite).onInitialize();
 				}
 			}
 		}

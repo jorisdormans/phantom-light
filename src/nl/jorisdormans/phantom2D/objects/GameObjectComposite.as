@@ -1,20 +1,19 @@
 package nl.jorisdormans.phantom2D.objects 
 {
-	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.Composite;
 	/**
-	 * Base class for all components designed to be components of a GameObject.
-	 * Creates a reference to is GameObject parent, throws an exception if not added to a GameObject 
+	 * ...
 	 * @author Joris Dormans
 	 */
-	public class GameObjectComponent extends Component
+	public class GameObjectComposite extends Composite
 	{
 		/**
 		 * A reference to the component's GameObject (if any)
 		 */
 		public var gameObject:GameObject;
 		
-		public function GameObjectComponent() 
+		
+		public function GameObjectComposite() 
 		{
 			
 		}
@@ -24,7 +23,7 @@ package nl.jorisdormans.phantom2D.objects
 			super.onAdd(composite);
 			gameObject = composite as GameObject;
 			if (!gameObject) {
-				throw new Error("GameObjectComponent (" + this + ") must be added to a GameObject.");
+				throw new Error("GameObjectComposite (" + this + ") must be added toa GameObject.");
 			}
 		}
 		
@@ -39,7 +38,7 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public function onInitialize():void {
 			
-		}
+		}		
 		
 	}
 
