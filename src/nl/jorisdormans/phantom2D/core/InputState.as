@@ -12,11 +12,11 @@ package nl.jorisdormans.phantom2D.core
 		/**
 		 * The mouse X position on the stage
 		 */
-		public var mouseX:int = 0;
+		public var stageX:int = 0;
 		/**
 		 * The mouse Y position on the stage
 		 */
-		public var mouseY:int = 0;
+		public var stageY:int = 0;
 		/**
 		 * The mouse button state
 		 */
@@ -25,11 +25,11 @@ package nl.jorisdormans.phantom2D.core
 		/**
 		 * The mouse X position relative to the active screen's camera.
 		 */
-		public var cameraX:Number = 0;
+		public var localX:Number = 0;
 		/**
 		 * The mouse Y position relative to the active screen's camera.
 		 */
-		public var cameraY:Number = 0;
+		public var localY:Number = 0;
 		
 		/**
 		 * State of the up arrow key
@@ -239,11 +239,11 @@ package nl.jorisdormans.phantom2D.core
 			key7 = source.key7;
 			key8 = source.key8;
 			
-			mouseX = source.mouseX;
-			mouseY = source.mouseY;
+			stageX = source.stageX;
+			stageY = source.stageY;
 			mouseButton = source.mouseButton;
-			cameraX = source.cameraX;
-			cameraY = source.cameraY;
+			localX = source.localX;
+			localY = source.localY;
 		}
 		
 		/**
@@ -270,8 +270,8 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function onMouseMove(e:MouseEvent):void 
 		{
-			mouseX = e.stageX;
-			mouseY = e.stageY;
+			stageX = e.stageX;
+			stageY = e.stageY;
 		}
 		
 		/**
