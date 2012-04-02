@@ -47,6 +47,7 @@ package nl.jorisdormans.phantom2D.objects.renderers
 		public function render(graphics:Graphics, x:Number, y:Number, angle:Number = 0, zoom:Number = 1):void 
 		{
 			graphics.beginFill(fillColor, alpha);
+			angle -= gameObject.shape.orientation;
 			if (strokeWidth>=0) {
 				graphics.lineStyle(strokeWidth, strokeColor);
 				gameObject.shape.drawShape(graphics, x, y, angle, zoom);
