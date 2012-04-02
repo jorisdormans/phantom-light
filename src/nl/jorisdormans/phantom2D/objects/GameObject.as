@@ -89,10 +89,10 @@ package nl.jorisdormans.phantom2D.objects
 			if (components[index] is IInputHandler) _inputHandlers--;
 				
 			if (components[index] == shape) {
-				shape == null;
+				shape = null;
 			} 
 			if (components[index] == mover) {
-				mover == null;
+				mover = null;
 			} 
 			
 			return super.removeComponentAt(index);
