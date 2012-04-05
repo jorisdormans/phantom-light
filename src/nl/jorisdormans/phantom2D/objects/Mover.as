@@ -5,7 +5,7 @@ package nl.jorisdormans.phantom2D.objects
 	 * A mover Components enables movement and collision response of GameObjects.
 	 * @author Joris Dormans
 	 */
-	public class Mover extends GameObjectComponent
+	public class Mover extends GameObjectComponent implements ICollisionHandler
 	{
 		/**
 		 * The GameObjects velocity (in pixels/second)

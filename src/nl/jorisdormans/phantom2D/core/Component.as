@@ -77,7 +77,7 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	property 	A string identifying the property to be returned
 		 * @return				An object containing or representing the data.	
 		 */
-		public function getProperty(property:String, componentClass:Class = null):Object {
+		public function getProperty(property:String, data:Object = null, componentClass:Class = null):Object {
 			return null;
 		}
 		

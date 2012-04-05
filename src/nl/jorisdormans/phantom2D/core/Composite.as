@@ -77,12 +77,12 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	componentClass	A specific target component class for this message (can be null)
 		 * @return					An object containing or representing the data.	
 		 */
-		override public function getProperty(property:String, componentClass:Class = null):Object {
+		override public function getProperty(property:String, data:Object = null, componentClass:Class = null):Object {
 			var r:Object;
 			for (var i:int = 0; i < components.length; i++) {
 				if (componentClass == null || components[i] is componentClass) {
-					r = components[i].getProperty(property);
-					if (r) return r;
+					r = components[i].getProperty(property, data);
+					if (r != null) return r;
 				}
 			}
 			
