@@ -17,6 +17,7 @@ package nl.jorisdormans.phantom2D.objects
 	import nl.jorisdormans.phantom2D.cameras.Camera;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
 	import nl.jorisdormans.phantom2D.objects.shapes.BoundingLine;
+	import nl.jorisdormans.phantom2D.util.MathUtil;
 	import nl.jorisdormans.phantom2D.util.StringUtil;
 	/**
 	 * ...
@@ -160,6 +161,27 @@ package nl.jorisdormans.phantom2D.objects
 					addGameObjectSorted(gameObject, p);
 				}
 			}
+		}
+		
+		
+		override public function getObjectAt(position:Vector3D, objectClass:Class = null):GameObject 
+		{
+			var tileX:int = MathUtil.clamp(position.x / tileSize, 0, tilesX - 1);
+			var tileY:int = MathUtil.clamp(position.y / tileSize, 0, tilesX - 1);
+			var minX:int = Math.max(tileX - 1, 0);
+			var maxX:int = Math.min(tileX + 2, tilesX);
+			var minY:int = Math.max(tileY - 1, 0);
+			var maxY:int = Math.min(tileY + 2, tilesY);
+			for (var x:int = minX; x < maxX; x++) {
+				for (var y:int = minY; y < maxY; y++) {
+					var tile:Tile = tiles[x + y * tilesX];
+					var maxO:int = tile.objects.length;
+					for (var j:int = maxO - 1; j >= 0; j--) {
+						if ((objectClass == null || tile.objects[j] is objectClass) && tile.objects[j].shape && tile.objects[j].shape.pointInShape(position)) return tile.objects[j];
+					}
+				}
+			}
+			return null;
 		}
 	}
 

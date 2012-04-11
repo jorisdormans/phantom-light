@@ -328,7 +328,7 @@ package nl.jorisdormans.phantom2D.objects
 		 * @return			
 		 */
 		public function getObjectAt(position:Vector3D, objectClass:Class = null): GameObject {
-			for (var i:int = objects.length-1; i >= 0 ; i--) {
+			for (var i:int = objects.length - 1; i >= 0 ; i--) {
 				if ((objectClass == null || objects[i] is objectClass) && objects[i].shape && objects[i].shape.pointInShape(position)) return objects[i];
 			}
 			return null;

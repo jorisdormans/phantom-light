@@ -178,7 +178,8 @@ package nl.jorisdormans.phantom2D.objects
 		 * Checks if the object is in a TiledObjectLayer and updates tile data according to its current location
 		 * This needs to be implemented smarter!
 		 */
-		private function placeOnTile():void {
+		public function placeOnTile():void {
+			if (!inTiledLayer) return;
 			//get the current tile
 			var t:Tile = tiledLayer.getTile(position);
 			//update tile information if the object is in a different tile
