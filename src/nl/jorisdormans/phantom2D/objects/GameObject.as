@@ -69,6 +69,11 @@ package nl.jorisdormans.phantom2D.objects
 		public var mass:Number;
 		
 		/**
+		 * A tag can be used to identify types of objects without casting or using base classes, best used as bit flags
+		 */
+		public var tag:uint;
+		
+		/**
 		 * Creates an instance of the gameObject. Call the initialize() function to actually initialize it.
 		 */
 		public function GameObject() 
