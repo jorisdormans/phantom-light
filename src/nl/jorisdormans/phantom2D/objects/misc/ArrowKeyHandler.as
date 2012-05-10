@@ -31,7 +31,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 		{
 			super.onAdd(composite);
 			if (!gameObject.mover) {
-				throw new Error("ArrowKeyHandler requires that is GameObject has a Mover component.");
+				throw new Error("ArrowKeyHandler requires that this GameObject has a Mover component.");
 			}
 		}
 		
