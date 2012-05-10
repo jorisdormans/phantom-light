@@ -1,5 +1,6 @@
 package nl.jorisdormans.phantom2D.objects.misc 
 {
+	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.Composite;
 	import nl.jorisdormans.phantom2D.core.InputState;
 	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
@@ -15,6 +16,15 @@ package nl.jorisdormans.phantom2D.objects.misc
 		 */
 		public static const E_CHANGE_DIRECTION:String = "changeDirection";
 		
+		public static var xmlDescription:XML = <ArrowKeyHandler acceleration="Number"/>;
+		public static var xmlDefault:XML = <ArrowKeyHandler acceleration="1000"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new ArrowKeyHandler();
+			comp.readXML(xml);
+			return comp;
+		}
+		
 		private var acceleration:Number;
 		private var lastX:Number;
 		private var lastY:Number;
@@ -25,6 +35,19 @@ package nl.jorisdormans.phantom2D.objects.misc
 			this.acceleration = acceleration;
 			lastX = 1;
 			lastY = 0;
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			xml.@acceleration = acceleration;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			if (xml.@acceleration.length() > 0) acceleration = xml.@acceleration;
 		}
 		
 		override public function onAdd(composite:Composite):void 

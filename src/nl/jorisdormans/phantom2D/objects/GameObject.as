@@ -18,6 +18,16 @@ package nl.jorisdormans.phantom2D.objects
 	 */
 	public class GameObject extends Composite
 	{
+		public static var xmlDescription:XML = <GameObject x="Number" y="Number" z="Number" sortOrder="Number"/>;
+		public static var xmlDefault:XML = <GameObject x="0" y="0" z="0" sortOrder="0"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new GameObject();
+			comp.readXML(xml);
+			return comp;
+		}			
+		
+		
 		/**
 		 * The object's position on the objectLayer
 		 */
@@ -84,6 +94,25 @@ package nl.jorisdormans.phantom2D.objects
 			initiateCollisionCheck = false;
 			mass = 1;
 			position = new Vector3D();
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			xml.@x = position.x;
+			xml.@y = position.y;
+			if (position.z != 0) xml.@z = position.z;
+			if (sortOrder != 0) xml.@sortOrder = sortOrder;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			if (xml.@x.length() > 0) position.x = xml.@x;
+			if (xml.@y.length() > 0) position.y = xml.@y;
+			if (xml.@z.length() > 0) position.z = xml.@z;
+			if (xml.@sortOrder.length() > 0) sortOrder = xml.@sortOrder;
 		}
 		
 		

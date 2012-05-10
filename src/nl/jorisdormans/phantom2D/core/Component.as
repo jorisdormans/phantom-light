@@ -2,6 +2,7 @@ package nl.jorisdormans.phantom2D.core
 {
 	import flash.utils.getQualifiedClassName;
 	import nl.jorisdormans.phantom2D.core.Phantom;
+	import nl.jorisdormans.phantom2D.util.StringUtil;
 	
 	
 	/**
@@ -10,6 +11,14 @@ package nl.jorisdormans.phantom2D.core
 	 */
 	public class Component 
 	{
+		public static var xmlDescription:XML = <component/>;
+		public static var xmlDefault:XML = <component/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new Component();
+			comp.readXML(xml);
+			return comp;
+		}
 		
 		/**
 		 * A reference to the component's composite (if any)
@@ -107,6 +116,23 @@ package nl.jorisdormans.phantom2D.core
 		 * Disposes all members, should be overriden.
 		 */
 		public function dispose():void {
+			
+		}
+		
+		/**
+		 * Function to generate an XML description of the component
+		 * @return
+		 */
+		public function generateXML():XML {
+			var xml:XML = new XML("<" + StringUtil.getObjectClassName(getQualifiedClassName(this)) + "/>");
+			return xml;
+		}
+		
+		/**
+		 * Read and set parameters from xml
+		 * @param	xml
+		 */
+		public function readXML(xml:XML):void {
 			
 		}
 	}

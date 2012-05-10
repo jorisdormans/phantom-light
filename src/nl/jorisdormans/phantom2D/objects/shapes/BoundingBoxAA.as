@@ -4,6 +4,7 @@
 	import flash.display.GraphicsPathCommand;
 	import flash.display.Shape;
 	import flash.geom.Vector3D;
+	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	
 	/**
@@ -12,6 +13,15 @@
 	 */
 	public class BoundingBoxAA extends BoundingShape
 	{
+		public static var xmlDescription:XML = <BoundingBoxAA width="Number" height="Number"/>;
+		public static var xmlDefault:XML = <BoundingBoxAA width="20" height="20"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new BoundingBoxAA(new Vector3D(20, 20));
+			comp.readXML(xml);
+			return comp;
+		}
+		
 		//A size of the box divided by 2
 		private var _halfSize:Vector3D;
 		
@@ -24,6 +34,22 @@
 			this._halfSize.scaleBy(0.5);
 			super();
 		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			xml.@width = _halfSize.x * 2;
+			xml.@height = _halfSize.y * 2;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			if (xml.@width.length() > 0) _halfSize.x = parseFloat(xml.@width) * 0.5;
+			if (xml.@height.length() > 0) _halfSize.y = parseFloat(xml.@height) * 0.5;
+			changeShape();
+		}		
 		
 		override protected function setExtremes():void {
 			super.setExtremes();

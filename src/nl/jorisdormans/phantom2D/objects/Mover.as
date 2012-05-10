@@ -1,12 +1,22 @@
 package nl.jorisdormans.phantom2D.objects 
 {
 	import flash.geom.Vector3D;
+	import nl.jorisdormans.phantom2D.core.Component;
 	/**
 	 * A mover Components enables movement and collision response of GameObjects.
 	 * @author Joris Dormans
 	 */
 	public class Mover extends GameObjectComponent implements ICollisionHandler
 	{
+		public static var xmlDescription:XML = <Mover velocityX="Number" velocityY="Number" velocityZ="Number" friction="Number" bounceRestitution="Number" initiateCollisionCheck="Boolean"/>;
+		public static var xmlDefault:XML = <Mover velocityX="0" velocityY="0" velocityZ="0" friction="2" bounceRestitution="1" initiateCollisionCheck="true"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new Mover(new Vector3D());
+			comp.readXML(xml);
+			return comp;
+		}			
+		
 		/**
 		 * The GameObjects velocity (in pixels/second)
 		 */
@@ -44,6 +54,29 @@ package nl.jorisdormans.phantom2D.objects
 			this.friction = friction;
 			this.initiateCollisionCheck = initiateCollisionCheck;
 			this.bounceRestitution = bounceRestitution;
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			xml.@velocityX = velocity.x;
+			xml.@velocityY = velocity.y;
+			if (velocity.z != 0) xml.@velocityZ = velocity.z;
+			if (friction != 0) xml.@friction = friction;
+			if (bounceRestitution != 0) xml.@bounceRestitution = bounceRestitution;
+			if (initiateCollisionCheck != 0) xml.@initiateCollisionCheck = initiateCollisionCheck;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			if (xml.@velocityX.length() > 0) velocity.x = xml.@x;
+			if (xml.@velocityY.length() > 0) velocity.y = xml.@y;
+			if (xml.@velocityZ.length() > 0) velocity.z = xml.@z;
+			if (xml.@friction.length() > 0) friction = xml.@friction;
+			if (xml.@bounceRestitution.length() > 0) bounceRestitution = xml.@bounceRestitution;
+			if (xml.@initiateCollisionCheck.length() > 0) initiateCollisionCheck = xml.@initiateCollisionCheck;
 		}
 		
 		override public function updatePhysics(elapsedTime:Number):void 

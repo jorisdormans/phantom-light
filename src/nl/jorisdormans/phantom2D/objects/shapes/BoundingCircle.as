@@ -4,6 +4,7 @@
 	import flash.display.GraphicsPathCommand;
 	import flash.display.Shape;
 	import flash.geom.Vector3D;
+	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	
 	/**
@@ -12,6 +13,14 @@
 	 */
 	public class BoundingCircle extends BoundingShape
 	{
+		public static var xmlDescription:XML = <BoundingShape radius="Number" orientation="Number"/>;
+		public static var xmlDefault:XML = <BoundingShape radius="10" orientation="0"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new BoundingBoxAA(new Vector3D(20, 20));
+			comp.readXML(xml);
+			return comp;
+		}		
 		/**
 		 * The circle's radius
 		 */
@@ -21,6 +30,20 @@
 		{
 			this._radius = radius;
 			super();
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			xml.@radius = _radius;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			if (xml.@radius.length() > 0) radius = xml.@radius;
+			
 		}
 		
 		override protected function setExtremes():void {

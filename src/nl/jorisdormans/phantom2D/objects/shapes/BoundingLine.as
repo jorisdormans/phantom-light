@@ -5,6 +5,7 @@
 	import flash.display.Shape;
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
+	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	
 	/**
@@ -13,6 +14,17 @@
 	 */
 	public class BoundingLine extends BoundingShape
 	{
+		public static var xmlDescription:XML = <BoundingLine x="Number" y="Number" oneWay="Number" orientation="Number"/>;
+		public static var xmlDefault:XML = <BoundingLine x="20" y="20" oneWay="0" orientation="0"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new BoundingLine(new Vector3D(20, 20), 0);
+			comp.readXML(xml);
+			return comp;
+		}
+		
+		
+		
 		public var line:Vector3D;
 		//public var originalLine:Vector3D;
 		public var normal:Vector3D;
@@ -37,6 +49,24 @@
 			points.push(line.clone());
 			points[0].scaleBy( -0.5);
 			points[1].scaleBy( 0.5);
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			xml.@x = line.x;
+			xml.@y = line.y;
+			if (oneWay != 0) xml.@oneWay = oneWay;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			if (xml.@x.length() > 0) line.x = xml.@x;
+			if (xml.@y.length() > 0) line.y = xml.@y;
+			if (xml.@oneWay.length() > 0) oneWay = xml.@oneWay;
+			setLine(line);
 		}
 		
 		public function setLine(line:Vector3D):void {

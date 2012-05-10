@@ -5,6 +5,7 @@
 	import flash.display.Shape;
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
+	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	import nl.jorisdormans.phantom2D.util.PseudoRandom;
 	
@@ -14,6 +15,15 @@
 	 */
 	public class BoundingPolygon extends BoundingShape
 	{
+		public static var xmlDescription:XML = <BoundingPolygon orientation="Number"><Point x="Number" y="Number"/></BoundingPolygon>;
+		public static var xmlDefault:XML = <BoundingPolygon orientation="0"><Point x="0" y="-10"/><Point x="10" y="10"/><Point x="-10" y="10"/></BoundingPolygon>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new BoundingPolygon(new Vector3D(20, 20), new Vector3D(20, -20), new Vector3D(-20, -20));
+			comp.readXML(xml);
+			return comp;
+		}			
+		
 		private static var p:Vector3D = new Vector3D();
 		private static var p2:Vector3D = new Vector3D();
 		private static var u:Vector3D = new Vector3D();
@@ -26,6 +36,35 @@
 					points.push(args[i]);
 				}
 			}
+			createProjections();
+			setExtremes();
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			for (var i:int = 0; i < points.length; i++) {
+				var child:XML = <Point/>;
+				child.@x = points[i].x;
+				child.@y = points[i].y;
+				xml.appendChild(child);
+			}
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			var l:int = xml.Point.length();
+			for (var i:int = 0; i < l; i++) {
+				if (points.length > i) {
+					points[i].x = xml.Point[i].@x;
+					points[i].y = xml.Point[i].@y;
+				} else {
+					points.push(new Vector3D(xml.Point[i].@x, xml.Point[i].@y));
+				}
+			}
+			if (l < points.length) points.splice(l, points.length - l);
 			createProjections();
 			setExtremes();
 		}

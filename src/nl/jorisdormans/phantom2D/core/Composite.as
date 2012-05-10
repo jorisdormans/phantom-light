@@ -1,11 +1,22 @@
 package nl.jorisdormans.phantom2D.core 
 {
+	import nl.jorisdormans.phantom2D.objects.ObjectFactory;
 	/**
 	 * ...
 	 * @author Joris Dormans
 	 */
 	public class Composite extends Component
 	{
+		public static var xmlDescription:XML = <composite/>;
+		public static var xmlDefault:XML = <composite/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new Composite();
+			comp.readXML(xml);
+			return comp;
+		}
+		
+		
 		/**
 		 * A collection of the Composite's components. Do not modify this list directly.
 		 * Use AddComponent() and RemoveComponent() instead.
@@ -179,7 +190,26 @@ package nl.jorisdormans.phantom2D.core
 				}
 				i--;
 			}
-		}		
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			for (var i:int = 0; i < components.length; i++) {
+				var child:XML = components[i].generateXML();
+				if (child) xml.appendChild(child);
+			}
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			for (var i:int = 0; i < xml.children().length(); i++) {
+				var child:XML = xml.children()[i];
+				ObjectFactory.getInstance().addComponent(this, child);
+			}
+		}
 		
 	}
 

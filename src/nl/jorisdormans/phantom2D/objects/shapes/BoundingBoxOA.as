@@ -5,6 +5,7 @@
 	import flash.display.Shape;
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
+	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
 	
 	/**
@@ -13,6 +14,15 @@
 	 */
 	public class BoundingBoxOA extends BoundingBoxAA
 	{
+		public static var xmlDescription:XML = <BoundingBoxOA width="Number" height="Number" orientation="Number"/>;
+		public static var xmlDefault:XML = <BoundingBoxOA width="20" height="20" orientation="0"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new BoundingBoxOA(new Vector3D(20, 20));
+			comp.readXML(xml);
+			return comp;
+		}
+		
 		private static var p:Vector3D = new Vector3D();
 		private static var p2:Vector3D = new Vector3D();
 		

@@ -14,6 +14,14 @@
 	 */
 	public class BoundingShape extends GameObjectComponent
 	{
+		public static var xmlDescription:XML = <BoundingShape orientation="Number"/>;
+		public static var xmlDefault:XML = <BoundingShape orientation="0"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new BoundingLine(new Vector3D(20, 20), 0);
+			comp.readXML(xml);
+			return comp;
+		}		
 		
 		public var projections:Vector.<Vector3D>; 
 		
@@ -49,6 +57,19 @@
 			_orientation = 0;
 			_orientationVector = new Vector3D(1, 0, 0);
 			changeShape();
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			if (_orientation!=0) xml.@orientation = _orientation * MathUtil.TO_DEGREES;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			super.readXML(xml);
+			if (xml.@orientation.length() > 0) orientation = parseFloat(xml.@orientation) * MathUtil.TO_RADIANS;
 		}
 		
 		protected function setExtremes():void {
