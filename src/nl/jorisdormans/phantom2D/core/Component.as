@@ -120,6 +120,17 @@ package nl.jorisdormans.phantom2D.core
 		}
 		
 		/**
+		 * Get the first parent of a particular type.
+		 * @param	type 	The class indicating the type.
+		 * @return			the first parent of the type (might be null)
+		 */
+		public function getParentByType(type:Class):Component {
+			if (parent is type) return parent;
+			if (parent) return parent.getParentByType(type);
+			return null;
+		}
+		
+		/**
 		 * Function to generate an XML description of the component
 		 * @return
 		 */

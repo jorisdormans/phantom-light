@@ -22,7 +22,7 @@ package nl.jorisdormans.phantom2D.objects
 		override public function onAdd(composite:Composite):void 
 		{
 			super.onAdd(composite);
-			gameObject = composite as GameObject;
+			gameObject = getParentByType(GameObject) as GameObject;
 			if (!gameObject) {
 				throw new Error("GameObjectComponent (" + this + ") must be added to a GameObject.");
 			}
