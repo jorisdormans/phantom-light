@@ -1,18 +1,26 @@
 package nl.jorisdormans.phantom2D.ai.statemachines 
 {
 	import nl.jorisdormans.phantom2D.core.Component;
+	import nl.jorisdormans.phantom2D.core.Composite;
 	import nl.jorisdormans.phantom2D.core.Phantom;
 	/**
 	 * ...
 	 * @author R. van Swieten
 	 */
-	public class StateMachine extends Component
+	public class StateMachine extends State 
 	{
 		private var states:Vector.<State>;
+		private var firstState:State;
 		
 		public function StateMachine(firstState:State = null) 
 		{
+			this.firstState = firstState;
 			states = new Vector.<State>();
+		}
+		
+		override public function onAdd(composite:Composite):void 
+		{
+			super.onAdd(composite);
 			if(firstState != null) {
 				addState(firstState);
 			}
@@ -57,6 +65,14 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 			super.update(elapsedTime);
 			if (states.length > 0) {
 				states[states.length - 1].update(elapsedTime);
+			}
+		}
+		
+		override public function updatePhysics(elapsedTime:Number):void 
+		{
+			super.update(elapsedTime);
+			if (states.length > 0) {
+				states[states.length - 1].updatePhysics(elapsedTime);
 			}
 		}
 		

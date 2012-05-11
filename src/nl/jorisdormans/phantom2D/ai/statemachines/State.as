@@ -1,11 +1,13 @@
 package nl.jorisdormans.phantom2D.ai.statemachines 
 {
+	import nl.jorisdormans.phantom2D.core.Component;
+	import nl.jorisdormans.phantom2D.core.Composite;
 	import nl.jorisdormans.phantom2D.core.Phantom;
 	/**
 	 * ...
 	 * @author R. van Swieten
 	 */
-	public class State 
+	public class State extends Composite 
 	{
 		protected var stateMachine:StateMachine;
 		
@@ -14,12 +16,12 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 			
 		}
 		
-		public function onAdd(stateMachine:StateMachine):void {
-			this.stateMachine = stateMachine;
+		override public function onAdd(composite:Composite):void {
+			this.stateMachine = composite as StateMachine;
 			
 		}
 		
-		public function onRemove():void {
+		override public function onRemove():void {
 			
 		}
 		
@@ -33,14 +35,7 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 			
 		}
 		
-		public function update(elapsedTime:Number):void {
-			
-		}
 		
-		public function handleMessage(message:String, data:Object = null):int
-		{
-			return Phantom.MESSAGE_NOT_HANDLED;
-		}
 	}
 
 }
