@@ -17,6 +17,7 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 		}
 		
 		override public function onAdd(composite:Composite):void {
+			super.onAdd(composite);
 			this.stateMachine = composite as StateMachine;
 			
 		}

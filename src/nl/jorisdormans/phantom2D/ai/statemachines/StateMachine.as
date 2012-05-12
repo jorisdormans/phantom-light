@@ -1,13 +1,18 @@
 package nl.jorisdormans.phantom2D.ai.statemachines 
 {
+	import flash.display.Graphics;
 	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.Composite;
 	import nl.jorisdormans.phantom2D.core.Phantom;
+	import nl.jorisdormans.phantom2D.core.PhantomGame;
+	import nl.jorisdormans.phantom2D.graphics.PhantomFont;
+	import nl.jorisdormans.phantom2D.objects.IRenderable;
+	import nl.jorisdormans.phantom2D.util.StringUtil;
 	/**
 	 * ...
 	 * @author R. van Swieten
 	 */
-	public class StateMachine extends State 
+	public class StateMachine extends State implements IRenderable
 	{
 		private var states:Vector.<State>;
 		private var firstState:State;
@@ -92,6 +97,21 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 					return Phantom.MESSAGE_HANDLED;
 			}
 			
+		}
+		
+		/* INTERFACE nl.jorisdormans.phantom2D.objects.IRenderable */
+		
+		public function render(graphics:Graphics, x:Number, y:Number, angle:Number = 0, zoom:Number = 1):void 
+		{
+			if (PhantomGame.debugInfo) {
+				var s:String = "No State!";
+				if (states.length > 0) s = StringUtil.getObjectClassName(states[states.length-1].toString());
+				graphics.lineStyle(4, 0x000000);
+				PhantomFont.drawText(s, graphics, x, y, 7, PhantomFont.ALIGN_CENTER);
+				graphics.lineStyle(2, 0xffffff);
+				PhantomFont.drawText(s, graphics, x, y, 7, PhantomFont.ALIGN_CENTER);
+				graphics.lineStyle();
+			}
 		}
 		
 	}
