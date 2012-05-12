@@ -22,6 +22,7 @@ package nl.jorisdormans.phantom2D.layers
 			textField.text = "fps";
 			textField.width = size * 4;
 			textField.height = size * 1.5;
+			textField.x = layerWidth - textField.width;
 			this.background = background;
 			
 			sprite.addChild(textField);
@@ -37,7 +38,7 @@ package nl.jorisdormans.phantom2D.layers
 		{
 			super.render(camera);
 			sprite.graphics.beginFill(background, 0.5);
-			sprite.graphics.drawRect(0, 0, textField.width, textField.height);
+			sprite.graphics.drawRect(layerWidth-textField.width, 0, textField.width, textField.height);
 			sprite.graphics.endFill();
 		}
 		

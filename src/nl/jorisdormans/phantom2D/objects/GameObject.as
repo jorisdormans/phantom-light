@@ -102,7 +102,11 @@ package nl.jorisdormans.phantom2D.objects
 			xml.@x = position.x;
 			xml.@y = position.y;
 			if (position.z != 0) xml.@z = position.z;
+			if (tag != 0) xml.@tag = tag;
+			if (mass != 1) xml.@mass = mass;
 			if (sortOrder != 0) xml.@sortOrder = sortOrder;
+			if (!doResponse) xml.@doResponse = "false";
+			if (initiateCollisionCheck) xml.@initiateCollisionCheck = "true";
 			return xml;
 		}
 		
@@ -112,9 +116,12 @@ package nl.jorisdormans.phantom2D.objects
 			if (xml.@x.length() > 0) position.x = xml.@x;
 			if (xml.@y.length() > 0) position.y = xml.@y;
 			if (xml.@z.length() > 0) position.z = xml.@z;
+			if (xml.@tag.length() > 0) tag = xml.@tag;
+			if (xml.@mass.length() > 0) mass = xml.@mass;
 			if (xml.@sortOrder.length() > 0) sortOrder = xml.@sortOrder;
+			if (xml.@doResponse.length() > 0) doResponse = xml.@doResponse == "true";
+			if (xml.@initiateCollisionCheck.length() > 0) initiateCollisionCheck = xml.@initiateCollisionCheck == "true";
 		}
-		
 		
 		override public function removeComponentAt(index:int):Boolean 
 		{

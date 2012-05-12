@@ -179,9 +179,13 @@
 		public static function getObjectClassName(s:String):String {
 			var p:int = s.indexOf("::");
 			if (p > 0) {
-				s = s.substr(p + 2, s.length - p - 3);
+				s = s.substr(p + 2, s.length - p - 2);
 			} else {
 				s = s.substr(8, s.length - 9);
+			}
+			p = s.indexOf("]"); 
+			if (p >= 0) {
+				s = s.substr(0, p);
 			}
 			return s;
 		}

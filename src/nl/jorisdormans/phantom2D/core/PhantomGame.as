@@ -5,14 +5,25 @@ package nl.jorisdormans.phantom2D.core
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
+	import nl.jorisdormans.phantom2D.layers.FPSDisplay;
+
 	import nl.jorisdormans.phantom2D.thirdparty.profiler.Profiler;
 	import nl.jorisdormans.phantom2D.thirdparty.profiler.ProfilerConfig;
+	
 	/**
 	 * ...
 	 * @author Joris Dormans
 	 */
 	public class PhantomGame extends Sprite
 	{
+		/**
+		 * Flag indicating debugInfo should be rendered
+		 */
+		static public var debugInfo:Boolean = false;
+		/**
+		 * Flag indicating fps counter should be rendered
+		 */
+		static public var displayFPS:Boolean = false;
 		/**
 		 * Volume for sound effects (0-1)
 		 */
@@ -77,6 +88,8 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public static var gameHeight:Number;
 		
+		private var fpsLayer:FPSDisplay;
+		
 		
 		/**
 		 * Creates a Phantom Game instance
@@ -93,6 +106,7 @@ package nl.jorisdormans.phantom2D.core
 			gameHeight = height;
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
+			fpsLayer = new FPSDisplay();
 		}
 		
 		/**
@@ -112,6 +126,8 @@ package nl.jorisdormans.phantom2D.core
 			//ProfilerConfig.Width = 200;
 			ProfilerConfig.ShowMinMax = true;
 			
+			
+			
 		
 			//add event listeners
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -120,7 +136,7 @@ package nl.jorisdormans.phantom2D.core
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, currentInputState.onMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_UP, currentInputState.onMouseUp);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, currentInputState.onMouseMove);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			//stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			
 			//create and add a mask
 			_maskShape = new Sprite();
@@ -143,6 +159,7 @@ package nl.jorisdormans.phantom2D.core
 		 * Key down event listener to show or hide the profiler
 		 * @param	e
 		 */
+		/*
 		private function onKeyDown(e:KeyboardEvent):void 
 		{
 			//trace("Key down", e.keyCode);
@@ -152,6 +169,39 @@ package nl.jorisdormans.phantom2D.core
 				} else {
 					addChild(prof);
 				}
+			}
+		}*/
+		
+		
+		public function showDebugInfo():void {
+			PhantomGame.debugInfo = true;
+		}
+		
+		public function hideDebugInfo():void {
+			PhantomGame.debugInfo = false;
+		}
+		
+		public function showFPS():void {
+			PhantomGame.displayFPS = true;
+			if (fpsLayer.parent) fpsLayer.parent.removeComponent(fpsLayer);
+			currentScreen.addComponent(fpsLayer);
+		}
+		
+		public function hideFPS():void {
+			PhantomGame.displayFPS = false;
+			if (fpsLayer.parent) fpsLayer.parent.removeComponent(fpsLayer);
+		}
+		
+		public function showProfiler():void {
+			if (prof.parent) {
+				prof.parent.removeChild(prof);
+			}
+			addChild(prof);
+		}
+		
+		public function hideProfiler():void {
+			if (prof.parent) {
+				prof.parent.removeChild(prof);
 			}
 		}
 		
@@ -201,6 +251,9 @@ package nl.jorisdormans.phantom2D.core
 			addChild(screen.sprite);
 			screen.activate();
 			previousInputState.copy(currentInputState);
+			if (fpsLayer.parent) fpsLayer.removeComponent(fpsLayer);
+			if (displayFPS) currentScreen.addComponent(fpsLayer);
+			
 		}
 		
 		/**
@@ -221,7 +274,12 @@ package nl.jorisdormans.phantom2D.core
 						screens[i].dispose();
 						if (i>0 && i == screens.length - 1) {
 							//removed the top
-							screens[i-1].activate();
+							screens[i - 1].activate();
+							if (displayFPS) {
+								if (fpsLayer.parent) fpsLayer.removeComponent(fpsLayer);
+								currentScreen.addComponent(fpsLayer);
+							}
+
 						} else {
 							//removed in the middle
 							if (i > 0) {
