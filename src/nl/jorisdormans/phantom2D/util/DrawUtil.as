@@ -135,7 +135,24 @@ package nl.jorisdormans.phantom2D.util
 			graphics.lineTo(x+cos, y+sin);
 			graphics.moveTo(x-sin, y-cos);
 			graphics.lineTo(x+sin, y+cos);
-		}		
+		}	
+		
+		public static function drawArc(graphics:Graphics, centerX:Number, centerY:Number, radius:Number, startAngle:Number, angle:Number, segments:int = -1):void {
+			drawEllipseArc(graphics, centerX, centerY, radius, radius, startAngle, angle, segments);
+			
+		}
+		public static function drawEllipseArc(graphics:Graphics, centerX:Number, centerY:Number, radiusX:Number, radiusY:Number, startAngle:Number, angle:Number, segments:int = -1):void {
+			if (segments <= 0) {
+				segments = Math.ceil(Math.max(radiusX, radiusY)*Math.abs(angle) / (Math.PI*4));
+			}
+			var s:Number = angle / segments;
+			graphics.moveTo(centerX + Math.cos(startAngle) * radiusX, centerY + Math.sin(startAngle) * radiusY);
+			for (var i:int = 0; i < segments; i++) {
+				startAngle += s;
+				graphics.lineTo(centerX + Math.cos(startAngle) * radiusX, centerY + Math.sin(startAngle) * radiusY)
+			}
+			
+		}
 	}
 
 }

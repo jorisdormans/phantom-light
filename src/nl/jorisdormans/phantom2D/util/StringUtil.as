@@ -179,7 +179,7 @@
 		public static function getObjectClassName(s:String):String {
 			var p:int = s.indexOf("::");
 			if (p > 0) {
-				s = s.substr(p + 2, s.length - p - 2);
+				s = s.substr(p + 2, s.length - p - 3);
 			} else {
 				s = s.substr(8, s.length - 9);
 			}
