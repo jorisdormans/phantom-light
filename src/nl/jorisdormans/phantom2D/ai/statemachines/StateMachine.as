@@ -14,6 +14,15 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 	 */
 	public class StateMachine extends State implements IRenderable
 	{
+		public static var xmlDescription:XML = <StateMachine firstState="String"/>;
+		public static var xmlDefault:XML = <StateMachine firstState=""/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new StateMachine();
+			comp.readXML(xml);
+			return comp;
+		}
+		
 		private var states:Vector.<State>;
 		private var firstState:State;
 		
@@ -22,6 +31,22 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 			this.firstState = firstState;
 			states = new Vector.<State>();
 		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			if (firstState) xml.@firstState = StringUtil.getObjectClassName(firstState.toString());
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			if (xml.@firstState.length() > 0) {
+				firstState = StateFactory.getInstance().getState(xml.@firstState);
+			}
+			super.readXML(xml);
+		}		
+		
 		
 		override public function onAdd(composite:Composite):void 
 		{

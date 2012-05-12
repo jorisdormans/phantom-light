@@ -1,6 +1,7 @@
 package nl.jorisdormans.phantom2D.ai.sensors 
 {
 	import flash.display.Graphics;
+	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.PhantomGame;
 	import nl.jorisdormans.phantom2D.objects.IRenderable;
 	import nl.jorisdormans.phantom2D.util.DrawUtil;
@@ -16,12 +17,39 @@ package nl.jorisdormans.phantom2D.ai.sensors
 		private var orientation:Number;
 		private var distanceSquared:Number;
 		
+		public static var xmlDescription:XML = <AIEye distance="Number" arc="Number" orientation="Number"/>;
+		public static var xmlDefault:XML = <AIEye distance="100" arc="120" orientation="0"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new AIEye(100, 120, 0);
+			comp.readXML(xml);
+			return comp;
+		}
+		
 		public function AIEye(distance:Number, arc:Number, orientation:Number = 0) 
 		{
 			this.orientation = orientation;
 			this.arc = arc * 0.5 * MathUtil.TO_RADIANS;
 			this.distance = distance;
 			this.distanceSquared = distance * distance;
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			xml.@distance = distance;
+			xml.@arc = (arc * 2 * MathUtil.TO_DEGREES);
+			if (orientation!=0) xml.@orientation = orientation;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			if (xml.@distance.length() > 0) distance = xml.@distance;
+			if (xml.@arc.length() > 0) arc = parseFloat(xml.@arc) * 0.5 * MathUtil.TO_RADIANS;
+			if (xml.@orientation.length() > 0) orientation = xml.@orientation;
+			this.distanceSquared = distance * distance;
+			super.readXML(xml);
 		}
 		
 		override public function update(elapsedTime:Number):void 

@@ -1,6 +1,7 @@
 package nl.jorisdormans.phantom2D.ai.sensors 
 {
 	import flash.geom.Vector3D;
+	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.Phantom;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
 	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
@@ -29,9 +30,27 @@ package nl.jorisdormans.phantom2D.ai.sensors
 		public static const E_LOST_TARGET:String = "lostTarget";
 		
 		
+		/**
+		 * detection state, no target locked
+		 */
 		public static const NO_TARGET:int = 0;
+		/**
+		 * detection state target detected
+		 */
 		public static const TARGET_DETECTED:int = 1;
+		/**
+		 * detection state target not seen for a while
+		 */
 		public static const TARGET_LOST:int = 2;
+		
+		public static var xmlDescription:XML = <AITarget timeOut="Number"/>;
+		public static var xmlDefault:XML = <AITarget timeOut="1"/>;
+		
+		public static function generateFromXML(xml:XML):Component {
+			var comp:Component = new AITarget(1);
+			comp.readXML(xml);
+			return comp;
+		}
 		
 		
 		public var targetObject:GameObject;
@@ -50,6 +69,19 @@ package nl.jorisdormans.phantom2D.ai.sensors
 			position = new Vector3D();
 			this.timeOut = timeOut;
 			detectedThisUpdate = 0;
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			if (timeOut != 1) xml.@timeOut = timeOut;
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			if (xml.@timeOut.length() > 0) timeOut = xml.@timeOut;
+			super.readXML(xml);
 		}
 		
 		override public function handleMessage(message:String, data:Object = null):int 
