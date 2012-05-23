@@ -84,7 +84,7 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function activate():void {
 			if (!paused) return;
-			trace("PHANTOM: Activating screen " + this + "...");
+			PhantomGame.log("Activating screen " + this + "...", PhantomGame.LOG_INFO, PhantomGame.LOG_TAG);
 			paused = false;
 		}
 		
@@ -92,7 +92,7 @@ package nl.jorisdormans.phantom2D.core
 		 * Deactivates the current screen
 		 */
 		public function deactivate():void {
-			trace("PHANTOM: Deactivating screen " + this + "...");
+			PhantomGame.log("Deactivating screen " + this + "...", PhantomGame.LOG_INFO, PhantomGame.LOG_TAG);
 			paused = true;
 		}
 		

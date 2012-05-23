@@ -1,6 +1,7 @@
 package nl.jorisdormans.phantom2D.objects
 {
 	import flash.display.Graphics;
+	import flash.geom.Vector3D;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
 	/**
 	 * A Tile keeps track of objects that are at a particular location
@@ -98,7 +99,30 @@ package nl.jorisdormans.phantom2D.objects
 					i--;
 				}
 			}
-		}	
+		}
+		
+		/**
+		 * Read only property to get the center x position of the tile in its layer.
+		 */
+		public function get positionX():Number {
+			return (tileX + 0.5) * layer.tileSize;
+		}
+		
+		/**
+		 * Read only property to get the center y position of the tile in its layer.
+		 */
+		public function get positionY():Number {
+			return (tileY + 0.5) * layer.tileSize;
+		}
+		
+		/**
+		 * Function to get the center position as a new vector3d of the tile in its layer.
+		 */
+		public function getPosition():Vector3D {
+			return new Vector3D((tileX + 0.5) * layer.tileSize, (tileY + 0.5) * layer.tileSize);
+		}
+
+		
 	}
 
 }

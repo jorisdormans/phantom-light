@@ -63,6 +63,8 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public static var fps:uint = 0;
 		
+		public static var frameClock:uint = 0;
+		
 		
 		/**
 		 * Sprite to contain the masking shape
@@ -90,6 +92,25 @@ package nl.jorisdormans.phantom2D.core
 		
 		private var fpsLayer:FPSDisplay;
 		
+		private static var activeGame:PhantomGame;
+		
+		public static const LOG_DEBUG : String = "Debug";
+		public static const LOG_ERROR : String = "Error";
+		public static const LOG_EVENT : String = "Event";
+		public static const LOG_FATAL : String = "Fatal";
+		public static const LOG_HOORAY : String = "Hooray";
+		public static const LOG_INFO : String = "Info";
+		public static const LOG_SYSTEM : String = "System";
+		public static const LOG_TRACE : String = "Trace";
+		public static const LOG_USER : String = "User";
+		public static const LOG_WARNING : String = "Warning";		
+		
+		public static const LOG_TAG : String = "Phantom";		
+
+		
+		public static function log(message:String, type:String = "Info", tag:String = ""):void {
+			if (activeGame) activeGame.log(message, type, tag);
+		}
 		
 		/**
 		 * Creates a Phantom Game instance
@@ -107,7 +128,24 @@ package nl.jorisdormans.phantom2D.core
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
 			fpsLayer = new FPSDisplay();
+			activeGame = this;
 		}
+		
+		/**
+		 * Log function that traces its output to the console. 
+		 */
+		public function log(message:String, type:String = "Info", tag:String = ""):void {
+			if (type != "Info") {
+				if (tag != "") tag += " ";
+				tag += "(" + type + ")";
+			}
+			if (tag != "") {
+				trace(tag + ": " + message);
+			} else {
+				trace(message);
+			}
+		}
+		
 		
 		/**
 		 * Called by the constructor or after the game is added to the stage. Initiate your game here
@@ -226,6 +264,8 @@ package nl.jorisdormans.phantom2D.core
 				frameCounter = 0;
 			}
 			
+			frameClock++;
+			
 			prof.beginProfiling();
 			//update the current screen
 			if (currentScreen) currentScreen.update(elapsedTime);
@@ -237,14 +277,18 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	screen
 		 */
 		public function addScreen(screen:Screen):void {
-			trace("PHANTOM: Adding screen "+screen+"...");
+			log("Adding screen "+screen+"...", LOG_INFO, LOG_TAG);
 			if (currentScreen) {
 				currentScreen.deactivate();
 				screen.screenBelow = currentScreen;
 			}
 			//remove all children before adding a nontransparent screen
 			if (!screen.transparent) {
-				while (numChildren > 0) removeChildAt(0);
+				for (var i:int = 0; i < screens.length; i++) {
+					if (screens[i].sprite.parent) {
+						screens[i].sprite.parent.removeChild(screens[i].sprite.parent);
+					}
+				}
 			}
 			screens.push(screen);
 			screen.game = this;
@@ -264,7 +308,7 @@ package nl.jorisdormans.phantom2D.core
 			if (screen == currentScreen) {
 				removeCurrentScreen();
 			} else {
-				trace("PHANTOM: Removing screen "+screen+"...");
+				log("Removing screen "+screen+"...", LOG_INFO, LOG_TAG);
 				if (screen.game != this) return;
 				screen.deactivate();
 				removeChild(screen.sprite);
@@ -310,7 +354,7 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function removeCurrentScreen():void {
 			if (currentScreen) {
-				trace("PHANTOM: Removing current screen " + currentScreen + "...");
+				log("Removing current screen " + currentScreen + "...", LOG_INFO, LOG_TAG);
 				currentScreen.deactivate();
 				removeChild(currentScreen.sprite);
 				currentScreen.dispose();

@@ -23,7 +23,6 @@ package nl.jorisdormans.phantom2D.layers
 			super();
 			layerWidth = PhantomGame.gameWidth;
 			layerHeight = PhantomGame.gameHeight;
-			trace(layerWidth, layerHeight);
 			var matrix:Matrix = new Matrix();
 			//matrix.createGradientBox( layerWidth, layerHeight );
 			matrix.createGradientBox( layerHeight, layerWidth );

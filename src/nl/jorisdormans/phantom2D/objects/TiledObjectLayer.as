@@ -108,6 +108,26 @@ package nl.jorisdormans.phantom2D.objects
 		}
 		
 		/**
+		 * Function that connects tiles on the edges with the tiles on the opposing edges. Useful when the layer wraps around
+		 * @param	horizontal
+		 * @param	vertical
+		 */
+		public function wrapTileConnections(horizontal:Boolean = true, vertical:Boolean = true):void {
+			if (horizontal) {
+				for (var y:int = 0; y < tilesY; y++) {
+					tiles[y * tilesX].left = tiles[y * tilesX + tilesX - 1];
+					tiles[y * tilesX + tilesX - 1].right = tiles[y * tilesX];
+				}
+			}
+			if (vertical) {
+				for (var x:int = 0; x < tilesX; x++) {
+					tiles[x].up = tiles[x + tilesX * (tilesY -1)];
+					tiles[x + tilesX * (tilesY -1)].down = tiles[x];
+				}
+			}
+		}
+		
+		/**
 		 * Returns the tile at a specified position
 		 * @param	position
 		 * @return

@@ -1,6 +1,9 @@
 package nl.jorisdormans.phantom2D.objects 
 {
 	import flash.utils.Dictionary;
+	import nl.jorisdormans.phantom2D.ai.*;
+	import nl.jorisdormans.phantom2D.ai.sensors.*;
+	import nl.jorisdormans.phantom2D.ai.statemachines.StateMachine;
 	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.Composite;
 	import nl.jorisdormans.phantom2D.objects.boundaries.*;
@@ -50,6 +53,11 @@ package nl.jorisdormans.phantom2D.objects
 			components["BoundingPolygon"] = BoundingPolygon;
 			components["BoundingShape"] = BoundingShape;
 			components["Mover"] = Mover;
+			components["AISplicer"] = AISplicer;
+			components["AIEye"] = AIEye;
+			components["AISensorRadius"] = AISensorRadius;
+			components["AITarget"] = AITarget;
+			components["StateMachine"] = StateMachine;
 			
 		}
 		
