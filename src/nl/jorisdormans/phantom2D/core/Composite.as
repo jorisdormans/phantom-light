@@ -1,6 +1,9 @@
 package nl.jorisdormans.phantom2D.core 
 {
+	import flash.utils.getQualifiedClassName;
+	import nl.jorisdormans.phantom2D.objects.GameObjectComposite;
 	import nl.jorisdormans.phantom2D.objects.ObjectFactory;
+	import nl.jorisdormans.phantom2D.util.StringUtil;
 	/**
 	 * ...
 	 * @author Joris Dormans
@@ -62,13 +65,24 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function addComponent(component:Component):Component {
 			if (component) {
+				if (component.parent) component.parent.removeComponent(component);
 				component.parent = this;
 				components.push(component);
 				component.onAdd(this);
 			}
 			return component;
-			
 		}	
+		
+		public function insertComponent(component:Component, index:int):void {
+			if (index >= components.length - 1) {
+				addComponent(component);
+			} else {
+				if (component.parent) component.parent.removeComponent(component);
+				component.parent = this;
+				components.splice(index, 0, component);
+				component.onAdd(this);
+			}
+		}
 		
 		/**
 		 * Disposes all components
@@ -161,6 +175,14 @@ package nl.jorisdormans.phantom2D.core
 			return result;
 		}
 		
+		public function hasComponent(componentClass:Class):Boolean {
+			for (var i:int = 0; i < components.length; i++) {
+				if (components[i] is componentClass) return true;
+				if (components[i] is GameObjectComposite && (components[i] as Composite).hasComponent(componentClass)) return true;
+			}
+			return false;
+		}
+		
 		
 		/**
 		 * Takes care of the physics update (which might run more than once every frame) 
@@ -205,10 +227,30 @@ package nl.jorisdormans.phantom2D.core
 		override public function readXML(xml:XML):void 
 		{
 			super.readXML(xml);
-			for (var i:int = 0; i < xml.children().length(); i++) {
+			/*for (var i:int = 0; i < xml.children().length(); i++) {
 				var child:XML = xml.children()[i];
 				ObjectFactory.getInstance().addComponent(this, child);
+			}*/
+		}
+		
+		
+		/**
+		 * Creates string representing the object and its components
+		 * @return
+		 */
+		override public function toString():String {
+			//return "[object " + getQualifiedClassName(this) + "]";
+			var s:String = StringUtil.getObjectClassName(getQualifiedClassName(this));
+			var l:int = components.length;
+			if (l>0) {
+				s +=" [";
+				for (var i:int = 0; i < l; i++) {
+					if (i>0) s += ", ";
+					s += components[i].toString();
+				}
+				s += "]";
 			}
+			return s;
 		}
 		
 	}

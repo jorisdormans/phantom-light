@@ -7,6 +7,7 @@ package nl.jorisdormans.phantom2D.objects
 	import nl.jorisdormans.phantom2D.core.Layer;
 	import nl.jorisdormans.phantom2D.core.Phantom;
 	import nl.jorisdormans.phantom2D.objects.shapes.BoundingLine;
+	import nl.jorisdormans.phantom2D.util.MathUtil;
 	import nl.jorisdormans.phantom2D.util.StringUtil;
 	/**
 	 * A ScreenComponent to handle GameObjects. For improved collision detection, use the TiledObjectLayer component
@@ -359,6 +360,22 @@ package nl.jorisdormans.phantom2D.objects
 		}
 		
 		/**
+		 * Gets a property from its objects
+		 * @param	property
+		 * @param	data
+		 * @param	componentClass
+		 * @return
+		 */
+		public function getPropertyFromObjects(property:String, data:Object = null, componentClass:Class = null):Object {
+			for (var i:int = 0; i < objects.length; i++) {
+				var r:Object = objects[i].getProperty(property, data, componentClass);
+				if (r) return r;
+			}
+			return null;
+			
+		}
+		
+		/**
 		 * Pooled instances for the ratTracing
 		 */
 		private var v1:Vector3D = new Vector3D();
@@ -431,6 +448,37 @@ package nl.jorisdormans.phantom2D.objects
 			}
 			return true;
 		}
+		
+		public function getClosestObject(position:Vector3D, objectClass:Class = null, exclude:GameObject = null, maxDistance:Number = 999999):GameObject {
+			var dist:Number = maxDistance * maxDistance;
+			var r:GameObject = null;
+			for (var i:int = 0; i < objects.length; i++) {
+				if (objects[i] != exclude && (objectClass == null || objects[i] is objectClass)) {
+					var d:Number = MathUtil.distanceSquared(position, objects[i].position);
+					if (d < dist) {
+						dist = d;
+						r = objects[i];
+					}
+				}
+			}
+			return r;
+		}
+		
+		public function getClosestObjectWithComponent(position:Vector3D, componentClass:Class, exclude:GameObject = null, maxDistance:Number = 999999):GameObject {
+			var dist:Number = maxDistance * maxDistance;
+			var r:GameObject = null;
+			for (var i:int = 0; i < objects.length; i++) {
+				if (objects[i] != exclude && objects[i].hasComponent(componentClass)) {
+					var d:Number = MathUtil.distanceSquared(position, objects[i].position);
+					if (d < dist) {
+						dist = d;
+						r = objects[i];
+					}
+				}
+			}
+			return r;
+		}
+
 		
 		
 	}

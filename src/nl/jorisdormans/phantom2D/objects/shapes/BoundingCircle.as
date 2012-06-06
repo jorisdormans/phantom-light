@@ -17,7 +17,7 @@
 		public static var xmlDefault:XML = <BoundingShape radius="10" orientation="0"/>;
 		
 		public static function generateFromXML(xml:XML):Component {
-			var comp:Component = new BoundingBoxAA(new Vector3D(20, 20));
+			var comp:Component = new BoundingCircle(5);
 			comp.readXML(xml);
 			return comp;
 		}		
@@ -63,14 +63,14 @@
 		override public function drawShape(graphics:Graphics, x:Number, y:Number, angle:Number = 0, zoom:Number = 1):void 
 		{
 			graphics.drawCircle(x, y, _radius * zoom);
-
-			var commands:Vector.<int> = new Vector.<int>();
+			
+			/*var commands:Vector.<int> = new Vector.<int>();
 			commands.push(GraphicsPathCommand.MOVE_TO, GraphicsPathCommand.LINE_TO);
 			var data:Vector.<Number> = new Vector.<Number>();
 			data.push(x, y);
 			data.push(x + zoom * _radius * Math.cos(angle), y + zoom * _radius * Math.sin(angle));
 					  
-			graphics.drawPath(commands, data);			
+			graphics.drawPath(commands, data);			*/
 		}
 		
 		override public function projection(dst:Vector3D, unit:Vector3D, distance:Vector3D):void 

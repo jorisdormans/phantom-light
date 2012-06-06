@@ -23,7 +23,7 @@ package nl.jorisdormans.phantom2D.objects
 			super.onAdd(composite);
 			gameObject = getParentByType(GameObject) as GameObject;
 			if (!gameObject) {
-				throw new Error("GameObjectComposite (" + this + ") must be added toa GameObject.");
+				throw new Error("GameObjectComposite (" + this + ") must be added to a GameObject.");
 			}
 		}
 		

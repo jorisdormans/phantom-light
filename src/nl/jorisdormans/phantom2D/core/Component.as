@@ -95,7 +95,8 @@ package nl.jorisdormans.phantom2D.core
 		 * @return
 		 */
 		public function toString():String {
-			return "[object " + getQualifiedClassName(this) + "]";
+			return StringUtil.getObjectClassName(getQualifiedClassName(this));
+			//return "[object " + getQualifiedClassName(this) + "]";
 		}
 		
 		/**

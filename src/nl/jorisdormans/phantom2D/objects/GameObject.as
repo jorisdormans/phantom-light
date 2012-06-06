@@ -18,8 +18,8 @@ package nl.jorisdormans.phantom2D.objects
 	 */
 	public class GameObject extends Composite
 	{
-		public static var xmlDescription:XML = <GameObject x="Number" y="Number" z="Number" sortOrder="Number"/>;
-		public static var xmlDefault:XML = <GameObject x="0" y="0" z="0" sortOrder="0"/>;
+		public static var xmlDescription:XML = <GameObject x="Number" y="Number" z="Number" sortOrder="Number" mass="Number" doResponse="Boolean" initiateCollisionCheck="Boolean" tag="int"/>;
+		public static var xmlDefault:XML = <GameObject x="0" y="0" z="0" sortOrder="0" mass="1" doResponse="true" initiateCollisionCheck="false" tag="0"/>;
 		
 		public static function generateFromXML(xml:XML):Component {
 			var comp:Component = new GameObject();
@@ -282,20 +282,7 @@ package nl.jorisdormans.phantom2D.objects
 			}
 		}
 		
-		/**
-		 * Creates string representing the object and its components
-		 * @return
-		 */
-		override public function toString():String {
-			//return "[object " + getQualifiedClassName(this) + "]";
-			var s:String = "[object " + getQualifiedClassName(this) + "] components (";
-			var l:int = components.length;
-			for (var i:int = 0; i < l; i++) {
-				s += ", "+components[0].toString();
-			}
-			s += ")";
-			return s;
-		}
+		
 		
 		/**
 		 * Checks if the GameObject is in the visible portion of the GameScreen.
