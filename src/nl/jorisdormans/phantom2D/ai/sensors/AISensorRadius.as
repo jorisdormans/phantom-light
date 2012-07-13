@@ -34,7 +34,7 @@ package nl.jorisdormans.phantom2D.ai.sensors
 		override public function update(elapsedTime:Number):void 
 		{
 			super.update(elapsedTime);
-			if (target.gameObject && target.targetObject.position) {
+			if (target.targetObject && target.targetObject.position) {
 				var d:Number = MathUtil.distanceSquared(target.targetObject.position, gameObject.position);
 				if (d < radiusSquared + target.targetObject.shape.roughSize * target.targetObject.shape.roughSize ) {
 					target.detect();

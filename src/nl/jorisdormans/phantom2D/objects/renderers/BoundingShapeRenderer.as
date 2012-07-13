@@ -12,14 +12,15 @@ package nl.jorisdormans.phantom2D.objects.renderers
 	 */
 	public class BoundingShapeRenderer extends GameObjectComponent implements IRenderable
 	{
+		public var zoom:Number;
 		/**
 		 * Message you can use to change the render style. 
 		 * Takes input: {[fillColor:uint][, strokeColor:uint][, strokeWidth:Number][, alpha:Number]}
 		 */
 		public static const M_SET_RENDER_STYLE:String = "setRenderStyle";
 		
-		public static var xmlDescription:XML = <BoundingShapeRenderer fillColor="Color" strokeColor="Color" strokeWidth="Number" alpha="Number"/>;
-		public static var xmlDefault:XML = <BoundingShapeRenderer fillColor="0xffffff" strokeColor="0xffffff" strokeWidth="-1" alpha="1"/>;
+		public static var xmlDescription:XML = <BoundingShapeRenderer fillColor="Color" strokeColor="Color" strokeWidth="Number" alpha="Number" zoom="Number"/>;
+		public static var xmlDefault:XML = <BoundingShapeRenderer fillColor="0xffffff" strokeColor="0xffffff" strokeWidth="-1" alpha="1" zoom="1"/>;
 		
 		public static function generateFromXML(xml:XML):Component {
 			var comp:Component = new BoundingShapeRenderer();
@@ -32,8 +33,9 @@ package nl.jorisdormans.phantom2D.objects.renderers
 		public var fillColor:uint;
 		public var alpha:Number;
 		
-		public function BoundingShapeRenderer(fillColor:uint = 0xffffff, strokeColor:uint = 0xffffff, strokeWidth:Number = -1, alpha:Number = 1) 
+		public function BoundingShapeRenderer(fillColor:uint = 0xffffff, strokeColor:uint = 0xffffff, strokeWidth:Number = -1, alpha:Number = 1, zoom:Number = 1) 
 		{
+			this.zoom = zoom;
 			this.strokeWidth = strokeWidth;
 			this.strokeColor = strokeColor;
 			this.fillColor = fillColor;
@@ -47,6 +49,7 @@ package nl.jorisdormans.phantom2D.objects.renderers
 			if (strokeWidth != -1 && strokeColor != 0xffffff) xml.@strokeColor = StringUtil.toColorString(strokeColor);
 			if (strokeWidth != -1) xml.@strokeWidth = strokeWidth;
 			if (alpha != 1) xml.@alpha = alpha;
+			if (zoom != 1) xml.@zoom = zoom;
 			return xml;
 		}
 		
@@ -56,6 +59,7 @@ package nl.jorisdormans.phantom2D.objects.renderers
 			if (xml.@strokeColor.length() > 0) strokeColor = StringUtil.toColor(xml.@strokeColor);
 			if (xml.@strokeWidth.length() > 0) strokeWidth = xml.@strokeWidth;
 			if (xml.@alpha.length() > 0) alpha = xml.@alpha;
+			if (xml.@zoom.length() > 0) zoom = xml.@zoom;
 			super.readXML(xml);
 		}
 		
@@ -78,6 +82,7 @@ package nl.jorisdormans.phantom2D.objects.renderers
 		public function render(graphics:Graphics, x:Number, y:Number, angle:Number = 0, zoom:Number = 1):void 
 		{
 			graphics.beginFill(fillColor, alpha);
+			zoom *= this.zoom;
 			angle -= gameObject.shape.orientation;
 			if (strokeWidth>=0) {
 				graphics.lineStyle(strokeWidth, strokeColor);

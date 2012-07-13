@@ -55,7 +55,7 @@ package nl.jorisdormans.phantom2D.ai.sensors
 		override public function update(elapsedTime:Number):void 
 		{
 			super.update(elapsedTime);
-			if (target.gameObject) {
+			if (target.targetObject) {
 				var d:Number = MathUtil.distanceSquared(target.targetObject.position, gameObject.position);
 				if (d < distanceSquared + target.targetObject.shape.roughSize * target.targetObject.shape.roughSize ) {
 					var a:Number = Math.atan2(target.targetObject.position.y - gameObject.position.y, target.targetObject.position.x - gameObject.position.x);

@@ -79,7 +79,7 @@
 			if (p >= 0) {
 				r.push(command.substr(0, p));
 				command = trim(command.substr(p + 1));
-				p = command.indexOf(")");
+				p = command.lastIndexOf(")");
 				if (p >= 0) {
 					command = trim(command.substr(0, p));
 					p = command.indexOf(",");
