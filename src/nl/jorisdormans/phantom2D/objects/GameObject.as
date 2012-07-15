@@ -59,14 +59,8 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public var doResponse:Boolean;
 		
-		/**
-		 * A count of the number of components that implement the IHandler interface.
-		 */
-		private var _collisionHandlers:int;
-		/**
-		 * A count of the number of components that implement the IInputHandler interface.
-		 */
-		private var _inputHandlers:int;
+		
+		public var passive:Boolean;
 		
 		/**
 		 * A flag if the object should initiate a collision check even when it has no mover component.
@@ -89,11 +83,10 @@ package nl.jorisdormans.phantom2D.objects
 		public function GameObject() 
 		{
 			doResponse = true;
-			_collisionHandlers = 0;
-			_inputHandlers = 0;
 			initiateCollisionCheck = false;
 			mass = 1;
 			position = new Vector3D();
+			passive = false;
 		}
 		
 		override public function generateXML():XML 
@@ -107,6 +100,7 @@ package nl.jorisdormans.phantom2D.objects
 			if (sortOrder != 0) xml.@sortOrder = sortOrder;
 			if (!doResponse) xml.@doResponse = "false";
 			if (initiateCollisionCheck) xml.@initiateCollisionCheck = "true";
+			if (passive) xml.@passive = "true";
 			return xml;
 		}
 		
@@ -121,13 +115,12 @@ package nl.jorisdormans.phantom2D.objects
 			if (xml.@sortOrder.length() > 0) sortOrder = xml.@sortOrder;
 			if (xml.@doResponse.length() > 0) doResponse = xml.@doResponse == "true";
 			if (xml.@initiateCollisionCheck.length() > 0) initiateCollisionCheck = xml.@initiateCollisionCheck == "true";
+			if (xml.@passive.length() > 0) passive = xml.@passive == "true";
 		}
 		
 		override public function removeComponentAt(index:int):Boolean 
 		{
 			if (index<0 || index>=components.length) return false;
-			if (components[index] is ICollisionHandler) _collisionHandlers--;
-			if (components[index] is IInputHandler) _inputHandlers--;
 				
 			if (components[index] == shape) {
 				shape = null;
@@ -146,10 +139,6 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		override public function addComponent(component:Component):Component {
 			super.addComponent(component);
-			if (component) {
-				if (component is ICollisionHandler) _collisionHandlers++;
-				if (component is IInputHandler) _inputHandlers++;
-			}
 			
 			if (component is BoundingShape) {
 				if (this.shape) {
@@ -172,7 +161,7 @@ package nl.jorisdormans.phantom2D.objects
 		override public function updatePhysics(elapsedTime:Number):void 
 		{
 			super.updatePhysics(elapsedTime);
-			if (inTiledLayer) {
+			if (inTiledLayer && mover) {
 				placeOnTile();
 			}
 		}
@@ -239,13 +228,9 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public function handleInput(elapsedTime:Number, currentInputState:InputState, previousInputState:InputState):void 
 		{
-			if (_inputHandlers>0) {
-				var l:int = components.length;
-				for (var i:int = 0; i < l; i++) {
-					if (components[i] is IInputHandler) {
-						(components[i] as IInputHandler).handleInput(elapsedTime, currentInputState, previousInputState);
-					}
-				}
+			var l:int = inputHandlers.length;
+			for (var i:int = 0; i < l; i++) {
+				inputHandlers[i].handleInput(elapsedTime, currentInputState, previousInputState);
 			}
 		}
 
@@ -256,12 +241,10 @@ package nl.jorisdormans.phantom2D.objects
 		 * @return			Return true if the collision with the other GameObject is possible, false to ignore the collission altogether.
 		 */
 		public function canCollideWith(other:GameObject):Boolean {
-			if (collisionHandlers>0) {
-				var l:int = components.length;
-				for (var i:int = 0; i < l; i++) {
-					if (components[i] is ICollisionHandler && !(components[i] as ICollisionHandler).canCollideWith(other)) {
-						return false;
-					}
+			var l:int = collisionHandlers.length;
+			for (var i:int = 0; i < l; i++) {
+				if (!collisionHandlers[i].canCollideWith(other)) {
+					return false;
 				}
 			}
 			return true;
@@ -272,13 +255,9 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	other
 		 */
 		public function afterCollisionWith(other:GameObject):void {
-			if (collisionHandlers>0) {
-				var l:int = components.length;
-				for (var i:int = 0; i < l; i++) {
-					if (components[i] is ICollisionHandler) {
-						(components[i] as ICollisionHandler).afterCollisionWith(other);
-					}
-				}
+			var l:int = collisionHandlers.length;
+			for (var i:int = 0; i < l; i++) {
+				collisionHandlers[i].afterCollisionWith(other);
 			}
 		}
 		
@@ -308,31 +287,15 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public function render(graphics:Graphics, x:Number, y:Number, angle:Number, zoom:Number):void 
 		{
-			var l:int = components.length;
+			var l:int = this.renderables.length;
 			for (var i:int = 0; i < l; i++) {
-				if (components[i] is IRenderable) {
-					var a:Number = angle;
-					if (shape) a += shape.orientation;
-					(components[i] as IRenderable).render(graphics, x, y, a, zoom);
-				}
+				var a:Number = angle;
+				if (shape) a += shape.orientation;
+				renderables[i].render(graphics, x, y, a, zoom);
 			}
 		}
 		
-		/**
-		 * Current count of collisionHandlers
-		 */
-		public function get collisionHandlers():int 
-		{
-			return _collisionHandlers;
-		}
 		
-		/**
-		 * Current count of inputHandlers
-		 */
-		public function get inputHandlers():int 
-		{
-			return _inputHandlers;
-		}
 		
 	}
 

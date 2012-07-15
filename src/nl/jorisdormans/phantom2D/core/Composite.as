@@ -2,6 +2,9 @@ package nl.jorisdormans.phantom2D.core
 {
 	import flash.utils.getQualifiedClassName;
 	import nl.jorisdormans.phantom2D.objects.GameObjectComposite;
+	import nl.jorisdormans.phantom2D.objects.ICollisionHandler;
+	import nl.jorisdormans.phantom2D.objects.IInputHandler;
+	import nl.jorisdormans.phantom2D.objects.IRenderable;
 	import nl.jorisdormans.phantom2D.objects.ObjectFactory;
 	import nl.jorisdormans.phantom2D.util.StringUtil;
 	/**
@@ -25,10 +28,16 @@ package nl.jorisdormans.phantom2D.core
 		 * Use AddComponent() and RemoveComponent() instead.
 		 */
 		public var components:Vector.<Component>;
+		protected var collisionHandlers:Vector.<ICollisionHandler>;
+		protected var renderables:Vector.<IRenderable>;
+		protected var inputHandlers:Vector.<IInputHandler>;
 		
 		public function Composite() 
 		{
 			components = new Vector.<Component>();
+			collisionHandlers = new Vector.<ICollisionHandler>();
+			renderables = new Vector.<IRenderable>();
+			inputHandlers = new Vector.<IInputHandler>();
 			
 		}
 		
@@ -54,7 +63,32 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function removeComponentAt(index:int):Boolean {
 			if (index<0 || index>=components.length) return false;
-			components[index].onRemove();
+			var c:Component = components[index];
+			c.onRemove();
+			if (c is ICollisionHandler) {
+				for (var i:int = collisionHandlers.length - 1; i >= 0; i--) {
+					if (collisionHandlers[i] == c) {
+						collisionHandlers.splice(i, 1);
+						break;
+					}
+				}
+			}
+			if (c is IRenderable) {
+				for (i = renderables.length - 1; i >= 0; i--) {
+					if (renderables[i] == c) {
+						renderables.splice(i, 1);
+						break;
+					}
+				}
+			}
+			if (c is IInputHandler) {
+				for (i = inputHandlers.length - 1; i >= 0; i--) {
+					if (inputHandlers[i] == c) {
+						inputHandlers.splice(i, 1);
+						break;
+					}
+				}
+			}
 			components.splice(index, 1);
 			return true;
 		}
@@ -68,7 +102,13 @@ package nl.jorisdormans.phantom2D.core
 				if (component.parent) component.parent.removeComponent(component);
 				component.parent = this;
 				components.push(component);
+				
+				if (component is IInputHandler) inputHandlers.push(component as IInputHandler);
+				if (component is ICollisionHandler) collisionHandlers.push(component as ICollisionHandler);
+				if (component is IRenderable) renderables.push(component as IRenderable);
+				
 				component.onAdd(this);
+				
 			}
 			return component;
 		}	
@@ -80,6 +120,9 @@ package nl.jorisdormans.phantom2D.core
 				if (component.parent) component.parent.removeComponent(component);
 				component.parent = this;
 				components.splice(index, 0, component);
+				if (component is IInputHandler) inputHandlers.push(component as IInputHandler);
+				if (component is ICollisionHandler) collisionHandlers.push(component as ICollisionHandler);
+				if (component is IRenderable) renderables.push(component as IRenderable);
 				component.onAdd(this);
 			}
 		}

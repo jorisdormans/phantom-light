@@ -129,7 +129,6 @@ package nl.jorisdormans.phantom2D.core
 			game.prof.begin("render");
 			render(camera);
 			game.prof.end("render");
-			game.prof.endProfiling();			
 		}
 		
 		

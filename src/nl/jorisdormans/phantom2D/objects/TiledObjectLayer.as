@@ -184,6 +184,8 @@ package nl.jorisdormans.phantom2D.objects
 		}
 		
 		
+		
+		
 		override public function getObjectAt(position:Vector3D, objectClass:Class = null):GameObject 
 		{
 			var tileX:int = MathUtil.clamp(position.x / tileSize, 0, tilesX - 1);

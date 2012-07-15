@@ -160,7 +160,7 @@ package nl.jorisdormans.phantom2D.core
 			//contain current and previous input states
 			
 			//create a profilier
-			prof = new Profiler(16);
+			prof = new Profiler(10);
 			//ProfilerConfig.Width = 200;
 			ProfilerConfig.ShowMinMax = true;
 			

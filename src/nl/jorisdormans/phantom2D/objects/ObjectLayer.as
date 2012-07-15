@@ -133,11 +133,9 @@ package nl.jorisdormans.phantom2D.objects
 		override public function render(camera:Camera):void {
 			sprite.graphics.clear();
 			var i:int = 0;
-			l = components.length;
+			l = renderables.length;
 			while (i < l) {
-				if (components[i] is IRenderable) {
-					(components[i] as IRenderable).render(sprite.graphics, 0, 0, camera.angle, camera.zoom);
-				}
+				renderables[i].render(sprite.graphics, 0, 0, camera.angle, camera.zoom);
 				i++;
 			}
 			i = 0;
@@ -183,12 +181,13 @@ package nl.jorisdormans.phantom2D.objects
 		override public function update(elapsedTime:Number):void {
 			var l:int = objects.length;
 			for (var i:int = l-1; i >= 0 ; i--) {
-				objects[i].update(elapsedTime);
+				if (!objects[i].passive) objects[i].update(elapsedTime);
 			}
 			super.update(elapsedTime);
 		}
 		
 		override public function updatePhysics(elapsedTime:Number):void {
+			//return;
 			var i:int = 0;
 			var l:int = objects.length;
 			elapsedTime /= physicsExecutionCount;
@@ -209,8 +208,11 @@ package nl.jorisdormans.phantom2D.objects
 						objects.splice(i, 1);
 						l--;
 					} else {
-						objects[i].updatePhysics(elapsedTime);
-						checkCollisionsOfObject(i);
+						if (!objects[i].passive) {
+							objects[i].updatePhysics(elapsedTime);
+							checkCollisionsOfObject(i);
+						}
+						
 						i++;
 					}
 				}
