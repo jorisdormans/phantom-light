@@ -113,22 +113,28 @@ package nl.jorisdormans.phantom2D.core
 			game.currentInputState.update();
 			game.prof.end("handleInput");
 			
+			/*/
 			//run physics
 			game.prof.begin("physics");
 			updatePhysics(elapsedTime);
 			if (paused) return;
 			game.prof.end("physics");
+			//*/
 			
+			/*/
 			//other updates
 			game.prof.begin("other updates");
 			updateOther(elapsedTime);
 			if (paused) return;
 			game.prof.end("other update");
+			//*/
 			
+			//*/
 			//draw frame
 			game.prof.begin("render");
 			render(camera);
 			game.prof.end("render");
+			//*/			
 		}
 		
 		

@@ -84,7 +84,6 @@ package nl.jorisdormans.phantom2D.objects.misc
 		override public function update(elapsedTime:Number):void 
 		{
 			super.update(elapsedTime);
-			PhantomGame.log(this.particleClass + " " + this.particleLayer + " " + particleDelay );
 			if ( this.particleClass && this.particleLayer && (particleDelay-=elapsedTime) <= 0)
 			{
 				var particle:Particle = new this.particleClass();
