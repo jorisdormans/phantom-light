@@ -6,6 +6,7 @@ package nl.jorisdormans.phantom2D.core
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import nl.jorisdormans.phantom2D.layers.FPSDisplay;
@@ -52,22 +53,25 @@ package nl.jorisdormans.phantom2D.core
 		/**
 		 * Timer to measer elapsedTime between frames
 		 */
-		private var frameTimer:uint;
+		private var lastTime:uint;
 		/**
 		 * Maximu elapsed time (in seconds) to be used between for updates
 		 */
 		protected var maxElapsedTime:Number = 0.1;
 		
-		private var frameCounter:uint;
-		private var frameCountTimer:Number;
 		
 		/**
 		 * The game's current framerate, is updated every second
 		 */
 		public static var fps:uint = 0;
+		public static var ups:uint = 0;
 		
 		public static var frameClock:uint = 0;
 		
+		
+		private var frameCounter:uint;
+		private var updateCounter:uint;
+		private var countTimer:Number;
 		
 		
 		
@@ -98,7 +102,8 @@ package nl.jorisdormans.phantom2D.core
 		private var fpsLayer:FPSDisplay;
 		
 		private static var activeGame:PhantomGame;
-		private var gametimer:Timer;
+		
+		private var timer:Timer;
 		
 		public static const LOG_DEBUG : String = "Debug";
 		public static const LOG_ERROR : String = "Error";
@@ -176,7 +181,7 @@ package nl.jorisdormans.phantom2D.core
             stage.frameRate = 60;
 		
 			//add event listeners
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			//addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, currentInputState.onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, currentInputState.onKeyUp);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, currentInputState.onMouseDown);
@@ -195,12 +200,18 @@ package nl.jorisdormans.phantom2D.core
 			this.focusRect = null;
 			
 			//get timer
-			frameTimer = getTimer();
+			lastTime = getTimer();
 			
 			frameCounter = 0;
-			frameCountTimer = 0;
+			updateCounter = 0;
+			countTimer = 0;
 			prof.beginProfiling();
 			prof.begin("idle");
+			
+			
+			this.timer = new Timer(0, 1);
+			this.timer.addEventListener(TimerEvent.TIMER, onEnterFrame);
+			this.timer.start();
 		}		
 		
 		/**
@@ -259,30 +270,54 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		private function onEnterFrame(e:Event):void 
 		{
-			
-			//Get the elapsed time and calculate fps
-			var time:uint = getTimer();
-			var elapsedTime:Number = (time-frameTimer) / 1000;
-			frameCountTimer += elapsedTime;
-			elapsedTime = Math.min(maxElapsedTime, elapsedTime);
-			frameTimer = time;
-			
-			//fps
-			frameCounter++;
-			if (frameCountTimer >= 1) {
-				frameCountTimer -= 1;
-				fps = frameCounter;
-				frameCounter = 0;
-			}
-			
-			frameClock++;
-			
 			prof.end("idle");
 			prof.endProfiling();
 			prof.beginProfiling();
 			prof.begin("game");
+			
+			//Get the elapsed time and calculate fps
+			var now:uint = getTimer();
+			var elapsedTime:Number = (now-lastTime) / 1000.0;
+			lastTime = now;
+			
+			countTimer += elapsedTime;
+			if ( countTimer >= 1.0 )
+			{
+				countTimer -= 1.0;
+				fps = frameCounter;
+				ups = updateCounter;
+				frameCounter = 0;
+				updateCounter = 0;
+			}
+			
 			//update the current screen
-			if (currentScreen) currentScreen.update(elapsedTime);
+			if (currentScreen)
+			{
+				currentScreen.doUpdate(elapsedTime);
+				updateCounter++;
+				currentScreen.doRender();
+				frameCounter++;
+			}
+			
+			var after:Number = getTimer();
+			var took:Number = after - now;
+			var sleep:Number = (1000.0 / 60.0) - took;
+			sleep = Math.max(0, sleep);
+			
+			this.timer.reset();
+			this.timer.delay = sleep;
+			this.timer.start();
+			
+			while ( sleep > 0 )
+			{
+				now = getTimer();
+				elapsedTime = (now-lastTime) / 1000.0;
+				lastTime = now;
+				currentScreen.doUpdate(elapsedTime);
+				updateCounter++;
+				sleep -= took;
+			}
+			
 			prof.end("game");
 			prof.begin("idle");
 		}		

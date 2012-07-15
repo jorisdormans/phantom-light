@@ -97,12 +97,18 @@ package nl.jorisdormans.phantom2D.core
 		}
 		
 		
+		public function doRender():void {
+			game.prof.begin("render");
+			this.render(camera);
+			game.prof.end("render");
+		}
+		
 		/**
 		 * The screen's main update function. Called every frame for a game's top most screen. 
 		 * The update loop handles input first, it updates physics next, then it calls all other updates and finally it renders all components.
 		 * @param	elapsedTime
 		 */
-		override public function update(elapsedTime:Number):void {
+		public function doUpdate(elapsedTime:Number):void {
 			var l:int = components.length;
 			//handleInput
 			//input is never propagated to a screen below
@@ -124,17 +130,11 @@ package nl.jorisdormans.phantom2D.core
 			//*/
 			//other updates
 			game.prof.begin("other updates");
-			updateOther(elapsedTime);
+			this.update(elapsedTime);
 			if (paused) return;
 			game.prof.end("other update");
 			//*/
 			
-			//*/
-			//draw frame
-			game.prof.begin("render");
-			render(camera);
-			game.prof.end("render");
-			//*/			
 		}
 		
 		
@@ -153,12 +153,9 @@ package nl.jorisdormans.phantom2D.core
 		 * If propagateUpdates is set to true it will update screen below first
 		 * @param	elapsedTime
 		 */
-		public function updateOther(elapsedTime:Number):void {
-			if (propagateUpdate && screenBelow) screenBelow.updateOther(elapsedTime);
-			var l:int = components.length;
-			for (var i:int = 0; i < l; i++) {
-				components[i].update(elapsedTime);
-			}
+		override public function update(elapsedTime:Number):void {
+			if (propagateUpdate && screenBelow) screenBelow.update(elapsedTime);
+			super.update(elapsedTime);
 			camera.update(elapsedTime);
 		}
 		

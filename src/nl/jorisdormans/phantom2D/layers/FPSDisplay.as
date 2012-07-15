@@ -21,7 +21,7 @@ package nl.jorisdormans.phantom2D.layers
 			textField.defaultTextFormat = new TextFormat(font, size, color);
 			textField.text = "fps";
 			textField.width = size * 4;
-			textField.height = size * 1.5;
+			textField.height = size * 3;
 			textField.x = layerWidth - textField.width;
 			this.background = background;
 			
@@ -31,7 +31,8 @@ package nl.jorisdormans.phantom2D.layers
 		override public function update(elapsedTime:Number):void 
 		{
 			super.update(elapsedTime);
-			textField.text = "fps: " + PhantomGame.fps;
+			textField.text = "fps: " + PhantomGame.fps + "\n"
+						  + "ups: " + PhantomGame.ups;
 		}
 		
 		override public function render(camera:Camera):void 
