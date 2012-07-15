@@ -1,6 +1,7 @@
 package nl.jorisdormans.phantom2D.objects.misc 
 {
 	import flash.display.Graphics;
+	import flash.geom.Point;
 	import flash.geom.Vector3D;
 	import flash.ui.Keyboard;
 	import layers.Hud;
@@ -12,6 +13,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 	import nl.jorisdormans.phantom2D.core.PhantomGame;
 	import nl.jorisdormans.phantom2D.objects.GameObjectComponent;
 	import nl.jorisdormans.phantom2D.objects.IInputHandler;
+	import nl.jorisdormans.phantom2D.objects.ObjectLayer;
 	import nl.jorisdormans.phantom2D.particles.Particle;
 	import nl.jorisdormans.phantom2D.particles.ParticleEmiter;
 	import nl.jorisdormans.phantom2D.particles.ParticleLayer;
@@ -52,6 +54,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 		private var particleLayer:ParticleLayer;
 		private var particleClass:Class;
 		private var particleDelay:Number;
+		private var layer:ObjectLayer;
 		
 		public function WASDMouseInput( acceleration:Number=1000, particleClass:Class=null ) 
 		{
@@ -79,6 +82,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 			super.onInitialize();
 			this.particleDelay = 0;
 			this.particleLayer = this.gameObject.objectLayer.screen.getComponentByClass(ParticleLayer) as ParticleLayer;
+			this.layer = this.gameObject.objectLayer as ObjectLayer;
 		}
 		
 		override public function update(elapsedTime:Number):void 
@@ -130,7 +134,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 			if (!currentState.keySpace && previousState.keySpace)
 				msg = E_ATTACK2_END;
 			
-			if ( msg != null )
+			if ( msg != null && layer.sprite.hitTestPoint(stagemouse.x, stagemouse.y) )
 			{
 				var pos:Vector3D = this.gameObject.position.clone();
 				
