@@ -186,8 +186,8 @@ package nl.jorisdormans.phantom2D.core
 		override public function handleInput(elapsedTime:Number, currentState:InputState, previousState:InputState):void 
 		{
 			if (this.allowInteraction) {
-				currentState.localX = currentState.stageX * camera.zoom + camera.left;
-				currentState.localY = currentState.stageY * camera.zoom + camera.top;
+				currentState.localX = currentState.stageX * camera.zoom + camera.left - this.sprite.x;
+				currentState.localY = currentState.stageY * camera.zoom + camera.top - this.sprite.y;
 				var l:int = components.length;
 				for (var i:int = 0; i < l; i++) {
 					if (components[i] is IInputHandler) {

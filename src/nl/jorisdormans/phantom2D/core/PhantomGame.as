@@ -172,7 +172,7 @@ package nl.jorisdormans.phantom2D.core
 			
 			//create a profilier
 			prof = new Profiler(10);
-			//ProfilerConfig.Width = 200;
+			ProfilerConfig.Width = 200;
 			ProfilerConfig.ShowMinMax = true;
 			ProfilerConfig.Width = 800;
 			
@@ -299,23 +299,25 @@ package nl.jorisdormans.phantom2D.core
 				frameCounter++;
 			}
 			
-			var after:Number = getTimer();
-			var took:Number = after - now;
+			var after:uint = getTimer();
+			var took:uint = after - now;
 			var sleep:Number = (1000.0 / 60.0) - took;
 			sleep = Math.max(0, sleep);
 			
 			this.timer.reset();
-			this.timer.delay = sleep;
+			this.timer.delay = Math.round(sleep);
 			this.timer.start();
 			
 			var max:int = 4;
-			while ( sleep > 0 && max > 0 )
+			while ( sleep > took*2 && max > 0 )
 			{
 				now = getTimer();
 				elapsedTime = (now-lastTime) / 1000.0;
 				lastTime = now;
 				currentScreen.doUpdate(elapsedTime);
 				updateCounter++;
+				after = getTimer();
+				took = after - now;
 				sleep -= took;
 				max--;
 			}

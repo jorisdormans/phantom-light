@@ -236,7 +236,7 @@ package nl.jorisdormans.phantom2D.objects
 			if (object1 == object2 || object1.destroyed || object2.destroyed || object1.removed || object2.removed) return;
 			//if (object1.shape.position.z != object2.shape.position.z) return;
 			if (!object1.canCollideWith(object2) || !object2.canCollideWith(object1)) return;
-			screen.game.prof.begin("collision check");
+			//screen.game.prof.begin("collision check");
 			var collision:CollisionData = CollisionData.check(object1, object2);
 			if (collision.interpenetration != CollisionData.NO_INTERPENETRATION) {
 				if (object1.doResponse && object2.doResponse) {
@@ -255,7 +255,7 @@ package nl.jorisdormans.phantom2D.objects
 				object1.afterCollisionWith(object2);
 				object2.afterCollisionWith(object1);
 			}
-			screen.game.prof.end("collision check");
+			//screen.game.prof.end("collision check");
 		}
 		
 				
