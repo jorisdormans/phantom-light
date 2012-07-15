@@ -308,7 +308,8 @@ package nl.jorisdormans.phantom2D.core
 			this.timer.delay = sleep;
 			this.timer.start();
 			
-			while ( sleep > 0 )
+			var max:int = 4;
+			while ( sleep > 0 && max > 0 )
 			{
 				now = getTimer();
 				elapsedTime = (now-lastTime) / 1000.0;
@@ -316,6 +317,7 @@ package nl.jorisdormans.phantom2D.core
 				currentScreen.doUpdate(elapsedTime);
 				updateCounter++;
 				sleep -= took;
+				max--;
 			}
 			
 			prof.end("game");
