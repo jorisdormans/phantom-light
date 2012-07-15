@@ -161,7 +161,7 @@ package nl.jorisdormans.phantom2D.objects
 		override public function updatePhysics(elapsedTime:Number):void 
 		{
 			super.updatePhysics(elapsedTime);
-			if (inTiledLayer && mover) {
+			if (inTiledLayer && this.mover) {
 				placeOnTile();
 			}
 		}

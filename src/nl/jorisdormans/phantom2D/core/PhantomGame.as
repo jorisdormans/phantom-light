@@ -1,14 +1,17 @@
 package nl.jorisdormans.phantom2D.core 
 {
 	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
+	import flash.utils.Timer;
 	import nl.jorisdormans.phantom2D.layers.FPSDisplay;
-
 	import nl.jorisdormans.phantom2D.thirdparty.profiler.Profiler;
 	import nl.jorisdormans.phantom2D.thirdparty.profiler.ProfilerConfig;
+
 	
 	/**
 	 * ...
@@ -66,6 +69,8 @@ package nl.jorisdormans.phantom2D.core
 		public static var frameClock:uint = 0;
 		
 		
+		
+		
 		/**
 		 * Sprite to contain the masking shape
 		 */
@@ -93,6 +98,7 @@ package nl.jorisdormans.phantom2D.core
 		private var fpsLayer:FPSDisplay;
 		
 		private static var activeGame:PhantomGame;
+		private var gametimer:Timer;
 		
 		public static const LOG_DEBUG : String = "Debug";
 		public static const LOG_ERROR : String = "Error";
@@ -163,9 +169,11 @@ package nl.jorisdormans.phantom2D.core
 			prof = new Profiler(10);
 			//ProfilerConfig.Width = 200;
 			ProfilerConfig.ShowMinMax = true;
+			ProfilerConfig.Width = 800;
 			
-			
-			
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+            stage.align = StageAlign.TOP_LEFT;
+            stage.frameRate = 60;
 		
 			//add event listeners
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -191,6 +199,8 @@ package nl.jorisdormans.phantom2D.core
 			
 			frameCounter = 0;
 			frameCountTimer = 0;
+			prof.beginProfiling();
+			prof.begin("idle");
 		}		
 		
 		/**
@@ -249,6 +259,7 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		private function onEnterFrame(e:Event):void 
 		{
+			
 			//Get the elapsed time and calculate fps
 			var time:uint = getTimer();
 			var elapsedTime:Number = (time-frameTimer) / 1000;
@@ -266,10 +277,14 @@ package nl.jorisdormans.phantom2D.core
 			
 			frameClock++;
 			
+			prof.end("idle");
+			prof.endProfiling();
 			prof.beginProfiling();
+			prof.begin("game");
 			//update the current screen
 			if (currentScreen) currentScreen.update(elapsedTime);
-			prof.endProfiling();
+			prof.end("game");
+			prof.begin("idle");
 		}		
 		
 		/**

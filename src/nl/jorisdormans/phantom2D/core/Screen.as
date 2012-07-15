@@ -113,7 +113,7 @@ package nl.jorisdormans.phantom2D.core
 			game.currentInputState.update();
 			game.prof.end("handleInput");
 			
-			/*/
+			//*/
 			//run physics
 			game.prof.begin("physics");
 			updatePhysics(elapsedTime);
@@ -121,7 +121,7 @@ package nl.jorisdormans.phantom2D.core
 			game.prof.end("physics");
 			//*/
 			
-			/*/
+			//*/
 			//other updates
 			game.prof.begin("other updates");
 			updateOther(elapsedTime);
