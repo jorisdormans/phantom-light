@@ -55,13 +55,15 @@ package nl.jorisdormans.phantom2D.ai.sensors
 		override public function update(elapsedTime:Number):void 
 		{
 			super.update(elapsedTime);
-			if (target.targetObject) {
+			if (target.targetObject && target.targetObject.shape) {
 				var d:Number = MathUtil.distanceSquared(target.targetObject.position, gameObject.position);
 				if (d < distanceSquared + target.targetObject.shape.roughSize * target.targetObject.shape.roughSize ) {
 					var a:Number = Math.atan2(target.targetObject.position.y - gameObject.position.y, target.targetObject.position.x - gameObject.position.x);
 					a = MathUtil.angleDifference(gameObject.shape.orientation + orientation, a);
-					if (Math.abs(a)<=arc) {
-						target.detect();
+					if (Math.abs(a) <= arc) {
+						if (gameObject.objectLayer.rayTraceToObject(gameObject, target.targetObject)) {
+							target.detect();
+						}
 					}
 				}
 			}
