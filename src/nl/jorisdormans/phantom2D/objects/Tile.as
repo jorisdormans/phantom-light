@@ -22,6 +22,10 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public var index:int;
 		/**
+		 * Optional informational flags, used for gameplay (ex. fog of war)
+		 */
+		public var flags:uint;
+		/**
 		 * The tile's X position in the grid of the TiledObjectLayer
 		 */
 		public var tileX:int;
