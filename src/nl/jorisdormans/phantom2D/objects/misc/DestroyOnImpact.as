@@ -9,7 +9,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 	 */
 	public class DestroyOnImpact extends GameObjectComponent implements ICollisionHandler
 	{
-		static public const M_IMPACT:String = "impact";
+		static public const E_IMPACT:String = "impact";
 		
 		public function DestroyOnImpact() 
 		{
@@ -26,7 +26,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 		public function afterCollisionWith(other:GameObject):void 
 		{
 			if (other.doResponse && gameObject.doResponse) {
-				gameObject.sendMessage(M_IMPACT);
+				gameObject.sendMessage(E_IMPACT);
 				gameObject.destroyed = true;
 			}
 		}
