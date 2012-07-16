@@ -69,14 +69,6 @@ package nl.jorisdormans.phantom2D.objects.misc
 			InputState.keyCode4 = 68; // D
 		}
 		
-		override public function onAdd(composite:Composite):void 
-		{
-			super.onAdd(composite);
-			if (!this.gameObject.mover) {
-				throw new Error("WASDMouseInput requires that this GameObject has a Mover component.");
-			}
-		}
-		
 		override public function onInitialize():void 
 		{
 			super.onInitialize();
@@ -99,25 +91,28 @@ package nl.jorisdormans.phantom2D.objects.misc
 		
 		public function handleInput(elapsedTime:Number, currentState:InputState, previousState:InputState):void 
 		{
-			// Handle movement:
-			var dx:Number = 0;
-			var dy:Number = 0;
-			if (currentState.key2) dx -= 1;
-			if (currentState.key4) dx += 1;
-			if (currentState.key1) dy -= 1;
-			if (currentState.key3) dy += 1;
-			if (dx != 0 && dy != 0) {
-				dx *= Math.SQRT1_2;
-				dy *= Math.SQRT1_2;
-			}
-			elapsedTime *= acceleration;
-			gameObject.mover.velocity.x += dx * elapsedTime;
-			gameObject.mover.velocity.y += dy * elapsedTime;
-			if ((lastX!=dx || lastY!=dy) && (dx!=0 || dy!=0)) {
-				lastX = dx;
-				lastY = dy;
-				parent.sendMessage(E_CHANGE_DIRECTION, { dx: dx, dy: dy } );
-				
+			if ( this.gameObject.mover != null )
+			{
+				// Handle movement:
+				var dx:Number = 0;
+				var dy:Number = 0;
+				if (currentState.key2) dx -= 1;
+				if (currentState.key4) dx += 1;
+				if (currentState.key1) dy -= 1;
+				if (currentState.key3) dy += 1;
+				if (dx != 0 && dy != 0) {
+					dx *= Math.SQRT1_2;
+					dy *= Math.SQRT1_2;
+				}
+				elapsedTime *= acceleration;
+				gameObject.mover.velocity.x += dx * elapsedTime;
+				gameObject.mover.velocity.y += dy * elapsedTime;
+				if ((lastX!=dx || lastY!=dy) && (dx!=0 || dy!=0)) {
+					lastX = dx;
+					lastY = dy;
+					parent.sendMessage(E_CHANGE_DIRECTION, { dx: dx, dy: dy } );
+					
+				}
 			}
 			
 			// Handle mouse actions:

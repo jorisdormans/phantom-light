@@ -6,6 +6,7 @@ package nl.jorisdormans.phantom2D.objects
 	import nl.jorisdormans.phantom2D.ai.statemachines.StateMachine;
 	import nl.jorisdormans.phantom2D.core.Component;
 	import nl.jorisdormans.phantom2D.core.Composite;
+	import nl.jorisdormans.phantom2D.core.PhantomGame;
 	import nl.jorisdormans.phantom2D.objects.boundaries.*;
 	import nl.jorisdormans.phantom2D.objects.misc.*;
 	import nl.jorisdormans.phantom2D.objects.renderers.*;
@@ -83,6 +84,10 @@ package nl.jorisdormans.phantom2D.objects
 						addComponent(comp as Composite, child);
 					}
 				}
+			}
+			else
+			{
+				PhantomGame.log("Component not found: " + xml.localName(), PhantomGame.LOG_WARNING);
 			}
 		}
 		
