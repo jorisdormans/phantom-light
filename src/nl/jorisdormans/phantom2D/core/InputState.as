@@ -1,5 +1,6 @@
 package nl.jorisdormans.phantom2D.core 
 {
+	import flash.display.Stage;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
@@ -280,6 +281,8 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function onKeyDown(e:KeyboardEvent):void 
 		{
+			if ( !(e.target is Stage) )
+				return;
 			if (e.keyCode == Keyboard.UP) arrowUp = true;
 			if (e.keyCode == Keyboard.DOWN) arrowDown = true;
 			if (e.keyCode == Keyboard.LEFT) arrowLeft = true;
@@ -305,6 +308,8 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function onKeyUp(e:KeyboardEvent):void 
 		{
+			if ( !(e.target is Stage) )
+				return;
 			if (e.keyCode == Keyboard.UP) arrowUpReleased = true;
 			if (e.keyCode == Keyboard.DOWN) arrowDownReleased = true;
 			if (e.keyCode == Keyboard.LEFT) arrowLeftReleased = true;

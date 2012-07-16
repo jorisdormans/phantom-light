@@ -19,6 +19,11 @@ package nl.jorisdormans.phantom2D.objects.renderers
 		 */
 		public static const M_SET_RENDER_STYLE:String = "setRenderStyle";
 		
+		public static const P_FILLCOLOR:String = "fillColor";
+		public static const P_STROKECOLOR:String = "strokeColor";
+		public static const P_STROKEWIDTH:String = "strokeWidth";
+		public static const P_ALPHA:String = "alpha";
+		
 		public static var xmlDescription:XML = <BoundingShapeRenderer fillColor="Color" strokeColor="Color" strokeWidth="Number" alpha="Number" zoom="Number"/>;
 		public static var xmlDefault:XML = <BoundingShapeRenderer fillColor="0xffffff" strokeColor="0xffffff" strokeWidth="-1" alpha="1" zoom="1"/>;
 		
@@ -76,6 +81,21 @@ package nl.jorisdormans.phantom2D.objects.renderers
 			return super.handleMessage(message, data);
 		}
 		
+		override public function getProperty(property:String, data:Object = null, componentClass:Class = null):Object 
+		{
+			switch( property )
+			{
+				case P_FILLCOLOR:
+					return this.fillColor;
+				case P_STROKECOLOR:
+					return this.strokeColor;
+				case P_STROKEWIDTH:
+					return this.strokeWidth;
+				case P_ALPHA:
+					return this.alpha;
+			}
+			return super.getProperty(property, data, componentClass);
+		}
 		
 		/* INTERFACE phantom2D.objects.IRenderable */
 		
