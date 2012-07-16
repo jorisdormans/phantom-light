@@ -270,6 +270,7 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		private function onEnterFrame(e:Event):void 
 		{
+			if (!currentScreen) return;
 			prof.end("idle");
 			prof.endProfiling();
 			prof.beginProfiling();
