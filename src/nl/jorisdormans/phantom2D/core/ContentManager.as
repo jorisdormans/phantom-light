@@ -38,6 +38,7 @@ package nl.jorisdormans.phantom2D.core
 					objectRecipes[id] = go;
 				}
 			}
+			PhantomGame.log(xml.GameObject.length() + " object(s) added to ContentManager");
 		}
 		
 		public function addLevels(xml:XML):void {
@@ -48,6 +49,7 @@ package nl.jorisdormans.phantom2D.core
 					levels[id] = l;
 				}
 			}
+			PhantomGame.log(xml.level.length() + " level(s) added to ContentManager");
 			
 		}
 		

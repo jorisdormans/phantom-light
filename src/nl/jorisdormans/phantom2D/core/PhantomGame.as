@@ -181,7 +181,7 @@ package nl.jorisdormans.phantom2D.core
             stage.frameRate = 60;
 		
 			//add event listeners
-			//addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, currentInputState.onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, currentInputState.onKeyUp);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, currentInputState.onMouseDown);
@@ -208,10 +208,11 @@ package nl.jorisdormans.phantom2D.core
 			prof.beginProfiling();
 			prof.begin("idle");
 			
-			
+			/*
 			this.timer = new Timer(0, 1);
 			this.timer.addEventListener(TimerEvent.TIMER, onEnterFrame);
 			this.timer.start();
+			//*/
 		}		
 		
 		/**
@@ -268,6 +269,9 @@ package nl.jorisdormans.phantom2D.core
 		 * Handles the game loop
 		 * @param	e
 		 */
+		/*
+		//Koen's (SLOWER!) version 
+		
 		private function onEnterFrame(e:Event):void 
 		{
 			if (!currentScreen) return;
@@ -325,7 +329,41 @@ package nl.jorisdormans.phantom2D.core
 			
 			prof.end("game");
 			prof.begin("idle");
-		}		
+		}	
+		//*/
+		
+		//*
+		// original (FASTER!) version
+		private function onEnterFrame(e:Event):void 
+		{
+			//Get the elapsed time and calculate fps
+			var time:uint = getTimer();
+			var elapsedTime:Number = (time-lastTime) / 1000;
+			countTimer += elapsedTime;
+			elapsedTime = Math.min(maxElapsedTime, elapsedTime);
+			lastTime = time;
+			
+			//fps
+			frameCounter++;
+			if (countTimer >= 1) {
+				countTimer -= 1;
+				fps = frameCounter;
+				frameCounter = 0;
+			}
+			
+			frameClock++;
+			
+			prof.end("idle");
+			prof.endProfiling();
+			prof.beginProfiling();
+			prof.begin("game");
+			//update the current screen
+			if (currentScreen) currentScreen.doUpdate(elapsedTime);
+			if (currentScreen) currentScreen.doRender();
+			prof.end("game");
+			prof.begin("idle");
+		}
+		//*/
 		
 		/**
 		 * Add a screen to the top of the screens stack and activate it
