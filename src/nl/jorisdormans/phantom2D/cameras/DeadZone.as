@@ -21,12 +21,22 @@ package nl.jorisdormans.phantom2D.cameras
 		override public function update(elapsedTime:Number):void 
 		{
 			super.update(elapsedTime);
-			if (Math.abs(camera.target.x - camera.position.x) <= width) {
+			if (camera.target.x - camera.position.x >= width) {
+				camera.target.x -= width;
+			} else if (camera.target.x - camera.position.x <= -width) {
+				camera.target.x += width;
+			} else {
 				camera.target.x = camera.position.x;
 			}
-			if (Math.abs(camera.target.y - camera.position.y) <= height) {
+			
+			if (camera.target.y - camera.position.y >= height) {
+				camera.target.y -= height;
+			} else if (camera.target.y - camera.position.y <= -height) {
+				camera.target.y += height;
+			} else {
 				camera.target.y = camera.position.y;
 			}
+			
 		}
 	}
 
