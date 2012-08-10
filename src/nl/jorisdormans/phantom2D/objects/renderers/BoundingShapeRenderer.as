@@ -68,7 +68,7 @@ package nl.jorisdormans.phantom2D.objects.renderers
 			super.readXML(xml);
 		}
 		
-		override public function handleMessage(message:String, data:Object = null):int 
+		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int 
 		{
 			switch (message) {
 				case M_SET_RENDER_STYLE:

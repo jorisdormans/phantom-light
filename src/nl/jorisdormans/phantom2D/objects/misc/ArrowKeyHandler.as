@@ -78,7 +78,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 			if ((lastX!=dx || lastY!=dy) && (dx!=0 || dy!=0)) {
 				lastX = dx;
 				lastY = dy;
-				parent.sendMessage(E_CHANGE_DIRECTION, { dx: dx, dy: dy } );
+				parent.handleMessage(E_CHANGE_DIRECTION, { dx: dx, dy: dy } );
 				
 			}
 			

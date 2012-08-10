@@ -42,7 +42,7 @@ package nl.jorisdormans.phantom2D.cameras
 			}
 		}
 		
-		override public function handleMessage(message:String, data:Object = null):int 
+		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int 
 		{
 			switch (message) {
 				case M_FOLLOW_OBJECT:

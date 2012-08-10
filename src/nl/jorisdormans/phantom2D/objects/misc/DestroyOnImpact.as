@@ -26,7 +26,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 		public function afterCollisionWith(other:GameObject):void 
 		{
 			if (other.doResponse && gameObject.doResponse) {
-				gameObject.sendMessage(E_IMPACT);
+				gameObject.handleMessage(E_IMPACT);
 				gameObject.destroyed = true;
 			}
 		}

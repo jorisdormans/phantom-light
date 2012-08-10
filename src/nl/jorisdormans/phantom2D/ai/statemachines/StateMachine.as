@@ -106,11 +106,11 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 			}
 		}
 		
-		override public function handleMessage(message:String, data:Object = null):int 
+		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int 
 		{
 			var r:int = Phantom.MESSAGE_NOT_HANDLED;
 			if (states.length > 0) {
-				r = states[states.length - 1].handleMessage(message, data);
+				r = states[states.length - 1].handleMessage(message, data, componentClass);
 				if (r != Phantom.MESSAGE_CONSUMED) return r;
 			}
 			switch (super.handleMessage(message, data)) {

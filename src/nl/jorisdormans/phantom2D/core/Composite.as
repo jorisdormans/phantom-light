@@ -184,12 +184,12 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	componentClass		specify a specific target component class for this message
 		 * @return			Returns an integer indicating if and how the message was handled.
 		 */
-		override public function sendMessage(message:String, data:Object = null, componentClass:Class = null):int {
+		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int {
 			var result:int = Phantom.MESSAGE_NOT_HANDLED;
 			var r:int = Phantom.MESSAGE_NOT_HANDLED;
 			
 			if (componentClass == null) {
-				r = handleMessage(message, data);
+				r = super.handleMessage(message, data, componentClass);
 				if (r == Phantom.MESSAGE_HANDLED) 
 					result = r;
 				else if (r == Phantom.MESSAGE_CONSUMED) 
@@ -201,7 +201,7 @@ package nl.jorisdormans.phantom2D.core
 				if (componentClass == null || components[i] is componentClass) {
 					if (components[i] is Composite) {
 						//composites should pass messages to their components
-						r = components[i].sendMessage(message, data);
+						r = components[i].handleMessage(message, data);
 					} else {
 						r = components[i].handleMessage(message, data);
 					}					

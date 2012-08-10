@@ -62,22 +62,7 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	componentClass		A specific target component class
 		 * @return						An integer value that indicates its response (defined in Phantom)
 		 */
-		public function sendMessage(message:String, data:Object = null, componentClass:Class = null):int {
-			if (componentClass != null && this is componentClass)	{
-				return handleMessage(message, data);
-			} else {
-				return Phantom.MESSAGE_NOT_HANDLED;
-			}
-		}
-
-		
-		/**
-		 * Handles the a message
-		 * @param	message	String identifying the message
-		 * @param	data	Additional message data.
-		 * @return			Returns an integer indicating if and how the message was handled.
-		 */
-		public function handleMessage(message:String, data:Object = null):int {
+		public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int {
 			return Phantom.MESSAGE_NOT_HANDLED;
 		}
 		

@@ -94,7 +94,7 @@
 			bottom = position.y + screen.screenHeight * 0.5;
 		}
 		
-		override public function handleMessage(message:String, data:Object = null):int 
+		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int 
 		{
 			switch (message) {
 				case M_JUMP_TO:
@@ -110,7 +110,7 @@
 					position.x = setTarget.x = target.x;
 					position.y = setTarget.y = target.y;
 					position.z = setTarget.z = target.z;
-					sendMessage(FollowObject.M_STOP_FOLLOWING);
+					handleMessage(FollowObject.M_STOP_FOLLOWING);
 					break;
 				case M_MOVE_TO:
 					if (data && data.target) {
@@ -126,7 +126,7 @@
 					setTarget.x = target.x;
 					setTarget.y = target.y;
 					setTarget.z = target.z;
-					sendMessage(FollowObject.M_STOP_FOLLOWING);
+					handleMessage(FollowObject.M_STOP_FOLLOWING);
 					break;
 			}
 			return super.handleMessage(message, data);

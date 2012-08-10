@@ -84,7 +84,7 @@ package nl.jorisdormans.phantom2D.ai.sensors
 			super.readXML(xml);
 		}
 		
-		override public function handleMessage(message:String, data:Object = null):int 
+		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int 
 		{
 			switch (message) {
 				case M_SET_TARGET:
@@ -111,14 +111,14 @@ package nl.jorisdormans.phantom2D.ai.sensors
 			_detected = value;
 			switch (_detected) {
 				case TARGET_DETECTED:
-					gameObject.sendMessage(E_DETECT_TARGET, { targetObject: targetObject } );	
+					gameObject.handleMessage(E_DETECT_TARGET, { targetObject: targetObject } );	
 					break;
 				case TARGET_LOST:
-					gameObject.sendMessage(E_LOST_TARGET );	
+					gameObject.handleMessage(E_LOST_TARGET );	
 					timer = timeOut;
 					break;
 				case NO_TARGET:
-					gameObject.sendMessage(E_NO_TARGET );	
+					gameObject.handleMessage(E_NO_TARGET );	
 					break;
 			}
 		}

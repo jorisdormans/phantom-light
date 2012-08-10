@@ -110,7 +110,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 				if ((lastX!=dx || lastY!=dy) && (dx!=0 || dy!=0)) {
 					lastX = dx;
 					lastY = dy;
-					parent.sendMessage(E_CHANGE_DIRECTION, { dx: dx, dy: dy } );
+					parent.handleMessage(E_CHANGE_DIRECTION, { dx: dx, dy: dy } );
 					
 				}
 			}
@@ -137,7 +137,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 				var dir:Vector3D = new Vector3D( Math.sin(a), Math.cos(a) );
 				
 				var data:Object = { target: localmouse, origin: pos, angle: a, direction:dir };
-				this.parent.sendMessage(msg, data);
+				this.parent.handleMessage(msg, data);
 			}
 			
 		}

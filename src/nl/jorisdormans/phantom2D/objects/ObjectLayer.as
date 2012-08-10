@@ -356,7 +356,7 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public function sendMessageToObjects(message:String, data:Object):void {
 			for (var i:int = 0; i < objects.length; i++) {
-				objects[i].sendMessage(message, data);
+				objects[i].handleMessage(message, data);
 			}
 			
 		}

@@ -24,12 +24,12 @@ package nl.jorisdormans.phantom2D.cameras
 		override public function onAdd(composite:Composite):void 
 		{
 			super.onAdd(composite);
-			camera.screen.sendMessage(Layer.M_SET_WRAPPED, { horizontal:horizontal, vertical:vertical } );
+			camera.screen.handleMessage(Layer.M_SET_WRAPPED, { horizontal:horizontal, vertical:vertical } );
 		}
 		
 		override public function onRemove():void 
 		{
-			camera.screen.sendMessage(Layer.M_SET_WRAPPED, { horizontal:false, vertical:false } );
+			camera.screen.handleMessage(Layer.M_SET_WRAPPED, { horizontal:false, vertical:false } );
 			layer = null;
 			super.onRemove();
 		}

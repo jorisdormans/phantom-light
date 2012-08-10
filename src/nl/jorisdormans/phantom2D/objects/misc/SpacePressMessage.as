@@ -43,7 +43,7 @@ package nl.jorisdormans.phantom2D.objects.misc
 		public function handleInput(elapsedTime:Number, currentState:InputState, previousState:InputState):void 
 		{
 			if (currentState.keySpace && !previousState.keySpace) {
-				parent.sendMessage(generatedMessage);
+				parent.handleMessage(generatedMessage);
 			}
 		}
 		

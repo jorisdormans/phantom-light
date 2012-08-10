@@ -47,7 +47,7 @@
 			super.update(elapsedTime);
 			life-= elapsedTime;
 			if (life <= 0) {
-				gameObject.sendMessage(E_DIED);
+				gameObject.handleMessage(E_DIED);
 				gameObject.destroyed = true;
 			}
 		}
