@@ -32,6 +32,12 @@ package nl.jorisdormans.phantom2D.objects
 		 * The object's position on the objectLayer
 		 */
 		public var position:Vector3D;
+		
+		/**
+		 * The object's starting position on the objectLayer
+		 */
+		public var startPosition:Vector3D;
+		
 		/**
 		 * A direct reference to the BoundingShape component that determines the GameObjects location and shape in the GameScreen
 		 */
@@ -77,6 +83,10 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public var tag:uint;
 		
+		public var key:String;
+		
+		public var id:int;
+		
 		/**
 		 * Creates an instance of the gameObject. Call the initialize() function to actually initialize it.
 		 */
@@ -87,11 +97,15 @@ package nl.jorisdormans.phantom2D.objects
 			mass = 1;
 			position = new Vector3D();
 			passive = false;
+			key = "";
+			id = 0;
 		}
 		
 		override public function generateXML():XML 
 		{
 			var xml:XML = super.generateXML();
+			if (key!="") xml.@key = key;
+			if (id>0) xml.@id = id;
 			xml.@x = position.x;
 			xml.@y = position.y;
 			if (position.z != 0) xml.@z = position.z;
@@ -107,9 +121,22 @@ package nl.jorisdormans.phantom2D.objects
 		override public function readXML(xml:XML):void 
 		{
 			super.readXML(xml);
+			if (xml.@key.length() > 0) key = xml.@key;
+			if (xml.@id.length() > 0) id = xml.@id;
 			if (xml.@x.length() > 0) position.x = xml.@x;
 			if (xml.@y.length() > 0) position.y = xml.@y;
 			if (xml.@z.length() > 0) position.z = xml.@z;
+			if (xml.@tag.length() > 0) tag = xml.@tag;
+			if (xml.@mass.length() > 0) mass = xml.@mass;
+			if (xml.@sortOrder.length() > 0) sortOrder = xml.@sortOrder;
+			if (xml.@doResponse.length() > 0) doResponse = xml.@doResponse == "true";
+			if (xml.@initiateCollisionCheck.length() > 0) initiateCollisionCheck = xml.@initiateCollisionCheck == "true";
+			if (xml.@passive.length() > 0) passive = xml.@passive == "true";
+		}
+		
+		public function copySettings(other:GameObject):void {
+			var xml:XML = other.generateXML();
+			super.readXML(xml);
 			if (xml.@tag.length() > 0) tag = xml.@tag;
 			if (xml.@mass.length() > 0) mass = xml.@mass;
 			if (xml.@sortOrder.length() > 0) sortOrder = xml.@sortOrder;
@@ -142,7 +169,7 @@ package nl.jorisdormans.phantom2D.objects
 			
 			if (component is BoundingShape) {
 				if (this.shape) {
-					trace("PHANTOM: Removed old shape from", this);
+					//trace("PHANTOM: Removed old shape from", this);
 					removeComponent(this.shape);
 				}
 				this.shape = component as BoundingShape;
@@ -150,7 +177,7 @@ package nl.jorisdormans.phantom2D.objects
 			
 			if (component is Mover) {
 				if (this.mover) {
-					trace("PHANTOM: Removed old mover from", this);
+					//trace("PHANTOM: Removed old mover from", this);
 					removeComponent(this.mover);
 				}
 				this.mover = component as Mover;
@@ -179,6 +206,7 @@ package nl.jorisdormans.phantom2D.objects
 						(components[i] as GameObjectComposite).onInitialize();
 					}
 				}
+				startPosition = position.clone();
 			}
 		}
 		
@@ -192,6 +220,7 @@ package nl.jorisdormans.phantom2D.objects
 					inTiledLayer = true;
 					placeOnTile();
 				}
+				startPosition = position.clone();
 			}
 			var l:int = components.length;
 			for (var i:int = 0; i < l; i++) {
@@ -202,6 +231,15 @@ package nl.jorisdormans.phantom2D.objects
 					(components[i] as GameObjectComposite).onInitialize();
 				}
 			}
+		}
+		
+		override public function reset():void 
+		{
+			super.reset();
+			position.x = startPosition.x;
+			position.y = startPosition.y;
+			position.z = startPosition.z;
+			placeOnTile();
 		}
 		
 		/**

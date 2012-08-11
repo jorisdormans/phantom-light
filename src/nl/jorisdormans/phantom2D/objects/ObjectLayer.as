@@ -330,7 +330,7 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	objectClass		A class specifying the type of object (null = any class of objects).
 		 * @return			
 		 */
-		public function getObjectAt(position:Vector3D, objectClass:Class = null): GameObject {
+		public function getObjectAt(position:Vector3D, objectClass:Class = null, excludeTileObjects:Boolean = false): GameObject {
 			for (var i:int = objects.length - 1; i >= 0 ; i--) {
 				if ((objectClass == null || objects[i] is objectClass) && objects[i].shape && objects[i].shape.pointInShape(position)) return objects[i];
 			}
@@ -480,8 +480,37 @@ package nl.jorisdormans.phantom2D.objects
 			}
 			return r;
 		}
-
 		
+		override public function reset():void 
+		{
+			for (var i:int = 0; i < objects.length; i++) {
+				objects[i].reset();
+			}
+			
+			for (i = objects.length - 1; i >= 0; i--) {
+				if (objects[i].destroyed) {
+					objects[i].dispose();
+					if (objects[i].tile != null) objects[i].tile.removeGameObject(objects[i]);
+					objects[i].objectLayer = null;
+					objects.splice(i, 1);
+				}
+			}
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			for (var i:int = 0; i < objects.length; i++) {
+				if (objects[i].tile && objects[i].tile.tileObject == objects[i]) continue;
+				xml.appendChild(objects[i].generateXML());
+			}
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			//super.readXML(xml);
+		}
 		
 	}
 

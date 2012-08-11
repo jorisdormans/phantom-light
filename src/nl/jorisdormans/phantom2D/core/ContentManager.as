@@ -2,6 +2,7 @@ package nl.jorisdormans.phantom2D.core
 {
 	import flash.utils.Dictionary;
 	import nl.jorisdormans.phantom2D.graphics.PhantomShape;
+	import nl.jorisdormans.phantomextra.gui.PhantomSelectBox;
 	/**
 	 * ...
 	 * @author Joris Dormans
@@ -9,18 +10,23 @@ package nl.jorisdormans.phantom2D.core
 	public class ContentManager 
 	{
 		private static var instance:ContentManager;
-		private var objectRecipes:Dictionary
-		private var levels:Dictionary;
-		private var shapes:Dictionary;
-		private var shapeKeys:Dictionary;		
+		public var objects:Dictionary
+		public var tiles:Dictionary
+		public var tileKeys:Vector.<String>
+		public var levels:Dictionary;
+		public var shapes:Dictionary;
+		public var shapeKeys:Dictionary;	
+		
 		
 		public function ContentManager() 
 		{
 			if (instance) throw new Error( "ContentManager can only be accessed through ContentManager.getInstance()" ); 
-			objectRecipes = new Dictionary();
+			objects = new Dictionary();
+			tiles = new Dictionary();
 			levels = new Dictionary();
 			shapes = new Dictionary();
 			shapeKeys = new Dictionary();
+			tileKeys = new Vector.<String>();
 		}
 		
 		public static function getInstance():ContentManager {
@@ -30,35 +36,53 @@ package nl.jorisdormans.phantom2D.core
 			return instance;
 		}
 		
-		public function addObjectRecipes(xml:XML):void {
+		public function addObjects(xml:XML):void {
 			for (var i:int = 0; i < xml.GameObject.length(); i++) {
-				if (xml.GameObject[i].@id.length() > 0) {
-					var id:String = xml.GameObject[i].@id
+				if (xml.GameObject[i].@key.length() > 0) {
+					var key:String = xml.GameObject[i].@key
 					var go:XML = xml.GameObject[i];
-					objectRecipes[id] = go;
+					objects[key] = go;
 				}
 			}
 			PhantomGame.log(xml.GameObject.length() + " object(s) added to ContentManager");
 		}
 		
+		public function getObject(key:String):XML {
+			return objects[key] as XML;
+		}
+		
+		public function addTiles(xml:XML):void {
+			for (var i:int = 0; i < xml.GameObject.length(); i++) {
+				if (xml.GameObject[i].@key.length() > 0) {
+					var key:String = xml.GameObject[i].@key
+					var go:XML = xml.GameObject[i];
+					if (!tiles[key]) {
+						tileKeys.push(key);
+					}
+					tiles[key] = go;
+				}
+			}
+			PhantomGame.log(xml.GameObject.length() + " tile(s) added to ContentManager");
+		}
+		
+		public function getTile(key:String):XML {
+			return tiles[key] as XML;
+		}
+		
 		public function addLevels(xml:XML):void {
 			for (var i:int = 0; i < xml.level.length(); i++) {
-				if (xml.level[i].@id.length() > 0) {
-					var id:String = xml.level[i].@id
+				if (xml.level[i].@key.length() > 0) {
+					var key:String = xml.level[i].@key;
 					var l:XML = xml.level[i];
-					levels[id] = l;
+					levels[key] = l;
 				}
 			}
 			PhantomGame.log(xml.level.length() + " level(s) added to ContentManager");
 			
 		}
 		
-		public function getObjectRecipe(id:String):XML {
-			return objectRecipes[id] as XML;
-		}
-		
-		public function getLevel(id:String):XML {
-			return levels[id] as XML;
+		public function getLevel(key:String):XML {
+			return levels[key] as XML;
 		}
 		
 		public function addShape(key:String, shape:PhantomShape):void {
@@ -66,6 +90,7 @@ package nl.jorisdormans.phantom2D.core
 			if (shapes[key]) throw new Error("Key for Shape cannot be added duplicated in ContentManager.");
 			shapes[key] = shape;
 			shapeKeys[shape] = key;
+
 		}
 		
 		public function getShape(key:String):PhantomShape {

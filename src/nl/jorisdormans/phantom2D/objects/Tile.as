@@ -51,6 +51,8 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public var down:Tile;
 		
+		public var tileObject:GameObject;
+		
 		
 		/**
 		 * Creates an instance of the Tile class
@@ -77,6 +79,7 @@ package nl.jorisdormans.phantom2D.objects
 			}
 			layer = null;
 			index = -1;
+			this.tileObject = null;
 		}
 		
 		/**
@@ -103,6 +106,7 @@ package nl.jorisdormans.phantom2D.objects
 					i--;
 				}
 			}
+			if (gameObject == tileObject) tileObject = null;
 		}
 		
 		/**

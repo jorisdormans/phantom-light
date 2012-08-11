@@ -1,5 +1,6 @@
 package nl.jorisdormans.phantom2D.objects 
 {
+	import com.furusystems.dconsole2.core.interfaces.IThemeable;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -13,8 +14,10 @@ package nl.jorisdormans.phantom2D.objects
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
 	import flash.utils.ByteArray;
+	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 	import nl.jorisdormans.phantom2D.cameras.Camera;
+	import nl.jorisdormans.phantom2D.core.ContentManager;
 	import nl.jorisdormans.phantom2D.objects.GameObject;
 	import nl.jorisdormans.phantom2D.objects.shapes.BoundingLine;
 	import nl.jorisdormans.phantom2D.util.MathUtil;
@@ -42,10 +45,6 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public var tilesY:int;
 		/**
-		 * An array that contains the game objects that can be placed in this level by the editor as tiles
-		 */
-		public var tileList:Array;
-		/**
 		 * Determines the order in which tiles get checked: first the same tile, then orthogonally adjecent tiles and diagonally adjecent tiles
 		 */
 		private static var checkOrder:Vector.<Number>;
@@ -64,7 +63,6 @@ package nl.jorisdormans.phantom2D.objects
 			this.tileSize = tileSize;
 			clear();
 			createTiles(tilesX, tilesY);
-			tileList = new Array();
 			if (!checkOrder) {
 				checkOrder = new Vector.<Number>();
 				checkOrder.push(0, 0, //same tile
@@ -167,16 +165,13 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	objectList	An array of game object classes
 		 */
 		
-		public function createObjects(data:Array, tileList:Array = null):void {
-			if (tileList) {
-				this.tileList = tileList;
-			}
+		public function createObjects(data:Array, tileList:Array):void {
 			for (var i:int = 0; i < data.length; i++) {
 				var x:int = i % tilesX;
 				var y:int = i / tilesX;
 				var tileIndex:int = data[i] as int;
-				if (y<tilesY && tileIndex >= 0 && tileIndex < this.tileList.length && this.tileList[tileIndex]!=null) {
-					var gameObject:GameObject = new this.tileList[tileIndex]() as GameObject;
+				if (y<tilesY && tileIndex >= 0 && tileIndex < tileList.length && tileList[tileIndex]!=null) {
+					var gameObject:GameObject = new tileList[tileIndex]() as GameObject;
 					var p:Vector3D = new Vector3D(x * tileSize + tileSize * 0.5, y * tileSize + tileSize * 0.5); 
 					addGameObjectSorted(gameObject, p);
 				}
@@ -186,7 +181,7 @@ package nl.jorisdormans.phantom2D.objects
 		
 		
 		
-		override public function getObjectAt(position:Vector3D, objectClass:Class = null):GameObject 
+		override public function getObjectAt(position:Vector3D, objectClass:Class = null, excludeTileObjects:Boolean = false):GameObject 
 		{
 			var tileX:int = MathUtil.clamp(position.x / tileSize, 0, tilesX - 1);
 			var tileY:int = MathUtil.clamp(position.y / tileSize, 0, tilesX - 1);
@@ -199,12 +194,94 @@ package nl.jorisdormans.phantom2D.objects
 					var tile:Tile = tiles[x + y * tilesX];
 					var maxO:int = tile.objects.length;
 					for (var j:int = maxO - 1; j >= 0; j--) {
-						if ((objectClass == null || tile.objects[j] is objectClass) && tile.objects[j].shape && tile.objects[j].shape.pointInShape(position)) return tile.objects[j];
+						if ((!excludeTileObjects || tile.tileObject != tile.objects[j]) && (objectClass == null || tile.objects[j] is objectClass) && tile.objects[j].shape && tile.objects[j].shape.pointInShape(position)) return tile.objects[j];
 					}
 				}
 			}
 			return null;
 		}
+		
+		public function addTileObject(gameObject:GameObject, position:Vector3D):void {
+			var tx:int = MathUtil.clamp(position.x / tileSize, 0, tilesX - 1);
+			var ty:int = MathUtil.clamp(position.y / tileSize, 0, tilesY - 1);
+			var tile:Tile = tiles[tx + ty * tilesX];
+			tile.tileObject = gameObject;
+			addGameObjectSorted(gameObject, position);
+		}
+		
+		public function getTileObject(x:Number, y:Number):GameObject {
+			var tx:int = MathUtil.clamp(x / tileSize, 0, tilesX - 1);
+			var ty:int = MathUtil.clamp(y / tileSize, 0, tilesY - 1);
+			var tile:Tile = tiles[tx + ty * tilesX];
+			return tile.tileObject;
+		}
+		
+		override public function generateXML():XML 
+		{
+			var xml:XML = super.generateXML();
+			xml.@width = tilesX;
+			xml.@height = tilesY;
+			if (ContentManager.getInstance().tileKeys.length > 0) {
+				var tileKeyIndeces:Dictionary = new Dictionary();
+				for (var i:int = 0; i < ContentManager.getInstance().tileKeys.length; i++) {
+					var tile:XML = <tile/>;
+					var ind:int = i + 1;
+					var index:String = ind.toString(16);
+					if (index.length < 2) index = "0" + index;
+					if (index.length > 2) index = index.substr(index.length - 2);
+					tile.@index = index;
+					tile.@object = ContentManager.getInstance().tileKeys[i];
+					tileKeyIndeces[ContentManager.getInstance().tileKeys[i]] = index;
+					xml.appendChild(tile);
+				}
+				for (var y:int = 0; y < tilesY; y++) {
+					var row:XML = <row/>;
+					xml.appendChild(row);
+					var r:String = "";
+					for (var x:int = 0; x < tilesX; x++) {
+						var o:GameObject = tiles[x+y*tilesX].tileObject;
+						if (o) r += tileKeyIndeces[o.key];
+						else r += "00";
+					}
+					xml.row[y] = r;
+				}
+			}
+			return xml;
+		}
+		
+		override public function readXML(xml:XML):void 
+		{
+			createTiles(xml.@width, xml.@height);
+			super.readXML(xml);
+			
+			var tileObjects:Vector.<String> = new Vector.<String>();
+			for (var i:int = 0; i < xml.tile.length(); i++) {
+				tileObjects.push(xml.tile[i].@object);
+			}
+			trace("TILEOBJECTS", tileObjects.length);
+			for (var y:int = 0; y < xml.row.length(); y++) {
+				var r:String = xml.row[y];
+				var x:int = 0;
+				while (x<tilesX && x*2<r.length) {
+					var t:String = r.substr(x*2, 2);
+					i = parseInt(t) - 1;
+					if (i >= 0 && i < tileObjects.length && tileObjects[i]) {
+						var c:XML = ContentManager.getInstance().getTile(tileObjects[i]);
+						if (c) {
+							var go:GameObject = ObjectFactory.getInstance().generateFromXML(c);
+							var pos:Vector3D = new Vector3D();
+							pos.x = (x + 0.5) * tileSize;
+							pos.y = (y + 0.5) * tileSize;
+							addTileObject(go, pos);
+						}
+					}
+					x++;
+				}
+			}
+			
+		}
+
+		
 	}
 
 }

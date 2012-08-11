@@ -106,6 +106,9 @@ package nl.jorisdormans.phantom2D.core
 		
 		}
 		
+		
+
+		
 		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int 
 		{
 			switch (message) {
@@ -136,6 +139,7 @@ package nl.jorisdormans.phantom2D.core
 				}
 			}
 		}
+		
 		
 	}
 

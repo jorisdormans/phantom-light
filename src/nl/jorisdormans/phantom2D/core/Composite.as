@@ -270,10 +270,14 @@ package nl.jorisdormans.phantom2D.core
 		override public function readXML(xml:XML):void 
 		{
 			super.readXML(xml);
-			/*for (var i:int = 0; i < xml.children().length(); i++) {
+			while (components.length > 0) {
+				components.pop().dispose();
+			}
+			
+			for (var i:int = 0; i < xml.children().length(); i++) {
 				var child:XML = xml.children()[i];
 				ObjectFactory.getInstance().addComponent(this, child);
-			}*/
+			}
 		}
 		
 		
@@ -294,6 +298,14 @@ package nl.jorisdormans.phantom2D.core
 				s += "]";
 			}
 			return s;
+		}
+		
+		override public function reset():void 
+		{
+			super.reset();
+			for (var i:int = 0; i < components.length; i++) {
+				components[i].reset();
+			}
 		}
 		
 	}

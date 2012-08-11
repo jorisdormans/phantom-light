@@ -64,10 +64,10 @@ package nl.jorisdormans.phantom2D.objects
 		
 		public function generateFromXML(xml:XML):GameObject {
 			var gameObject:GameObject = GameObject.generateFromXML(xml) as GameObject;
-			for (var i:int = 0; i < xml.children().length(); i++) {
+			/*for (var i:int = 0; i < xml.children().length(); i++) {
 				var child:XML = xml.children()[i];
 				addComponent(gameObject, child);
-			}
+			}*/
 			return gameObject;
 		}
 		
@@ -78,10 +78,11 @@ package nl.jorisdormans.phantom2D.objects
 				if (comp) {
 					composite.addComponent(comp);
 				}
-				if (comp is Composite) {
+				var childComposite:Composite = comp as Composite;
+				if (childComposite) {
 					for (var i:int = 0; i < xml.children().length(); i++) {
 						var child:XML = xml.children()[i];
-						addComponent(comp as Composite, child);
+						addComponent(childComposite, child);
 					}
 				}
 			}

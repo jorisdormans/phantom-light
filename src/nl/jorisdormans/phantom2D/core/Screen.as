@@ -198,6 +198,26 @@ package nl.jorisdormans.phantom2D.core
 			}
 		}
 		
+		override public function clear():void 
+		{
+			super.clear();
+			for (var i:int = 0; i < components.length; i++) {
+				var layer:Layer = components[i] as Layer;
+				if (layer) layer.clear();
+			}
+		}
+		
+		public function openLevel(xml:XML):void 
+		{
+			clear();
+			for (var i:int = 0; i < xml.children().length(); i++) {
+				var child:XML = xml.children()[i];
+				if (i<components.length) components[i].readXML(child);
+			}
+		}
+		
+		
+		
 		
 		
 	}

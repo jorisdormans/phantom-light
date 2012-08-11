@@ -106,6 +106,13 @@ package nl.jorisdormans.phantom2D.core
 		}
 		
 		/**
+		 * Restores the component to its original state
+		 */
+		public function reset():void {
+			
+		}
+		
+		/**
 		 * Get the first parent of a particular type.
 		 * @param	type 	The class indicating the type.
 		 * @return			the first parent of the type (might be null)
