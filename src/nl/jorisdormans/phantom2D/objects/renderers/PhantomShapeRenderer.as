@@ -101,7 +101,7 @@ package nl.jorisdormans.phantom2D.objects.renderers
 		
 		public function render(graphics:Graphics, x:Number, y:Number, angle:Number = 0, zoom:Number = 1):void 
 		{
-			if (alpha<=0) return;
+			if (alpha<=0 || !shape) return;
 			graphics.beginFill(color, alpha);
 			shape.drawScaledRotated(graphics, x, y, scale * zoom, scale * zoom, angle + this.orientation);
 			//shape.draw(graphics, x, y);
