@@ -127,6 +127,9 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public function render(camera:Camera):void {
 			sprite.graphics.clear();
+			for (var i:int = 0; i < this.renderables.length; i++) {
+				this.renderables[i].render(sprite.graphics, camera.left, camera.top, 0, 1);
+			}
 		}
 		
 		/* INTERFACE nl.jorisdormans.phantom2D.objects.IInputHandler */

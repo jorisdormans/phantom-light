@@ -167,10 +167,15 @@ package nl.jorisdormans.phantom2D.core
 		override public function render(camera:Camera):void {
 			if (transparent && screenBelow) screenBelow.render(screenBelow.camera);
 			var l:int = components.length;
+			var s:Sprite = this.sprite;
 			for (var i:int = 0; i < l; i++) {
 				if (components[i] is Layer) {
 					(components[i] as Layer).render(camera);
+					s = (components[i] as Layer).sprite;
 				}
+			}
+			for (var i:int = 0; i < this.renderables.length; i++) {
+				this.renderables[i].render(s.graphics, camera.left, camera.top, 0, 1);
 			}
 		}
 		

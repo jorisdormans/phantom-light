@@ -330,9 +330,9 @@ package nl.jorisdormans.phantom2D.objects
 		 * @param	objectClass		A class specifying the type of object (null = any class of objects).
 		 * @return			
 		 */
-		public function getObjectAt(position:Vector3D, objectClass:Class = null, excludeTileObjects:Boolean = false): GameObject {
+		public function getObjectAt(position:Vector3D, objectClass:Class = null, excludeTileObjects:Boolean = false, mustDoResponse:Boolean = false): GameObject {
 			for (var i:int = objects.length - 1; i >= 0 ; i--) {
-				if ((objectClass == null || objects[i] is objectClass) && objects[i].shape && objects[i].shape.pointInShape(position)) return objects[i];
+				if ((objectClass == null || objects[i] is objectClass) && (!mustDoResponse || objects[i].doResponse) && objects[i].shape && objects[i].shape.pointInShape(position)) return objects[i];
 			}
 			return null;
 		}

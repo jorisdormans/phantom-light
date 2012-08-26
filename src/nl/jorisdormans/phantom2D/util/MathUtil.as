@@ -17,6 +17,7 @@
 		public static const TO_RADIANS:Number = Math.PI / 180;
 		public static const TWO_PI:Number = Math.PI * 2;
 		
+		
 		private static var v:Vector3D = new Vector3D();
 		private static var p:Vector3D = new Vector3D();
 		

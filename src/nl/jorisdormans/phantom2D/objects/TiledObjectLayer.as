@@ -181,7 +181,7 @@ package nl.jorisdormans.phantom2D.objects
 		
 		
 		
-		override public function getObjectAt(position:Vector3D, objectClass:Class = null, excludeTileObjects:Boolean = false):GameObject 
+		override public function getObjectAt(position:Vector3D, objectClass:Class = null, excludeTileObjects:Boolean = false, mustDoResponse:Boolean = false):GameObject 
 		{
 			var tileX:int = MathUtil.clamp(position.x / tileSize, 0, tilesX - 1);
 			var tileY:int = MathUtil.clamp(position.y / tileSize, 0, tilesX - 1);
@@ -194,7 +194,7 @@ package nl.jorisdormans.phantom2D.objects
 					var tile:Tile = tiles[x + y * tilesX];
 					var maxO:int = tile.objects.length;
 					for (var j:int = maxO - 1; j >= 0; j--) {
-						if ((!excludeTileObjects || tile.tileObject != tile.objects[j]) && (objectClass == null || tile.objects[j] is objectClass) && tile.objects[j].shape && tile.objects[j].shape.pointInShape(position)) return tile.objects[j];
+						if ((!excludeTileObjects || tile.tileObject != tile.objects[j]) && (objectClass == null || tile.objects[j] is objectClass) && (!mustDoResponse || tile.objects[j].doResponse) && tile.objects[j].shape && tile.objects[j].shape.pointInShape(position)) return tile.objects[j];
 					}
 				}
 			}
@@ -258,7 +258,6 @@ package nl.jorisdormans.phantom2D.objects
 			for (var i:int = 0; i < xml.tile.length(); i++) {
 				tileObjects.push(xml.tile[i].@object);
 			}
-			trace("TILEOBJECTS", tileObjects.length);
 			for (var y:int = 0; y < xml.row.length(); y++) {
 				var r:String = xml.row[y];
 				var x:int = 0;

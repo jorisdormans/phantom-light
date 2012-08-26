@@ -85,6 +85,9 @@ package nl.jorisdormans.phantom2D.core
 		 */
 		public var prof:Profiler;
 		
+		public static var profiler:Profiler;
+
+		
 		/**
 		 * Contains a stack of active screens
 		 */
@@ -172,6 +175,7 @@ package nl.jorisdormans.phantom2D.core
 			
 			//create a profilier
 			prof = new Profiler(10);
+			PhantomGame.profiler = prof;
 			ProfilerConfig.Width = 200;
 			ProfilerConfig.ShowMinMax = true;
 			ProfilerConfig.Width = 800;
