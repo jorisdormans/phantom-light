@@ -174,7 +174,7 @@ package nl.jorisdormans.phantom2D.core
 					s = (components[i] as Layer).sprite;
 				}
 			}
-			for (var i:int = 0; i < this.renderables.length; i++) {
+			for (i = 0; i < this.renderables.length; i++) {
 				this.renderables[i].render(s.graphics, camera.left, camera.top, 0, 1);
 			}
 		}
