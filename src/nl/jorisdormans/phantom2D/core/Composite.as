@@ -248,7 +248,7 @@ package nl.jorisdormans.phantom2D.core
 			}
 			
 			//check if anything needs to be removed
-			i = l-1;
+			i = components.length-1;
 			while (i >= 0) {
 				if (components[i].destroyed) {
 					removeComponentAt(i);

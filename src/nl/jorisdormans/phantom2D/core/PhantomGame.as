@@ -383,7 +383,7 @@ package nl.jorisdormans.phantom2D.core
 			if (!screen.transparent) {
 				for (var i:int = 0; i < screens.length; i++) {
 					if (screens[i].sprite.parent) {
-						screens[i].sprite.parent.removeChild(screens[i].sprite.parent);
+						screens[i].sprite.parent.removeChild(screens[i].sprite);
 					}
 				}
 			}

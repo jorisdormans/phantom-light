@@ -1,6 +1,5 @@
 package nl.jorisdormans.phantom2D.objects 
 {
-	import com.furusystems.dconsole2.core.interfaces.IThemeable;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
