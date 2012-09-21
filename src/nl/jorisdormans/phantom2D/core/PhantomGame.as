@@ -9,6 +9,7 @@ package nl.jorisdormans.phantom2D.core
 	import flash.events.TimerEvent;
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
+	import nl.jorisdormans.phantom2D.audio.AudioSystem;
 	import nl.jorisdormans.phantom2D.layers.FPSDisplay;
 	import nl.jorisdormans.phantom2D.thirdparty.profiler.Profiler;
 	import nl.jorisdormans.phantom2D.thirdparty.profiler.ProfilerConfig;
@@ -28,18 +29,6 @@ package nl.jorisdormans.phantom2D.core
 		 * Flag indicating fps counter should be rendered
 		 */
 		static public var displayFPS:Boolean = false;
-		/**
-		 * Volume for sound effects (0-1)
-		 */
-		static public var volumeSoundEffects:Number = 1;
-		/**
-		 * Volume for music (0-1)
-		 */
-		static public var volumeMusic:Number = 1;
-		/**
-		 * Master volume (0-1)
-		 */
-		static public var volumeMaster:Number = 1;
 		
 		/**
 		 * Holds the current InputState. Compare to previousInputState to see respond to key presses and releases.
@@ -73,6 +62,7 @@ package nl.jorisdormans.phantom2D.core
 		private var updateCounter:uint;
 		private var countTimer:Number;
 		
+		private var _audio:AudioSystem;
 		
 		
 		/**
@@ -211,6 +201,9 @@ package nl.jorisdormans.phantom2D.core
 			countTimer = 0;
 			prof.beginProfiling();
 			prof.begin("idle");
+			
+			// Setup AudioSystem:
+			this._audio = new AudioSystem();
 			
 			/*
 			this.timer = new Timer(0, 1);
@@ -470,6 +463,11 @@ package nl.jorisdormans.phantom2D.core
 				currentScreen.activate();
 			}
 			previousInputState.copy(currentInputState);
+		}
+		
+		public function get Audio():AudioSystem
+		{
+			return this._audio;
 		}
 	}
 
