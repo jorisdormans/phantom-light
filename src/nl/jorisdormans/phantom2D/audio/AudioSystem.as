@@ -170,7 +170,7 @@ package nl.jorisdormans.phantom2D.audio
 			}
 		}
 		
-		public function stop( name:String )
+		public function stop( name:String ):void
 		{
 			var chan:SoundChannel = this.channels[name];
 			if ( chan )
