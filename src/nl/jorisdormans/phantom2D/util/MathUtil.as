@@ -31,10 +31,7 @@
 		 * @return
 		 */
 		public static function normalizeAngle(a:Number):Number {
-			a = a % TWO_PI;
-			if (a > Math.PI) a -= TWO_PI;
-			if (a <= -Math.PI) a += TWO_PI;
-			return a;
+			return ((a+Math.PI) % (Math.PI * 2)) - Math.PI;
 		}
 		
 		/**
