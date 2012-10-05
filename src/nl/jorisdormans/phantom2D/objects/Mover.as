@@ -100,6 +100,7 @@ package nl.jorisdormans.phantom2D.objects
 		 */
 		public function respondToCollision(collision:CollisionData, other:GameObject, factor:Number):void {
 			//resolve interpenetration
+			if (!applyMovement) return;
 			gameObject.position.x -= factor * collision.normal.x * collision.interpenetration;
 			gameObject.position.y -= factor * collision.normal.y * collision.interpenetration;
 			gameObject.position.z -= factor * collision.normal.z * collision.interpenetration;
