@@ -113,6 +113,11 @@ package nl.jorisdormans.phantom2D.core
 			return component;
 		}	
 		
+		/**
+		 * Insert a component to the Component at a specified index.
+		 * @param	component
+		 * @param	index
+		 */
 		public function insertComponent(component:Component, index:int):void {
 			if (index >= components.length - 1) {
 				addComponent(component);
@@ -125,6 +130,22 @@ package nl.jorisdormans.phantom2D.core
 				if (component is IRenderable) renderables.push(component as IRenderable);
 				component.onAdd(this);
 			}
+		}
+
+		/**
+		 * Insert a component to the Component before the specified child.
+		 * @param	component
+		 * @param	before
+		 */
+		public function insertBefore(component:Component, before:Component):void {
+			for (var i:int = 0; i < components.length; i++) {
+				if (components[i] == before) {
+					insertComponent(component, i);
+					return;
+				}
+			}
+			
+			addComponent(component);
 		}
 		
 		/**
