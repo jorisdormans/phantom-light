@@ -8,7 +8,7 @@ package nl.jorisdormans.phantom2D.particles
 	 * A Component that emmits particles at a regular interval
 	 * @author Joris Dormans
 	 */
-	public class ParticleEmiter extends GameObjectComponent
+	public class ParticleEmitter extends GameObjectComponent
 	{
 		private var speedFactor:Number;
 		private var randomVelocity:Number;
@@ -32,7 +32,7 @@ package nl.jorisdormans.phantom2D.particles
 		 * @param	randomVelocity  The maximum random change applied to the particles initial velocity
 		 * @param	speedFactor		The multiplication factor applied to the GameObject's velocity (if it has a mover) in order to get the particle´s initial velocity.
 		 */
-		public function ParticleEmiter(particleType:Class, frequency:Number = 10, layer:int = 0, life:Number = 1, randomLife:Number = 0, randomPosition:Number = 0, randomVelocity:Number = 0, speedFactor:Number = 1) 
+		public function ParticleEmitter(particleType:Class, frequency:Number = 10, layer:int = 0, life:Number = 1, randomLife:Number = 0, randomPosition:Number = 0, randomVelocity:Number = 0, speedFactor:Number = 1) 
 		{
 			this.timer = 0;
 			this.particleType = particleType;

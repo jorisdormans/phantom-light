@@ -2,7 +2,6 @@ package nl.jorisdormans.phantom2D.core
 {
 	import flash.utils.Dictionary;
 	import nl.jorisdormans.phantom2D.graphics.PhantomShape;
-	import nl.jorisdormans.phantomextra.gui.PhantomSelectBox;
 	/**
 	 * ...
 	 * @author Joris Dormans
