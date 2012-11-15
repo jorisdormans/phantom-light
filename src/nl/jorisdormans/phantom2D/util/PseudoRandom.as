@@ -89,6 +89,14 @@ package nl.jorisdormans.phantom2D.util
 			return aRandom.nextFloat();
 		}
 		
+		public function nextJFloat(amplitude:Number):Number {
+			__seed = (__seed*9301+49297) % 233280;
+			var r:Number = (__seed / 233280.0);
+			__seed = (__seed * 9301 + 49297) % 233280;
+			r -= (__seed / 233280.0);
+			return (r * amplitude);
+		}
+		
 		
 		/**
 		 * Set the seed using a string (setting an empty string randomizes the seed);
