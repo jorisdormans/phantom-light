@@ -52,6 +52,47 @@ package nl.jorisdormans.phantom2D.util
 		}	
 		
 		/**
+		 * Linear inerpolation between three colors
+		 * @param	color1
+		 * @param	color2
+		 * @param	color3
+		 * @param	f
+		 * @return
+		 */
+		public static function lerpGradient(color1:uint, color2:uint, color3:uint, f:Number):uint {
+			var red1:uint = (color1 & 0xff0000) >> 16;
+			var green1:uint = (color1 & 0x00ff00) >> 8;
+			var blue1:uint = color1 & 0x0000ff;
+
+			var red2:uint = (color2 & 0xff0000) >> 16;
+			var green2:uint = (color2 & 0x00ff00) >> 8;
+			var blue2:uint = color2 & 0x0000ff;
+			
+			var red3:uint = (color3 & 0xff0000) >> 16;
+			var green3:uint = (color3 & 0x00ff00) >> 8;
+			var blue3:uint = color3 & 0x0000ff;
+			
+			f *= 2.0;
+			
+			if (f < 1.0) {
+				
+				red1 += Math.round((red2 - red1) * f);
+				green1 += Math.round((green2 - green1) * f);
+				blue1 += Math.round((blue2 - blue1) * f);
+				
+				return ((red1 << 16) | (green1 << 8) | blue1);
+			}
+			else {
+				f -= 1.0;
+				red2 += Math.round((red3 - red2) * f);
+				green2 += Math.round((green3 - green2) * f);
+				blue2 += Math.round((blue3 - blue2) * f);
+				
+				return ((red2 << 16) | (green2 << 8) | blue2);
+			}
+		}	
+		
+		/**
 		 * Draws a regular star
 		 * @param	graphics
 		 * @param	x
