@@ -76,7 +76,19 @@ package nl.jorisdormans.phantom2D.core
 			super.onAdd(composite);
 			layer = composite as Layer;
 			if (layer) {
-				layer.sprite.addChild(sprite);
+				var previousLayer:Layer = null;
+				for (var i:int = 0; i < layer.components.length; i++) 
+				{
+					if (layer.components[i] == this) break;
+					if (layer.components[i] is Layer) previousLayer = layer.components[i] as Layer;
+				}
+				
+				if (previousLayer==null) {
+					layer.sprite.addChild(sprite);
+				} else {
+					var index:int = layer.sprite.getChildIndex(previousLayer.sprite);
+					layer.sprite.addChildAt(sprite, index + 1);
+				}
 			}
 			screen = composite as Screen;
 		}
