@@ -119,7 +119,7 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	index
 		 */
 		public function insertComponent(component:Component, index:int):void {
-			if (index >= components.length - 1) {
+			if (index > components.length - 1) {
 				addComponent(component);
 			} else {
 				if (component.parent) component.parent.removeComponent(component);
