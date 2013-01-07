@@ -26,7 +26,7 @@ package nl.jorisdormans.phantom2D.audio
 			this.synth = synth;
 		}
 		
-		override public function handleMessage(message:String, data:Object = null):int
+		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int
 		{
 			if (this.message == message)
 			{
@@ -39,7 +39,7 @@ package nl.jorisdormans.phantom2D.audio
 				}
 				return Phantom.MESSAGE_HANDLED;
 			}
-			return super.handleMessage(message, data);
+			return super.handleMessage(message, data, componentClass);
 		}
 	
 	}
