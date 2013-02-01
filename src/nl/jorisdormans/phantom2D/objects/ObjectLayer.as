@@ -338,6 +338,20 @@ package nl.jorisdormans.phantom2D.objects
 		}
 		
 		/**
+		 * Gets all object that are located at a particular position
+		 * @param	position			
+		 * @param	objectClass		A class specifying the type of object (null = any class of objects).
+		 * @return			
+		 */
+		public function getObjectsAt(position:Vector3D, objectClass:Class = null, excludeTileObjects:Boolean = false, mustDoResponse:Boolean = false): Vector.<GameObject> {
+			var objs:Vector.<GameObject> = new Vector.<GameObject>();
+			for (var i:int = objects.length - 1; i >= 0 ; i--) {
+				if ((objectClass == null || objects[i] is objectClass) && (!mustDoResponse || objects[i].doResponse) && objects[i].shape && objects[i].shape.pointInShape(position)) objs.push(objects[i]);
+			}
+			return objs;
+		}
+		
+		/**
 		 * Returns the index of a gameObject
 		 * @param	gameObject
 		 * @return
@@ -460,6 +474,20 @@ package nl.jorisdormans.phantom2D.objects
 					if (d < dist) {
 						dist = d;
 						r = objects[i];
+					}
+				}
+			}
+			return r;
+		}
+		
+		public function getObjectsWithinRange(position:Vector3D, objectClass:Class = null, exclude:GameObject = null, range:Number = 999999):Vector.<GameObject> {
+			var dist:Number = range * range;
+			var r:Vector.<GameObject> = new Vector.<GameObject>();
+			for (var i:int = 0; i < objects.length; i++) {
+				if (objects[i] != exclude && (objectClass == null || objects[i] is objectClass)) {
+					var d:Number = MathUtil.distanceSquared(position, objects[i].position);
+					if (d < dist) {
+						r.push(objects[i]);
 					}
 				}
 			}
