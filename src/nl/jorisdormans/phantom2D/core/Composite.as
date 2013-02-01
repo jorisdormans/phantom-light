@@ -263,8 +263,10 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	elapsedTime
 		 */
 		override public function update(elapsedTime:Number):void {
-			for (var i:int = 0; i < components.length; i++) {
+			var i:int = 0;
+			while (i<components.length) {
 				components[i].update(elapsedTime);
+				i++;
 			}
 			
 			//check if anything needs to be removed
