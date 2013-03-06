@@ -122,7 +122,6 @@
 					if (data && data.y) {
 						target.y = data.y;
 					}
-					target = data.target;
 					setTarget.x = target.x;
 					setTarget.y = target.y;
 					setTarget.z = target.z;

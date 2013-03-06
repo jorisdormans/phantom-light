@@ -200,6 +200,26 @@ package nl.jorisdormans.phantom2D.objects
 			return null;
 		}
 		
+		override public function getObjectsAt(position:Vector3D, objectClass:Class = null, excludeTileObjects:Boolean = false, mustDoResponse:Boolean = false): Vector.<GameObject> {
+			var objs:Vector.<GameObject> = new Vector.<GameObject>();
+			var tileX:int = MathUtil.clamp(position.x / tileSize, 0, tilesX - 1);
+			var tileY:int = MathUtil.clamp(position.y / tileSize, 0, tilesX - 1);
+			var minX:int = Math.max(tileX - 1, 0);
+			var maxX:int = Math.min(tileX + 2, tilesX);
+			var minY:int = Math.max(tileY - 1, 0);
+			var maxY:int = Math.min(tileY + 2, tilesY);
+			for (var x:int = minX; x < maxX; x++) {
+				for (var y:int = minY; y < maxY; y++) {
+					var tile:Tile = tiles[x + y * tilesX];
+					var maxO:int = tile.objects.length;
+					for (var j:int = maxO - 1; j >= 0; j--) {
+						if ((!excludeTileObjects || tile.tileObject != tile.objects[j]) && (objectClass == null || tile.objects[j] is objectClass) && (!mustDoResponse || tile.objects[j].doResponse) && tile.objects[j].shape && tile.objects[j].shape.pointInShape(position)) objs.push(tile.objects[j]);
+					}
+				}
+			}
+			return objs;
+		}
+		
 		public function addTileObject(gameObject:GameObject, position:Vector3D):void {
 			var tx:int = MathUtil.clamp(position.x / tileSize, 0, tilesX - 1);
 			var ty:int = MathUtil.clamp(position.y / tileSize, 0, tilesY - 1);

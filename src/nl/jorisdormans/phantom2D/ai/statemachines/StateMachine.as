@@ -82,10 +82,12 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 		public function popState():State
 		{
 			var state:State = states.pop();
-			state.onDeactivate();
-			state.onRemove();
-			if (states.length > 0) {
-				states[states.length - 1].onActivate();
+			if(state) {
+				state.onDeactivate();
+				state.onRemove();
+				if (states.length > 0) {
+					states[states.length - 1].onActivate();
+				}
 			}
 			return state;
 		}
@@ -104,6 +106,11 @@ package nl.jorisdormans.phantom2D.ai.statemachines
 			if (states.length > 0) {
 				states[states.length - 1].updatePhysics(elapsedTime);
 			}
+		}
+		
+		public function currentState():State
+		{
+			return states[states.length - 1];
 		}
 		
 		override public function handleMessage(message:String, data:Object = null, componentClass:Class = null):int 

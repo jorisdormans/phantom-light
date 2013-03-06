@@ -110,7 +110,10 @@ package nl.jorisdormans.phantom2D.core
 		public static const LOG_WARNING : String = "Warning";		
 		
 		public static const LOG_TAG : String = "Phantom";		
-
+		
+		static public var volumeMaster:Number = 1.0;
+		static public var volumeSoundEffects:Number = 1.0;
+		static public var volumeMusic:Number = 0.6;
 		
 		public static function log(message:String, type:String = "Info", tag:String = ""):void {
 			if (activeGame) activeGame.log(message, type, tag);

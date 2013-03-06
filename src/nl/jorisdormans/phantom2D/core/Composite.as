@@ -119,7 +119,7 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	index
 		 */
 		public function insertComponent(component:Component, index:int):void {
-			if (index >= components.length - 1) {
+			if (index > components.length - 1) {
 				addComponent(component);
 			} else {
 				if (component.parent) component.parent.removeComponent(component);
@@ -263,9 +263,10 @@ package nl.jorisdormans.phantom2D.core
 		 * @param	elapsedTime
 		 */
 		override public function update(elapsedTime:Number):void {
-			var l:int = components.length;
-			for (var i:int = 0; i < l; i++) {
+			var i:int = 0;
+			while (i<components.length) {
 				components[i].update(elapsedTime);
+				i++;
 			}
 			
 			//check if anything needs to be removed
