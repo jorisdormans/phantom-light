@@ -27,7 +27,7 @@ package nl.jorisdormans.phantom2D.util
 			if (text == null || text == "") return;
 			if (textField == null) {
 				textField = new TextField();
-				bmpd = new BitmapData(256, 32, false, 0x00ffffff);
+				bmpd = new BitmapData(width, height, false, 0x00ffffff);
 				sprite = new Sprite();
 				sprite.addChild(textField);
 				
@@ -35,7 +35,9 @@ package nl.jorisdormans.phantom2D.util
 			}
 			textField.defaultTextFormat = new TextFormat(font, size, color);
 			textField.text = text;
-			bmpd = new BitmapData(256, 32, true, 0xff00ff);
+			textField.width = width;
+			textField.height = height;
+			bmpd = new BitmapData(width, height, true, 0xff00ff);
 
 			var m:Matrix = new Matrix();
 			m.translate(0, 0);
@@ -52,7 +54,7 @@ package nl.jorisdormans.phantom2D.util
 			if (text == null || text == "") return;
 			if (textField == null) {
 				textField = new TextField();
-				bmpd = new BitmapData(256, 32, false, 0x00ffffff);
+				bmpd = new BitmapData(width, height, false, 0x00ffffff);
 				sprite = new Sprite();
 				sprite.addChild(textField);
 				
@@ -60,8 +62,10 @@ package nl.jorisdormans.phantom2D.util
 			}
 			textField.defaultTextFormat = new TextFormat(font, size, color);
 			textField.text = text;
+			textField.width = width;
+			textField.height = height;
 			width = textField.textWidth*1.2;
-			bmpd = new BitmapData(256, 32, true, 0xff00ff);
+			bmpd = new BitmapData(width, height, true, 0xff00ff);
 
 			var m:Matrix = new Matrix();
 			m.translate(0, 0);
@@ -78,7 +82,7 @@ package nl.jorisdormans.phantom2D.util
 			if (text == null || text == "") return;
 			if (textField == null) {
 				textField = new TextField();
-				bmpd = new BitmapData(256, 32, false, 0x00ffffff);
+				bmpd = new BitmapData(width, height, false, 0x00ffffff);
 				sprite = new Sprite();
 				sprite.addChild(textField);
 				
@@ -86,8 +90,10 @@ package nl.jorisdormans.phantom2D.util
 			}
 			textField.defaultTextFormat = new TextFormat(font, size, color);
 			textField.text = text;
+			textField.width = width;
+			textField.height = height;
 			width = textField.textWidth*1.2;
-			bmpd = new BitmapData(256, 32, true, 0xff00ff);
+			bmpd = new BitmapData(width, height, true, 0xff00ff);
 
 			var m:Matrix = new Matrix();
 			m.translate(0, 0);
