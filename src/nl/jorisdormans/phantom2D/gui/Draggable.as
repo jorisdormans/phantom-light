@@ -9,14 +9,16 @@ package nl.jorisdormans.phantom2D.gui
 	 */
 	public class Draggable extends GameObjectComponent 
 	{
+		private var onlyDragIfResponsive:Boolean;
 		public var velocityEndWeight:Number;
 		static public const M_START_DRAG:String = "startDrag";
 		static public const M_DRAG_TO:String = "dragTo";
 		static public const M_STOP_DRAG:String = "stopDrag";
 		
-		public function Draggable() 
+		public function Draggable(onlyDragIfResponsive:Boolean=false) 
 		{
 			super();	
+			this.onlyDragIfResponsive = onlyDragIfResponsive;
 			velocityEndWeight = 0.9;
 		}
 		
@@ -30,7 +32,7 @@ package nl.jorisdormans.phantom2D.gui
 					}
 					break;
 				case M_DRAG_TO:
-					if (data && data.x && data.y) {
+					if (data && data.x && data.y && (!this.gameObject.doResponse || !onlyDragIfResponsive) {
 						if (this.gameObject.mover) {
 							var dx:Number = data.x - this.gameObject.position.x;
 							var dy:Number = data.y - this.gameObject.position.y;
