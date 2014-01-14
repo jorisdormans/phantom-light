@@ -32,7 +32,7 @@ package nl.jorisdormans.phantom2D.gui
 					}
 					break;
 				case M_DRAG_TO:
-					if (data && data.x && data.y && (!this.gameObject.doResponse || !onlyDragIfResponsive) {
+					if (data && data.x && data.y && (!this.gameObject.doResponse || !onlyDragIfResponsive)) {
 						if (this.gameObject.mover) {
 							var dx:Number = data.x - this.gameObject.position.x;
 							var dy:Number = data.y - this.gameObject.position.y;
